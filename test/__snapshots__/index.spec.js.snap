@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`error 1`] = `
+<div>
+  <h1>
+    State Machine
+  </h1>
+  Oh, snap!
+</div>
+`;
+
+exports[`fetching 1`] = `
+<div>
+  <h1>
+    State Machine
+  </h1>
+  Loading...
+</div>
+`;
+
+exports[`idle 1`] = `
+<div>
+  <h1>
+    State Machine
+  </h1>
+  <button
+    onClick={[Function]}
+  >
+    Fetch
+  </button>
+</div>
+`;
+
+exports[`success 1`] = `
+<div>
+  <h1>
+    State Machine
+  </h1>
+  <ul>
+    <li>
+      GIST1
+    </li>
+    <li>
+      GIST2
+    </li>
+  </ul>
+</div>
+`;
