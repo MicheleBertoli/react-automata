@@ -12,15 +12,24 @@
 
   "rules": {
     "arrow-parens": ["error", "as-needed", { "requireForBlockBody": false }],
-    "no-use-before-define": "off",
+    "class-methods-use-this": "off",
+    "comma-dangle": ["error", {
+      "arrays": "only-multiline",
+      "exports": "never",
+      "functions": "never",
+      "imports": "never",
+      "objects": "only-multiline"
+    }],
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+    "no-use-before-define": "off",
     "prettier/prettier": ["error", {
       "semi": false,
       "singleQuote": true,
       "trailingComma": "es5"
     }],
     "react/jsx-filename-extension": ["error", { "extensions": [".js"] }],
-    "react/prop-types": ["error", { skipUndeclared: true }],
+    "react/prop-types": ["error", { "skipUndeclared": true }],
+    "react/sort-comp": ["off"],
     "semi": ["error", "never"],
   }
 }
