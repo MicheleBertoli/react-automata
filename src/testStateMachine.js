@@ -1,23 +1,16 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import TestRenderer from 'react-test-renderer'
+import { withStateMachine } from '../src'
 
-const createContext = (context, Component) => {
-  class Context extends React.Component {
-    getChildContext() {
-      return { ...context }
-    }
+const transition = (renderer, machineState, action) => {
+  const instance = renderer.getInstance()
+  instance.setState({ machineState })
 
-    render() {
-      return <Component />
-    }
+  if (action) {
+    instance.handleTransition(action)
   }
 
-  Context.childContextTypes = {
-    machineState: PropTypes.string,
-  }
-
-  return Context
+  return instance.state.machineState
 }
 
 const injectState = (renderer, Component, fixtures) => {
@@ -29,19 +22,22 @@ const injectState = (renderer, Component, fixtures) => {
 
 const moveToNextState = (config, Component, machineState) => {
   const { on: actions } = config.machine.states[machineState]
+
   if (actions) {
-    Object.values(actions).forEach(state => {
-      toMatchSnapshot(config, Component, state)
+    Object.keys(actions).forEach(action => {
+      toMatchSnapshot(config, Component, machineState, action)
     })
   }
 }
 
-const toMatchSnapshot = (config, Component, machineState) => {
-  const Context = createContext({ machineState }, Component)
-  const renderer = TestRenderer.create(<Context />)
-  injectState(renderer, Component, config.fixtures[machineState])
-  expect(renderer.toJSON()).toMatchSnapshot(machineState)
-  moveToNextState(config, Component, machineState)
+const toMatchSnapshot = (config, Component, machineState, action) => {
+  const StateMachine = withStateMachine(config.machine)(Component)
+  const renderer = TestRenderer.create(<StateMachine />)
+  const nextMachineState = transition(renderer, machineState, action)
+
+  injectState(renderer, Component, config.fixtures[nextMachineState])
+  expect(renderer.toJSON()).toMatchSnapshot(nextMachineState)
+  moveToNextState(config, Component, nextMachineState)
 }
 
 const testStateMachine = (config, Component) => {
