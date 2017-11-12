@@ -23,10 +23,13 @@ const createContext = (initialState, Tree) => {
   return Context
 }
 
-test('visible', () => {
+const initialState = 'a'
+const nextState = 'b'
+
+test('visible (single)', () => {
   const Context = createContext(
-    { machineState: 'a' },
-    <State name="a">
+    { machineState: initialState },
+    <State name={initialState}>
       <div />
     </State>
   )
@@ -36,10 +39,36 @@ test('visible', () => {
   expect(root.findAllByType('div')).toHaveLength(1)
 })
 
-test('not visible', () => {
+test('visible (multiple)', () => {
+  const Context = createContext(
+    { machineState: initialState },
+    <State names={['foo', initialState]}>
+      <div />
+    </State>
+  )
+
+  const { root } = TestRenderer.create(<Context />)
+
+  expect(root.findAllByType('div')).toHaveLength(1)
+})
+
+test('not visible (single)', () => {
   const Context = createContext(
     null,
-    <State name="a">
+    <State name={initialState}>
+      <div />
+    </State>
+  )
+
+  const { root } = TestRenderer.create(<Context />)
+
+  expect(root.findAllByType('div')).toHaveLength(0)
+})
+
+test('not visible (multiple)', () => {
+  const Context = createContext(
+    null,
+    <State names={['foo', initialState]}>
       <div />
     </State>
   )
@@ -55,15 +84,17 @@ test('callbacks work', () => {
 
   const Context = createContext(
     null,
-    <State name="a" onEnter={spyOnEnter} onLeave={spyOnLeave} />
+    <State name={initialState} onEnter={spyOnEnter} onLeave={spyOnLeave} />
   )
 
   const instance = TestRenderer.create(<Context />).getInstance()
-  instance.setState({ machineState: 'a' })
+  instance.setState({ machineState: initialState })
 
   expect(spyOnEnter).toHaveBeenCalledTimes(1)
+  expect(spyOnEnter).toHaveBeenCalledWith(initialState)
 
-  instance.setState({ machineState: null })
+  instance.setState({ machineState: nextState })
 
   expect(spyOnLeave).toHaveBeenCalledTimes(1)
+  expect(spyOnLeave).toHaveBeenCalledWith(nextState)
 })
