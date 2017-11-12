@@ -1,5 +1,39 @@
 import React from 'react'
-import { State } from '../src'
+import { State, testStateMachine } from '../src'
+
+const machine = {
+  initial: 'idle',
+  states: {
+    idle: {
+      on: {
+        FETCH: 'fetching',
+      },
+    },
+    fetching: {
+      on: {
+        SUCCESS: 'success',
+        ERROR: 'error',
+      },
+    },
+    success: {},
+    error: {},
+  },
+}
+
+const fixtures = {
+  success: {
+    gists: [
+      {
+        id: 'ID1',
+        description: 'GIST1',
+      },
+      {
+        id: 'ID2',
+        description: 'GIST2',
+      },
+    ],
+  },
+}
 
 class App extends React.Component {
   state = { gists: [] }
@@ -37,4 +71,6 @@ class App extends React.Component {
   }
 }
 
-export default App
+test('it works', () => {
+  testStateMachine({ machine, fixtures }, App)
+})
