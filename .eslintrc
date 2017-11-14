@@ -30,7 +30,7 @@
     "react/jsx-filename-extension": ["error", { "extensions": [".js"] }],
     "react/no-unused-prop-types": "off",
     "react/prop-types": ["error", { "skipUndeclared": true }],
-    "react/sort-comp": ["off"],
+    "react/sort-comp": "off",
     "semi": ["error", "never"],
   }
 }

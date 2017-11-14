@@ -8,6 +8,7 @@ const withStateMachine = config => Component => {
 
     state = {
       action: null,
+      componentState: null,
       machineState: this.machine.getInitialState(),
     }
 
@@ -23,7 +24,8 @@ const withStateMachine = config => Component => {
       ) {
         this.instance.componentDidTransition(
           prevState.machineState,
-          this.state.action
+          this.state.action,
+          this.state.payload
         )
       }
     }
@@ -32,15 +34,17 @@ const withStateMachine = config => Component => {
       this.instance = element
     }
 
-    handleTransition = action => {
+    handleTransition = (action, payload) => {
       if (this.instance.componentWillTransition) {
-        this.instance.componentWillTransition(action)
+        this.instance.componentWillTransition(action, payload)
       }
 
       this.setState(prevState => ({
         action,
+        componentState: { ...this.state.componentState, ...payload },
         machineState: this.machine.transition(prevState.machineState, action)
           .value,
+        payload,
       }))
     }
 
@@ -48,6 +52,8 @@ const withStateMachine = config => Component => {
       return (
         <Component
           {...this.props}
+          {...this.state.componentState}
+          machineState={this.state.machineState}
           ref={this.handleRef}
           transition={this.handleTransition}
         />

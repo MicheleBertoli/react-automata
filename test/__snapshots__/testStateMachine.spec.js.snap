@@ -5,6 +5,11 @@ exports[`error 1`] = `
   <h1>
     State Machine
   </h1>
+  <button
+    onClick={[Function]}
+  >
+    Retry
+  </button>
   Oh, snap!
 </div>
 `;

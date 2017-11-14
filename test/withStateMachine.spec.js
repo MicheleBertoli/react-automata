@@ -5,6 +5,7 @@ import { withStateMachine } from '../src'
 test('lifecycle hooks work', () => {
   const initialState = 'a'
   const actionName = 'ACTION'
+  const payload = 'payload'
 
   const machine = {
     initial: initialState,
@@ -21,12 +22,12 @@ test('lifecycle hooks work', () => {
   const spy = jest.fn()
 
   class App extends React.Component {
-    componentWillTransition(action) {
-      spy(action)
+    componentWillTransition(...args) {
+      spy(...args)
     }
 
-    componentDidTransition(prevState, action) {
-      spy(prevState, action)
+    componentDidTransition(...args) {
+      spy(...args)
     }
 
     render() {
@@ -37,9 +38,9 @@ test('lifecycle hooks work', () => {
   const StateMachine = withStateMachine(machine)(App)
 
   const instance = TestRenderer.create(<StateMachine />).getInstance()
-  instance.handleTransition(actionName)
+  instance.handleTransition(actionName, payload)
 
   expect(spy).toHaveBeenCalledTimes(2)
-  expect(spy).toHaveBeenCalledWith(actionName)
-  expect(spy).toHaveBeenLastCalledWith(initialState, actionName)
+  expect(spy).toHaveBeenCalledWith(actionName, payload)
+  expect(spy).toHaveBeenLastCalledWith(initialState, actionName, payload)
 })

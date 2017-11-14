@@ -1,6 +1,8 @@
 import React from 'react'
 import { State, testStateMachine } from '../src'
 
+global.fetch = jest.fn(() => new Promise(resolve => resolve()))
+
 const machine = {
   initial: 'idle',
   states: {
@@ -16,51 +18,58 @@ const machine = {
       },
     },
     success: {},
-    error: {},
+    error: {
+      on: {
+        FETCH: 'fetching',
+      },
+    },
   },
 }
 
 const fixtures = {
-  success: {
-    gists: [
-      {
-        id: 'ID1',
-        description: 'GIST1',
-      },
-      {
-        id: 'ID2',
-        description: 'GIST2',
-      },
-    ],
+  fetching: {
+    SUCCESS: {
+      gists: [
+        {
+          id: 'ID1',
+          description: 'GIST1',
+        },
+        {
+          id: 'ID2',
+          description: 'GIST2',
+        },
+      ],
+    },
   },
 }
 
 class App extends React.Component {
-  state = { gists: [] }
+  componentWillTransition(action) {
+    if (action === 'FETCH') {
+      fetch('https://api.github.com/users/gaearon/gists')
+        .then(response => response.json())
+        .then(gists => this.props.transition('SUCCESS', { gists }))
+        .catch(() => this.props.transition('ERROR'))
+    }
+  }
 
   handleClick = () => {
     this.props.transition('FETCH')
-
-    fetch('https://api.github.com/users/gaearon/gists')
-      .then(response => response.json())
-      .then(gists => {
-        this.setState({ gists })
-        this.props.transition('SUCCESS')
-      })
-      .catch(() => this.props.transition('ERROR'))
   }
 
   render() {
     return (
       <div>
         <h1>State Machine</h1>
-        <State name="idle">
-          <button onClick={this.handleClick}>Fetch</button>
+        <State names={['idle', 'error']}>
+          <button onClick={this.handleClick}>
+            {this.props.machineState === 'idle' ? 'Fetch' : 'Retry'}
+          </button>
         </State>
         <State name="fetching">Loading...</State>
         <State name="success">
           <ul>
-            {this.state.gists.map(gist => (
+            {this.props.gists.map(gist => (
               <li key={gist.id}>{gist.description}</li>
             ))}
           </ul>
@@ -69,6 +78,10 @@ class App extends React.Component {
       </div>
     )
   }
+}
+
+App.defaultProps = {
+  gists: [],
 }
 
 test('it works', () => {
