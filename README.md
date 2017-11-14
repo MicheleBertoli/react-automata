@@ -11,6 +11,7 @@ What if your components' state was predictable?
 Goals:
 - Declaratively define states
 - Automagically generate tests
+- Provide powerful DevTools
 
 # Inspiration
 
