@@ -25,6 +25,8 @@ const createContext = (initialState, Tree) => {
 
 const initialState = 'a'
 const nextState = 'b'
+const nestedState = 'a.b'
+const pattern = '*.b'
 
 test('visible (single)', () => {
   const Context = createContext(
@@ -52,23 +54,36 @@ test('visible (multiple)', () => {
   expect(root.findAllByType('div')).toHaveLength(1)
 })
 
-test('not visible (single)', () => {
+test('nested (single)', () => {
   const Context = createContext(
-    null,
-    <State name={initialState}>
+    { machineState: nestedState },
+    <State name={pattern}>
       <div />
     </State>
   )
 
   const { root } = TestRenderer.create(<Context />)
 
-  expect(root.findAllByType('div')).toHaveLength(0)
+  expect(root.findAllByType('div')).toHaveLength(1)
 })
 
-test('not visible (multiple)', () => {
+test('nested (multiple)', () => {
+  const Context = createContext(
+    { machineState: nestedState },
+    <State names={['foo', pattern]}>
+      <div />
+    </State>
+  )
+
+  const { root } = TestRenderer.create(<Context />)
+
+  expect(root.findAllByType('div')).toHaveLength(1)
+})
+
+test('not visible', () => {
   const Context = createContext(
     null,
-    <State names={['foo', initialState]}>
+    <State name={initialState}>
       <div />
     </State>
   )

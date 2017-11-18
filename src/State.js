@@ -1,10 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import minimatch from 'minimatch'
 
 const shouldShow = (props, context) =>
   context.machineState &&
-  ((props.name && props.name === context.machineState) ||
-    (props.names && props.names.includes(context.machineState)))
+  ((props.name && minimatch(context.machineState, props.name)) ||
+    (props.names &&
+      props.names.some(name => minimatch(context.machineState, name))))
 
 class State extends React.Component {
   componentWillReceiveProps(nextProps, nextContext) {
@@ -31,11 +33,7 @@ class State extends React.Component {
 }
 
 State.defaultProps = {
-  name: null,
-  names: null,
   children: null,
-  onEnter: null,
-  onLeave: null,
 }
 
 State.propTypes = {

@@ -17,26 +17,28 @@ const transition = (renderer, machineState, action, fixtures) => {
 
 const moveToNextState = (config, Component, machineState) => {
   visitedStates.push(machineState)
-  const { on: actions } = config.machine.states[machineState]
 
-  if (actions) {
+  machineState.split('.').reduce((states, state) => {
+    const { on: actions = {} } = states[state]
+
     Object.keys(actions).forEach(action => {
       if (!visitedStates.includes(actions[action])) {
         toMatchSnapshot(config, Component, machineState, action)
       }
     })
-  }
+
+    return states[state].states
+  }, config.machine.states)
 }
 
 const toMatchSnapshot = (config, Component, machineState, action) => {
   const StateMachine = withStateMachine(config.machine)(Component)
   const renderer = TestRenderer.create(<StateMachine />)
-  const nextMachineState = transition(
-    renderer,
-    machineState,
-    action,
-    config.fixtures[machineState] ? config.fixtures[machineState][action] : null
-  )
+  const fixtures =
+    config.fixtures && config.fixtures[machineState]
+      ? config.fixtures[machineState][action]
+      : null
+  const nextMachineState = transition(renderer, machineState, action, fixtures)
 
   expect(renderer.toJSON()).toMatchSnapshot(nextMachineState)
   moveToNextState(config, Component, nextMachineState)

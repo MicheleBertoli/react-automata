@@ -29,7 +29,9 @@
     }],
     "react/jsx-filename-extension": ["error", { "extensions": [".js"] }],
     "react/no-unused-prop-types": "off",
+    "react/prefer-stateless-function": "off",
     "react/prop-types": ["error", { "skipUndeclared": true }],
+    "react/require-default-props": "off",
     "react/sort-comp": "off",
     "semi": ["error", "never"],
   }

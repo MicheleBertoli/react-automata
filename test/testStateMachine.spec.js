@@ -1,89 +1,51 @@
 import React from 'react'
 import { State, testStateMachine } from '../src'
 
-global.fetch = jest.fn(() => new Promise(resolve => resolve()))
-
-const machine = {
-  initial: 'idle',
+const secondMachine = {
+  initial: 'a',
   states: {
-    idle: {
+    a: {
       on: {
-        FETCH: 'fetching',
+        SECOND_NEXT: 'b',
       },
     },
-    fetching: {
+    b: {
       on: {
-        SUCCESS: 'success',
-        ERROR: 'error',
-      },
-    },
-    success: {},
-    error: {
-      on: {
-        FETCH: 'fetching',
+        SECOND_NEXT: 'a',
       },
     },
   },
 }
 
-const fixtures = {
-  fetching: {
-    SUCCESS: {
-      gists: [
-        {
-          id: 'ID1',
-          description: 'GIST1',
-        },
-        {
-          id: 'ID2',
-          description: 'GIST2',
-        },
-      ],
+const firstMachine = {
+  initial: 'a',
+  states: {
+    a: {
+      on: {
+        FIRST_NEXT: 'b',
+      },
+    },
+    b: {
+      on: {
+        FIRST_NEXT: 'a',
+      },
+      ...secondMachine,
     },
   },
 }
 
 class App extends React.Component {
-  componentWillTransition(action) {
-    if (action === 'FETCH') {
-      fetch('https://api.github.com/users/gaearon/gists')
-        .then(response => response.json())
-        .then(gists => this.props.transition('SUCCESS', { gists }))
-        .catch(() => this.props.transition('ERROR'))
-    }
-  }
-
-  handleClick = () => {
-    this.props.transition('FETCH')
-  }
-
   render() {
     return (
       <div>
-        <h1>State Machine</h1>
-        <State names={['idle', 'error']}>
-          <button onClick={this.handleClick}>
-            {this.props.machineState === 'idle' ? 'Fetch' : 'Retry'}
-          </button>
-        </State>
-        <State name="fetching">Loading...</State>
-        <State name="success">
-          <ul>
-            {this.props.gists.map(gist => (
-              <li key={gist.id}>{gist.description}</li>
-            ))}
-          </ul>
-        </State>
-        <State name="error">Oh, snap!</State>
+        <State name="a">a</State>
+        <State name="b.a">b.a</State>
+        <State name="b.b">b.b</State>
       </div>
     )
   }
 }
 
-App.defaultProps = {
-  gists: [],
-}
-
 test('it works', () => {
-  testStateMachine({ machine, fixtures }, App)
+  testStateMachine({ machine: firstMachine }, App)
 })

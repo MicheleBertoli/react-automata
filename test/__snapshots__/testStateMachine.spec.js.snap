@@ -1,53 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`error 1`] = `
+exports[`a 1`] = `
 <div>
-  <h1>
-    State Machine
-  </h1>
-  <button
-    onClick={[Function]}
-  >
-    Retry
-  </button>
-  Oh, snap!
+  a
 </div>
 `;
 
-exports[`fetching 1`] = `
+exports[`b.a 1`] = `
 <div>
-  <h1>
-    State Machine
-  </h1>
-  Loading...
+  b.a
 </div>
 `;
 
-exports[`idle 1`] = `
+exports[`b.b 1`] = `
 <div>
-  <h1>
-    State Machine
-  </h1>
-  <button
-    onClick={[Function]}
-  >
-    Fetch
-  </button>
-</div>
-`;
-
-exports[`success 1`] = `
-<div>
-  <h1>
-    State Machine
-  </h1>
-  <ul>
-    <li>
-      GIST1
-    </li>
-    <li>
-      GIST2
-    </li>
-  </ul>
+  b.b
 </div>
 `;
