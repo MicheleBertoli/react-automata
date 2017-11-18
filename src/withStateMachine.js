@@ -42,8 +42,9 @@ const withStateMachine = config => Component => {
       this.setState(prevState => ({
         action,
         componentState: { ...this.state.componentState, ...payload },
-        machineState: this.machine.transition(prevState.machineState, action)
-          .value,
+        machineState: this.machine
+          .transition(prevState.machineState, action)
+          .toString(),
         payload,
       }))
     }
