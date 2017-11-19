@@ -26,14 +26,17 @@
     "jest": "^21.2.1",
     "lint-staged": "^4.3.0",
     "prettier": "^1.7.4",
-    "prop-types": "^15.6.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-test-renderer": "^16.0.0"
   },
   "dependencies": {
     "minimatch": "^3.0.4",
+    "prop-types": "^15.6.0",
     "xstate": "^1.2.1"
+  },
+  "peerDependencies": {
+    "react": "^16.0.0"
   },
   "lint-staged": {
     "*.{js}": [
