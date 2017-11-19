@@ -1,5 +1,5 @@
 import { testStateMachine } from '../src'
-import App, { machine } from './App'
+import { App, machine } from './App'
 
 global.fetch = jest.fn(() => new Promise(resolve => resolve()))
 

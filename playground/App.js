@@ -1,5 +1,5 @@
 import React from 'react'
-import { State } from '../src'
+import { State, withStateMachine } from '../src'
 
 export const machine = {
   initial: 'idle',
@@ -24,7 +24,7 @@ export const machine = {
   },
 }
 
-class App extends React.Component {
+export class App extends React.Component {
   componentWillTransition(action) {
     if (action === 'FETCH') {
       fetch('https://api.github.com/users/gaearon/gists')
@@ -65,4 +65,4 @@ App.defaultProps = {
   gists: [],
 }
 
-export default App
+export default withStateMachine(machine)(App)

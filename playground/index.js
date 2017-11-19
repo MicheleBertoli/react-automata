@@ -1,8 +1,19 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { withStateMachine } from '../src'
-import App, { machine } from './App'
+import { AppContainer } from 'react-hot-loader'
+import App from './App'
 
-const SuperApp = withStateMachine(machine)(App)
+const render = Component => {
+  ReactDOM.render(
+    <AppContainer>
+      <Component />
+    </AppContainer>,
+    document.body
+  )
+}
 
-ReactDOM.render(<SuperApp />, document.body)
+render(App)
+
+if (module.hot) {
+  module.hot.accept('./App', () => render(App))
+}

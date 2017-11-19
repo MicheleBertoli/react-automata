@@ -1,11 +1,13 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const path = require('path')
+const webpack = require('webpack')
 
 module.exports = {
-  entry: './playground/index.js',
+  entry: ['react-hot-loader/patch', './playground/index.js'],
 
   devServer: {
     contentBase: './dist',
+    hot: true,
   },
 
   module: {
@@ -15,6 +17,15 @@ module.exports = {
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
+          options: {
+            babelrc: false,
+            presets: [['env', { modules: false }], 'react'],
+            plugins: [
+              'transform-class-properties',
+              'transform-object-rest-spread',
+              'react-hot-loader/babel',
+            ],
+          },
         },
       },
     ],
@@ -25,5 +36,9 @@ module.exports = {
     filename: 'bundle.js',
   },
 
-  plugins: [new HtmlWebpackPlugin()],
+  plugins: [
+    new HtmlWebpackPlugin(),
+    new webpack.NamedModulesPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
+  ],
 }
