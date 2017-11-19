@@ -21,6 +21,7 @@
       "objects": "only-multiline"
     }],
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+    "import/no-named-as-default": "off",
     "no-use-before-define": "off",
     "prettier/prettier": ["error", {
       "semi": false,

@@ -1,9 +1,7 @@
 import React from 'react'
-import { State, testStateMachine } from '../src'
+import { State, withStateMachine } from '../src'
 
-global.fetch = jest.fn(() => new Promise(resolve => resolve()))
-
-const machine = {
+export const machine = {
   initial: 'idle',
   states: {
     idle: {
@@ -26,24 +24,7 @@ const machine = {
   },
 }
 
-const fixtures = {
-  fetching: {
-    SUCCESS: {
-      gists: [
-        {
-          id: 'ID1',
-          description: 'GIST1',
-        },
-        {
-          id: 'ID2',
-          description: 'GIST2',
-        },
-      ],
-    },
-  },
-}
-
-class App extends React.Component {
+export class App extends React.Component {
   componentWillTransition(action) {
     if (action === 'FETCH') {
       fetch('https://api.github.com/users/gaearon/gists')
@@ -84,6 +65,4 @@ App.defaultProps = {
   gists: [],
 }
 
-test('it works', () => {
-  testStateMachine({ machine, fixtures }, App)
-})
+export default withStateMachine(machine)(App)
