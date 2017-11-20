@@ -6,14 +6,209 @@
 
 # React Automata
 
-What if your components' state was predictable?
+If your components' state was predictable, you could [automagically generate tests](https://speakerdeck.com/michelebertoli/test-like-its-2017).
 
-Goals:
-- Declaratively define states
-- Automagically generate tests
-- Provide powerful DevTools
+# Quick Start
+
+## Installation
+
+```sh
+yarn add react-automata
+```
+
+## Usage
+
+```js
+// App.js
+
+import React from 'react'
+import { State, withStateMachine } from 'react-automata'
+
+export const machine = {
+  initial: 'a',
+  states: {
+    a: {
+      on: {
+        NEXT: 'b',
+      },
+    },
+    b: {
+      on: {
+        NEXT: 'a',
+      },
+    },
+  },
+}
+
+export class App extends React.Component {
+  handleClick = () => {
+    this.props.transition('NEXT')
+  }
+
+  render() {
+    return (
+      <div>
+        <button onClick={this.handleClick}>NEXT</button>
+        <State name="a">Hello, A</State>
+        <State name="b">Ciao, B</State>
+      </div>
+    )
+  }
+}
+
+export default withStateMachine(machine)(App)
+```
+
+```js
+// App.spec.js
+
+import { testStateMachine } from 'react-automata'
+import { App, machine } from './App'
+
+test('it works', () => {
+  testStateMachine({ machine }, App)
+})
+```
+
+```js
+// App.spec.js.snap
+
+exports[`a 1`] = `
+<div>
+  <button
+    onClick={[Function]}
+  >
+    NEXT
+  </button>
+  Hello, A
+</div>
+`;
+
+exports[`b 1`] = `
+<div>
+  <button
+    onClick={[Function]}
+  >
+    NEXT
+  </button>
+  Ciao, B
+</div>
+`;
+```
+
+# API
+
+## withStateMachine(machine)(Component)
+
+The `withStateMachine` higher-order component takes a state machine definition (see [xstate](https://github.com/davidkpiano/xstate)) and a component.
+It returns a new component with special props and lifecycle methods.
+
+> It works with plain and nested state machine - parallel state machines are not supported yet.
+
+### Props
+
+#### transition(action, [payload])
+
+The method to change the state of the state machine.
+It takes an optional payload, which is stored into the container and can be consumed in form of props.
+
+```js
+handleClick = () => {
+  this.props.transition('FETCH')
+}
+```
+
+#### machineState
+
+The current state of the state machine.
+
+```js
+<button onClick={this.handleClick}>
+  {this.props.machineState === 'idle' ? 'Fetch' : 'Retry'}
+</button>
+```
+
+### Lifecycle methods
+
+#### componentWillTransition(action, [payload])
+
+The lifecycle method invoked when a transition is about to happen.
+It provides the action, and an optional payload.
+This is the place to fire side-effects.
+
+```js
+componentWillTransition(action) {
+  if (action === 'FETCH') {
+    fetch('https://api.github.com/users/gaearon/gists')
+      .then(response => response.json())
+      .then(gists => this.props.transition('SUCCESS', { gists }))
+      .catch(() => this.props.transition('ERROR'))
+  }
+}
+```
+
+#### componentDidTransition(prevStateMachine, action, [payload])
+
+The lifecycle method invoked when a transition is happened and the state is updated.
+It provides the previous state machine, the action, and an optional payload.
+The current `machineState` is available in `this.state`.
+
+```js
+componentDidTransition(prevStateMachine, action, payload) {
+  Logger.log(action, payload)
+}
+```
+
+## State
+
+The component to define which parts of the tree should be rendered in a given state (or a set of states).
+
+| Prop | Type | Description |
+| ---- | ---- | ----------- |
+| name  | string  | The name of the state for which the children should be shown, it can be the exact state or a glob expression (e.g. `name="idle"` or `name="error.*"`). |
+| names  | arrayOf(string)  | The names of the states for which the children should be shown, it can be an array exact states or glob expressions (e.g. `name={['idle', 'error.*']`). The `name` prop has precedence over `names`. |
+| onEnter(machineState)  | func  | The function invoked when the component becomes visible, it provides the current machine state. |
+| onLeave(machineState)  | func  | The function invoked when the component becomes invisible, it provides the current machine state. |
+
+```js
+<State name="error">Oh, snap!</State>
+```
+
+## testStateMachine({ machine, [fixtures] }, Component)
+
+The method to automagically generate tests given a state machine definition, and a component.
+It accepts an optional `fixtures` configuration to describe which data that should be injected into the component for a given transition.
+
+```js
+const fixtures = {
+  fetching: {
+    SUCCESS: {
+      gists: [
+        {
+          id: 'ID1',
+          description: 'GIST1',
+        },
+        {
+          id: 'ID2',
+          description: 'GIST2',
+        },
+      ],
+    },
+  },
+}
+
+test('it works', () => {
+  testStateMachine({ machine, fixtures }, App)
+})
+```
+
+# DevTools
+
+[Coming soon](https://twitter.com/MicheleBertoli/status/932234021983211520)
 
 # Inspiration
+
+[Federico](https://twitter.com/gandellinux) for telling me "Hey, I think building UIs using State Machines is the future"
 
 [Infinitely Better UIs with Finite Automata](https://www.youtube.com/watch?v=VU1NKX6Qkxc) by [David](https://twitter.com/DavidKPiano)
 
