@@ -2,7 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Machine } from 'xstate'
 
-const withStateMachine = config => Component => {
+const getComponentName = Component =>
+  Component.displayName || Component.name || 'Component'
+
+const withStateMachine = (config, options = {}) => Component => {
   class StateMachine extends React.Component {
     machine = Machine(config)
 
@@ -16,17 +19,53 @@ const withStateMachine = config => Component => {
       return { machineState: this.state.machineState }
     }
 
+    componentDidMount() {
+      if (options.devTools && window.__REDUX_DEVTOOLS_EXTENSION__) {
+        this.devTools = window.__REDUX_DEVTOOLS_EXTENSION__.connect({
+          name: getComponentName(Component),
+        })
+        this.devTools.init({ machineState: this.state.machineState })
+
+        this.unsubscribe = this.devTools.subscribe(message => {
+          if (
+            message.type === 'DISPATCH' &&
+            message.payload.type === 'JUMP_TO_ACTION'
+          ) {
+            this.setState(JSON.parse(message.state))
+          }
+        })
+      }
+    }
+
+    componentWillUnmount() {
+      if (this.unsubscribe) {
+        this.unsubscribe()
+      }
+
+      if (window.__REDUX_DEVTOOLS_EXTENSION__) {
+        window.__REDUX_DEVTOOLS_EXTENSION__.disconnect()
+      }
+    }
+
     componentDidUpdate(prevProps, prevState) {
       if (
-        this.instance.componentDidTransition &&
         prevState.machineState !== this.state.machineState &&
         this.state.action
       ) {
-        this.instance.componentDidTransition(
-          prevState.machineState,
-          this.state.action,
-          this.state.payload
-        )
+        if (this.instance.componentDidTransition) {
+          this.instance.componentDidTransition(
+            prevState.machineState,
+            this.state.action,
+            this.state.payload
+          )
+        }
+
+        if (this.devTools) {
+          this.devTools.send(this.state.action, {
+            componentState: this.state.componentState,
+            machineState: this.state.machineState,
+          })
+        }
       }
     }
 

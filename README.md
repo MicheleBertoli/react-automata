@@ -98,12 +98,18 @@ exports[`b 1`] = `
 
 # API
 
-## withStateMachine(machine)(Component)
+## withStateMachine(machine, [options])(Component)
 
-The `withStateMachine` higher-order component takes a state machine definition (see [xstate](https://github.com/davidkpiano/xstate)) and a component.
+The `withStateMachine` higher-order component takes a state machine definition (see [xstate](https://github.com/davidkpiano/xstate)), some optional options and a component.
 It returns a new component with special props and lifecycle methods.
 
-> It works with plain and nested state machine - parallel state machines are not supported yet.
+> This package works with regular and nested state machines - parallel state machines are not supported yet.
+
+### Options
+
+| Option | Type | Description |
+| ------ | ---- | ----------- |
+| devTools | bool | To connect the state machine to the [Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension). |
 
 ### Props
 
@@ -201,10 +207,6 @@ test('it works', () => {
   testStateMachine({ machine, fixtures }, App)
 })
 ```
-
-# DevTools
-
-[Coming soon](https://twitter.com/MicheleBertoli/status/932234021983211520)
 
 # Inspiration
 

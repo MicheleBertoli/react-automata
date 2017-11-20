@@ -22,6 +22,9 @@
     }],
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
     "import/no-named-as-default": "off",
+    "no-underscore-dangle": ["error", {
+      "allow": ["__REDUX_DEVTOOLS_EXTENSION__"],
+    }],
     "no-use-before-define": "off",
     "prettier/prettier": ["error", {
       "semi": false,

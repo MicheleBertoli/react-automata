@@ -65,4 +65,4 @@ App.defaultProps = {
   gists: [],
 }
 
-export default withStateMachine(machine)(App)
+export default withStateMachine(machine, { devTools: true })(App)
