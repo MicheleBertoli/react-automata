@@ -100,8 +100,8 @@ exports[`b 1`] = `
 
 ## withStateMachine(machine, [options])(Component)
 
-The `withStateMachine` higher-order component takes a state machine definition (see [xstate](https://github.com/davidkpiano/xstate)), some optional options and a component.
-It returns a new component with special props and lifecycle methods.
+The `withStateMachine` higher-order component takes a state machine definition (see [xstate](https://github.com/davidkpiano/xstate)), some optional [options](#options) and a component.
+It returns a new component with special [props](#props) and [lifecycle methods](#lifecycle-methods).
 
 > This package works with regular and nested state machines - parallel state machines are not supported yet.
 
@@ -210,8 +210,8 @@ test('it works', () => {
 
 # Inspiration
 
-[Federico](https://twitter.com/gandellinux) for telling me "Hey, I think building UIs using State Machines is the future"
+[Federico](https://twitter.com/gandellinux), for telling me "Hey, I think building UIs using state machines is the future".
 
-[Infinitely Better UIs with Finite Automata](https://www.youtube.com/watch?v=VU1NKX6Qkxc) by [David](https://twitter.com/DavidKPiano)
+[David](https://twitter.com/DavidKPiano), for giving a very informative (and fun) [talk](https://www.youtube.com/watch?v=VU1NKX6Qkxc) about infinitely better UIs, and building [xstate](https://github.com/davidkpiano/xstate).
 
-[Rambling thoughts on React and Finite State Machines](https://www.youtube.com/watch?v=MkdV2-U16tc) by [Ryan](https://twitter.com/ryanflorence)
+[Ryan](https://twitter.com/ryanflorence), for [experimenting](https://www.youtube.com/watch?v=MkdV2-U16tc) with xstate and React - Ryan's approach to React has always been a source of inspiration to me.
