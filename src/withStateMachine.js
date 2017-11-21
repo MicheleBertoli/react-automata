@@ -5,6 +5,9 @@ import { Machine } from 'xstate'
 const getComponentName = Component =>
   Component.displayName || Component.name || 'Component'
 
+const isStateless = Component =>
+  !(Component.prototype && Component.prototype.isReactComponent)
+
 const withStateMachine = (config, options = {}) => Component => {
   class StateMachine extends React.Component {
     machine = Machine(config)
@@ -52,7 +55,7 @@ const withStateMachine = (config, options = {}) => Component => {
         prevState.machineState !== this.state.machineState &&
         this.state.action
       ) {
-        if (this.instance.componentDidTransition) {
+        if (this.instance && this.instance.componentDidTransition) {
           this.instance.componentDidTransition(
             prevState.machineState,
             this.state.action,
@@ -74,7 +77,7 @@ const withStateMachine = (config, options = {}) => Component => {
     }
 
     handleTransition = (action, payload) => {
-      if (this.instance.componentWillTransition) {
+      if (this.instance && this.instance.componentWillTransition) {
         this.instance.componentWillTransition(action, payload)
       }
 
@@ -94,7 +97,7 @@ const withStateMachine = (config, options = {}) => Component => {
           {...this.props}
           {...this.state.componentState}
           machineState={this.state.machineState}
-          ref={this.handleRef}
+          ref={isStateless(Component) ? null : this.handleRef}
           transition={this.handleTransition}
         />
       )

@@ -34,17 +34,13 @@ const firstMachine = {
   },
 }
 
-class App extends React.Component {
-  render() {
-    return (
-      <div>
-        <State name="a">a</State>
-        <State name="b.a">b.a</State>
-        <State name="b.b">b.b</State>
-      </div>
-    )
-  }
-}
+const App = () => (
+  <div>
+    <State name="a">a</State>
+    <State name="b.a">b.a</State>
+    <State name="b.b">b.b</State>
+  </div>
+)
 
 test('it works', () => {
   testStateMachine({ machine: firstMachine }, App)
