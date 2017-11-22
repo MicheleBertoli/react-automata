@@ -1,15 +1,22 @@
 {
   "name": "react-automata",
   "version": "0.1.0",
-  "main": "index.js",
+  "main": "lib/index.js",
   "author": "Michele Bertoli",
   "license": "MIT",
+  "files": [
+    "DISCLAIMER",
+    "lib"
+  ],
   "scripts": {
+    "build": "babel src --out-dir lib",
     "precommit": "lint-staged",
+    "prepublish": "yarn build",
     "start": "webpack-dev-server --open",
     "test": "jest"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.1",
     "babel-jest": "^21.2.0",

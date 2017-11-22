@@ -1,6 +1,6 @@
 import React from 'react'
 import TestRenderer from 'react-test-renderer'
-import { withStateMachine } from '../src'
+import { withStateMachine } from './'
 
 let visitedStates
 

@@ -6,7 +6,7 @@
 
 # React Automata
 
-If your components' state was predictable, you could [automagically generate tests](https://speakerdeck.com/michelebertoli/test-like-its-2017).
+If components' state is deterministic, tests can be automagically generated.
 
 # Quick Start
 
