@@ -20,6 +20,7 @@
       "imports": "never",
       "objects": "only-multiline"
     }],
+    "function-paren-newline": ["error", "consistent"],
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
     "import/no-named-as-default": "off",
     "no-underscore-dangle": ["error", {
