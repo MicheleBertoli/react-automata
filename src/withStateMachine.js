@@ -1,12 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Machine } from 'xstate'
-
-const getComponentName = Component =>
-  Component.displayName || Component.name || 'Component'
-
-const isStateless = Component =>
-  !(Component.prototype && Component.prototype.isReactComponent)
+import { getComponentName, isStateless } from './utils'
 
 const withStateMachine = (config, options = {}) => Component => {
   class StateMachine extends React.Component {

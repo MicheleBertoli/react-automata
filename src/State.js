@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import minimatch from 'minimatch'
+import { mutuallyExclusive } from './utils'
 
 const shouldShow = (props, context) =>
   context.machineState &&
@@ -38,7 +39,7 @@ State.defaultProps = {
 
 State.propTypes = {
   name: PropTypes.string,
-  names: PropTypes.arrayOf(PropTypes.string),
+  names: mutuallyExclusive('name', PropTypes.arrayOf(PropTypes.string)),
   children: PropTypes.node,
   onEnter: PropTypes.func,
   onLeave: PropTypes.func,
