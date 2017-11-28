@@ -32,7 +32,10 @@ const moveToNextState = (config, Component, machineState) => {
 }
 
 const toMatchSnapshot = (config, Component, machineState, action) => {
-  const StateMachine = withStateMachine(config.machine)(Component)
+  const initialData = config.fixtures ? config.fixtures.initialData : null
+  const StateMachine = withStateMachine(config.machine, { initialData })(
+    Component
+  )
   const renderer = TestRenderer.create(<StateMachine />)
   const fixtures =
     config.fixtures && config.fixtures[machineState]

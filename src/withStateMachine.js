@@ -9,7 +9,7 @@ const withStateMachine = (config, options = {}) => Component => {
 
     state = {
       action: null,
-      componentState: null,
+      componentState: options.initialData ,
       machineState: this.machine.getInitialState(),
     }
 
@@ -53,8 +53,7 @@ const withStateMachine = (config, options = {}) => Component => {
         if (this.instance && this.instance.componentDidTransition) {
           this.instance.componentDidTransition(
             prevState.machineState,
-            this.state.action,
-            this.state.payload
+            this.state.action
           )
         }
 
@@ -71,19 +70,25 @@ const withStateMachine = (config, options = {}) => Component => {
       this.instance = element
     }
 
-    handleTransition = (action, payload) => {
+    handleTransition = (action, updater) => {
       if (this.instance && this.instance.componentWillTransition) {
-        this.instance.componentWillTransition(action, payload)
+        this.instance.componentWillTransition(action)
       }
 
-      this.setState(prevState => ({
-        action,
-        componentState: { ...prevState.componentState, ...payload },
-        machineState: this.machine
-          .transition(prevState.machineState, action)
-          .toString(),
-        payload,
-      }))
+      this.setState(prevState => {
+        const stateChange =
+          typeof updater === 'function'
+            ? updater(prevState.componentState)
+            : updater
+
+        return {
+          action,
+          componentState: { ...prevState.componentState, ...stateChange },
+          machineState: this.machine
+            .transition(prevState.machineState, action)
+            .toString(),
+        }
+      })
     }
 
     render() {
