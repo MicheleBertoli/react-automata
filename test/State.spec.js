@@ -93,7 +93,7 @@ test('not visible', () => {
   expect(root.findAllByType('div')).toHaveLength(0)
 })
 
-test('callbacks work', () => {
+test('callbacks', () => {
   const spyOnEnter = jest.fn()
   const spyOnLeave = jest.fn()
 

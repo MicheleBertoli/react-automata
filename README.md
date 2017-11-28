@@ -98,7 +98,7 @@ exports[`b 1`] = `
 
 # API
 
-## withStateMachine(machine, [options])(Component)
+## withStateMachine(machine[, options])(Component)
 
 The `withStateMachine` higher-order component takes a state machine definition (see [xstate](https://github.com/davidkpiano/xstate)), some optional [options](#options) and a component.
 It returns a new component with special [props](#props) and [lifecycle methods](#lifecycle-methods).
@@ -110,13 +110,15 @@ It returns a new component with special [props](#props) and [lifecycle methods](
 | Option | Type | Description |
 | ------ | ---- | ----------- |
 | devTools | bool | To connect the state machine to the [Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension). |
+| initialData | object | The initial data, passed to the component as props. |
 
 ### Props
 
-#### transition(action, [payload])
+#### transition(action[, updater])
 
 The method to change the state of the state machine.
-It takes an optional payload, which is stored into the container and can be consumed in form of props.
+It takes an optional updater function that receives the previous data and returns a data change.
+The updater can also be an object, which gets merged into the current data.
 
 ```js
 handleClick = () => {
@@ -136,11 +138,10 @@ The current state of the state machine.
 
 ### Lifecycle methods
 
-#### componentWillTransition(action, [payload])
+#### componentWillTransition(action)
 
 The lifecycle method invoked when a transition is about to happen.
-It provides the action, and an optional payload.
-This is the place to fire side-effects.
+It provides the action, and it is the place to run side-effects.
 
 ```js
 componentWillTransition(action) {
@@ -153,15 +154,15 @@ componentWillTransition(action) {
 }
 ```
 
-#### componentDidTransition(prevStateMachine, action, [payload])
+#### componentDidTransition(prevStateMachine, action)
 
 The lifecycle method invoked when a transition is happened and the state is updated.
-It provides the previous state machine, the action, and an optional payload.
+It provides the previous state machine, and the action.
 The current `machineState` is available in `this.state`.
 
 ```js
-componentDidTransition(prevStateMachine, action, payload) {
-  Logger.log(action, payload)
+componentDidTransition(prevStateMachine, action) {
+  Logger.log(action)
 }
 ```
 
@@ -180,13 +181,16 @@ The component to define which parts of the tree should be rendered in a given st
 <State name="error">Oh, snap!</State>
 ```
 
-## testStateMachine({ machine, [fixtures] }, Component)
+## testStateMachine({ machine[, fixtures] }, Component)
 
 The method to automagically generate tests given a state machine definition, and a component.
 It accepts an optional `fixtures` configuration to describe which data that should be injected into the component for a given transition.
 
 ```js
 const fixtures = {
+  initialData: {
+    gists: [],
+  },
   fetching: {
     SUCCESS: {
       gists: [

@@ -50,9 +50,9 @@ export class App extends React.Component {
         <State name="fetching">Loading...</State>
         <State name="success">
           <ul>
-            {this.props.gists.map(gist => (
-              <li key={gist.id}>{gist.description}</li>
-            ))}
+            {this.props.gists
+              .filter(gist => gist.description)
+              .map(gist => <li key={gist.id}>{gist.description}</li>)}
           </ul>
         </State>
         <State name="error">Oh, snap!</State>
@@ -61,8 +61,9 @@ export class App extends React.Component {
   }
 }
 
-App.defaultProps = {
-  gists: [],
+const options = {
+  devTools: true,
+  initialData: { gists: [] },
 }
 
-export default withStateMachine(machine, { devTools: true })(App)
+export default withStateMachine(machine, options)(App)

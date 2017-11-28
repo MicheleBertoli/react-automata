@@ -2,26 +2,46 @@ import React from 'react'
 import TestRenderer from 'react-test-renderer'
 import { withStateMachine } from '../src'
 
-test('lifecycle hooks work', () => {
-  const initialState = 'a'
-  const actionName = 'ACTION'
-  const payload = 'payload'
+const initiaState = 'a'
+const action = 'ACTION'
 
-  const machine = {
-    initial: initialState,
-    states: {
-      [initialState]: {
-        on: {
-          [actionName]: 'b',
-        },
+const machine = {
+  initial: initiaState,
+  states: {
+    a: {
+      on: {
+        [action]: 'b',
       },
-      b: {},
     },
-  }
+    b: {},
+  },
+}
 
+test('state', () => {
+  const initialData = { counter: 0 }
+  const Component = () => <div />
+  const StateMachine = withStateMachine(machine, { initialData })(Component)
+  const renderer = TestRenderer.create(<StateMachine />)
+  const instance = renderer.getInstance()
+  const component = renderer.root.findByType(Component)
+
+  expect(component.props.counter).toBe(0)
+
+  instance.handleTransition(action, { counter: 1 })
+
+  expect(component.props.counter).toBe(1)
+
+  instance.handleTransition(action, prevState => ({
+    counter: prevState.counter + 1,
+  }))
+
+  expect(component.props.counter).toBe(2)
+})
+
+test('lifecycle hooks', () => {
   const spy = jest.fn()
 
-  class App extends React.Component {
+  class Component extends React.Component {
     componentWillTransition(...args) {
       spy(...args)
     }
@@ -31,16 +51,16 @@ test('lifecycle hooks work', () => {
     }
 
     render() {
-      return null
+      return <div />
     }
   }
 
-  const StateMachine = withStateMachine(machine)(App)
-
+  const StateMachine = withStateMachine(machine)(Component)
   const instance = TestRenderer.create(<StateMachine />).getInstance()
-  instance.handleTransition(actionName, payload)
+
+  instance.handleTransition(action)
 
   expect(spy).toHaveBeenCalledTimes(2)
-  expect(spy).toHaveBeenCalledWith(actionName, payload)
-  expect(spy).toHaveBeenLastCalledWith(initialState, actionName, payload)
+  expect(spy).toHaveBeenCalledWith(action)
+  expect(spy).toHaveBeenLastCalledWith(initiaState, action)
 })
