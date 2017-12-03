@@ -52,7 +52,7 @@
     "react": "^16.0.0"
   },
   "lint-staged": {
-    "*.{js}": [
+    "*.js": [
       "eslint --fix",
       "git add"
     ]

@@ -9,7 +9,7 @@ const withStateMachine = (config, options = {}) => Component => {
 
     state = {
       action: null,
-      componentState: options.initialData ,
+      componentState: options.initialData,
       machineState: this.machine.getInitialState(),
     }
 
