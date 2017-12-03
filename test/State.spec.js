@@ -98,12 +98,11 @@ test('callbacks', () => {
   const spyOnLeave = jest.fn()
 
   const Context = createContext(
-    null,
+    { machineState: initialState },
     <State name={initialState} onEnter={spyOnEnter} onLeave={spyOnLeave} />
   )
 
   const instance = TestRenderer.create(<Context />).getInstance()
-  instance.setState({ machineState: initialState })
 
   expect(spyOnEnter).toHaveBeenCalledTimes(1)
   expect(spyOnEnter).toHaveBeenCalledWith(initialState)
@@ -112,4 +111,10 @@ test('callbacks', () => {
 
   expect(spyOnLeave).toHaveBeenCalledTimes(1)
   expect(spyOnLeave).toHaveBeenCalledWith(nextState)
+
+  spyOnEnter.mockClear()
+  instance.setState({ machineState: initialState })
+
+  expect(spyOnEnter).toHaveBeenCalledTimes(1)
+  expect(spyOnEnter).toHaveBeenCalledWith(initialState)
 })

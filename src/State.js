@@ -10,6 +10,14 @@ const shouldShow = (props, context) =>
       props.names.some(name => minimatch(context.machineState, name))))
 
 class State extends React.Component {
+  constructor(props, context) {
+    super(props, context)
+
+    if (props.onEnter && shouldShow(props, context)) {
+      props.onEnter(context.machineState)
+    }
+  }
+
   componentWillReceiveProps(nextProps, nextContext) {
     if (
       this.props.onEnter &&
