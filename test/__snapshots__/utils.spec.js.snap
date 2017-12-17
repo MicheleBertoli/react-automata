@@ -1,5 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`mutuallyExclusive both 1`] = `[Error: Since both \`a\` and \`b\` have been supplied, \`b\` will be ignored.]`;
-
-exports[`mutuallyExclusive none 1`] = `[Error: At least one of \`a\` and \`b\` is required.]`;

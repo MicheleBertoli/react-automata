@@ -42,20 +42,20 @@ export class App extends React.Component {
     return (
       <div>
         <h1>State Machine</h1>
-        <State names={['idle', 'error']}>
+        <State value={['idle', 'error']}>
           <button onClick={this.handleClick}>
             {this.props.machineState === 'idle' ? 'Fetch' : 'Retry'}
           </button>
         </State>
-        <State name="fetching">Loading...</State>
-        <State name="success">
+        <State value="fetching">Loading...</State>
+        <State value="success">
           <ul>
             {this.props.gists
               .filter(gist => gist.description)
               .map(gist => <li key={gist.id}>{gist.description}</li>)}
           </ul>
         </State>
-        <State name="error">Oh, snap!</State>
+        <State value="error">Oh, snap!</State>
       </div>
     )
   }

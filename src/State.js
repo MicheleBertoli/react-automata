@@ -1,13 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import minimatch from 'minimatch'
-import { mutuallyExclusive } from './utils'
 
 const shouldShow = (props, context) =>
   context.machineState &&
-  ((props.name && minimatch(context.machineState, props.name)) ||
-    (props.names &&
-      props.names.some(name => minimatch(context.machineState, name))))
+  (Array.isArray(props.value)
+    ? props.value.some(state => minimatch(context.machineState, state))
+    : minimatch(context.machineState, props.value))
 
 class State extends React.Component {
   constructor(props, context) {
@@ -46,8 +45,10 @@ State.defaultProps = {
 }
 
 State.propTypes = {
-  name: PropTypes.string,
-  names: mutuallyExclusive('name', PropTypes.arrayOf(PropTypes.string)),
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.arrayOf(PropTypes.string),
+  ]),
   children: PropTypes.node,
   onEnter: PropTypes.func,
   onLeave: PropTypes.func,

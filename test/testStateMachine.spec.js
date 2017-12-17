@@ -36,9 +36,9 @@ const firstMachine = {
 
 const App = () => (
   <div>
-    <State name="a">a</State>
-    <State name="b.a">b.a</State>
-    <State name="b.b">b.b</State>
+    <State value="a">a</State>
+    <State value="b.a">b.a</State>
+    <State value="b.b">b.b</State>
   </div>
 )
 

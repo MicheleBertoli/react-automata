@@ -31,7 +31,7 @@ const pattern = '*.b'
 test('visible (single)', () => {
   const Context = createContext(
     { machineState: initialState },
-    <State name={initialState}>
+    <State value={initialState}>
       <div />
     </State>
   )
@@ -44,7 +44,7 @@ test('visible (single)', () => {
 test('visible (multiple)', () => {
   const Context = createContext(
     { machineState: initialState },
-    <State names={['foo', initialState]}>
+    <State value={['foo', initialState]}>
       <div />
     </State>
   )
@@ -57,7 +57,7 @@ test('visible (multiple)', () => {
 test('nested (single)', () => {
   const Context = createContext(
     { machineState: nestedState },
-    <State name={pattern}>
+    <State value={pattern}>
       <div />
     </State>
   )
@@ -70,7 +70,7 @@ test('nested (single)', () => {
 test('nested (multiple)', () => {
   const Context = createContext(
     { machineState: nestedState },
-    <State names={['foo', pattern]}>
+    <State value={['foo', pattern]}>
       <div />
     </State>
   )
@@ -83,7 +83,7 @@ test('nested (multiple)', () => {
 test('not visible', () => {
   const Context = createContext(
     null,
-    <State name={initialState}>
+    <State value={initialState}>
       <div />
     </State>
   )
@@ -99,7 +99,7 @@ test('callbacks', () => {
 
   const Context = createContext(
     { machineState: initialState },
-    <State name={initialState} onEnter={spyOnEnter} onLeave={spyOnLeave} />
+    <State value={initialState} onEnter={spyOnEnter} onLeave={spyOnLeave} />
   )
 
   const instance = TestRenderer.create(<Context />).getInstance()

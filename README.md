@@ -49,8 +49,8 @@ export class App extends React.Component {
     return (
       <div>
         <button onClick={this.handleClick}>NEXT</button>
-        <State name="a">Hello, A</State>
-        <State name="b">Ciao, B</State>
+        <State value="a">Hello, A</State>
+        <State value="b">Ciao, B</State>
       </div>
     )
   }
@@ -172,13 +172,12 @@ The component to define which parts of the tree should be rendered for a given s
 
 | Prop | Type | Description |
 | ---- | ---- | ----------- |
-| name  | string  | The name of the state for which the children should be shown, it can be the exact state or a glob expression (e.g. `name="idle"` or `name="error.*"`). |
-| names  | arrayOf(string)  | The names of the states for which the children should be shown, it can be an array of exact states or glob expressions (e.g. `name={['idle', 'error.*']`). The `name` prop has precedence over `names`. |
+| value  | oneOfType(string, arrayOf(string))  | The state(s) for which the children should be shown. It accepts the exact state, a glob expression or an array of states/expressions (e.g. `value="idle"`, `value="error.*"` or  `value={['idle', 'error.*']`). |
 | onEnter(machineState)  | func  | The function invoked when the component becomes visible, it provides the current machine state. |
 | onLeave(machineState)  | func  | The function invoked when the component becomes invisible, it provides the current machine state. |
 
 ```js
-<State name="error">Oh, snap!</State>
+<State value="error">Oh, snap!</State>
 ```
 
 ## testStateMachine({ machine[, fixtures] }, Component)
