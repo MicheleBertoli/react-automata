@@ -13,9 +13,7 @@ export const mutuallyExclusive = (prop, type) => (
 ) => {
   if (props[prop] && props[propName]) {
     return new Error(
-      `Since both \`${prop}\` and \`${propName}\` have been supplied, \`${
-        propName
-      }\` will be ignored.`
+      `Since both \`${prop}\` and \`${propName}\` have been supplied, \`${propName}\` will be ignored.`
     )
   }
   if (!props[prop] && !props[propName]) {

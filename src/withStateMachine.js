@@ -10,7 +10,7 @@ const withStateMachine = (config, options = {}) => Component => {
     state = {
       action: null,
       componentState: options.initialData,
-      machineState: this.machine.getInitialState(),
+      machineState: this.machine.initialState,
     }
 
     getChildContext() {

@@ -8,12 +8,16 @@ const action = 'ACTION'
 const machine = {
   initial: initiaState,
   states: {
-    a: {
+    [initiaState]: {
       on: {
         [action]: 'b',
       },
     },
-    b: {},
+    b: {
+      on: {
+        [action]: initiaState,
+      },
+    },
   },
 }
 
