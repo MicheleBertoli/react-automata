@@ -156,7 +156,7 @@ componentWillTransition(action) {
 
 #### componentDidTransition(prevStateMachine, action)
 
-The lifecycle method invoked when a transition is happened and the state is updated.
+The lifecycle method invoked when a transition has happened and the state is updated.
 It provides the previous state machine, and the action.
 The current `machineState` is available in `this.state`.
 
@@ -168,12 +168,12 @@ componentDidTransition(prevStateMachine, action) {
 
 ## State
 
-The component to define which parts of the tree should be rendered in a given state (or a set of states).
+The component to define which parts of the tree should be rendered for a given state (or set of states).
 
 | Prop | Type | Description |
 | ---- | ---- | ----------- |
 | name  | string  | The name of the state for which the children should be shown, it can be the exact state or a glob expression (e.g. `name="idle"` or `name="error.*"`). |
-| names  | arrayOf(string)  | The names of the states for which the children should be shown, it can be an array exact states or glob expressions (e.g. `name={['idle', 'error.*']`). The `name` prop has precedence over `names`. |
+| names  | arrayOf(string)  | The names of the states for which the children should be shown, it can be an array of exact states or glob expressions (e.g. `name={['idle', 'error.*']`). The `name` prop has precedence over `names`. |
 | onEnter(machineState)  | func  | The function invoked when the component becomes visible, it provides the current machine state. |
 | onLeave(machineState)  | func  | The function invoked when the component becomes invisible, it provides the current machine state. |
 
