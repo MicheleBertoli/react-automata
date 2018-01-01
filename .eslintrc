@@ -34,6 +34,7 @@
       "trailingComma": "es5"
     }],
     "react/jsx-filename-extension": ["error", { "extensions": [".js"] }],
+    "react/no-multi-comp": "off",
     "react/no-unused-prop-types": "off",
     "react/prefer-stateless-function": "off",
     "react/prop-types": ["error", { "skipUndeclared": true }],

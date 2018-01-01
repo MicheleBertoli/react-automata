@@ -44,6 +44,7 @@
     "webpack-dev-server": "^2.9.7"
   },
   "dependencies": {
+    "minimatch": "^3.0.4",
     "prop-types": "^15.6.0",
     "xstate": "^2.1.0"
   },

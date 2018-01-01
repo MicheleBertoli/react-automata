@@ -63,3 +63,30 @@ test('actions', () => {
 
   expect(spy).toHaveBeenCalledTimes(1)
 })
+
+test('lifecycle hooks', () => {
+  const spy = jest.fn()
+
+  class Component extends React.Component {
+    componentWillTransition(...args) {
+      spy(...args)
+    }
+
+    componentDidTransition(...args) {
+      spy(...args)
+    }
+
+    render() {
+      return <div />
+    }
+  }
+
+  const StateMachine = withStateChart(machine)(Component)
+  const instance = TestRenderer.create(<StateMachine />).getInstance()
+
+  instance.handleTransition(event)
+
+  expect(spy).toHaveBeenCalledTimes(2)
+  expect(spy).toHaveBeenCalledWith(event)
+  expect(spy).toHaveBeenLastCalledWith(initiaState, event)
+})

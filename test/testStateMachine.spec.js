@@ -1,5 +1,5 @@
 import React from 'react'
-import { Action, testStateMachine } from '../src'
+import { Action, State, testStateMachine } from '../src'
 
 const secondMachine = {
   initial: 'a',
@@ -37,18 +37,30 @@ const firstMachine = {
   },
 }
 
-const App = () => (
-  <div>
-    <Action initial hide="onEnterB">
-      a
-    </Action>
-    <Action show="onEnterBA" hide="onEnterBB">
-      b.a
-    </Action>
-    <Action show="onEnterBB">b.b</Action>
-  </div>
-)
+test('action', () => {
+  const App = () => (
+    <div>
+      <Action initial hide="onEnterB">
+        a
+      </Action>
+      <Action show="onEnterBA" hide="onEnterBB">
+        b.a
+      </Action>
+      <Action show="onEnterBB">b.b</Action>
+    </div>
+  )
 
-test('it works', () => {
+  testStateMachine({ statechart: firstMachine }, App)
+})
+
+test('state', () => {
+  const App = () => (
+    <div>
+      <State value="a">a</State>
+      <State value="b.a">b.a</State>
+      <State value="b.b">b.b</State>
+    </div>
+  )
+
   testStateMachine({ statechart: firstMachine }, App)
 })

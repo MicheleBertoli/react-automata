@@ -20,7 +20,10 @@ const withStateChart = (statechart, options = {}) => Component => {
     }
 
     getChildContext() {
-      return { actions: this.state.actions }
+      return {
+        actions: this.state.actions,
+        machineState: this.state.machineState,
+      }
     }
 
     componentDidMount() {
@@ -62,11 +65,17 @@ const withStateChart = (statechart, options = {}) => Component => {
           })
         }
 
-        if (
-          this.devTools &&
-          prevState.machineState !== this.state.machineState
-        ) {
-          this.devTools.send(this.state.event, this.state)
+        if (prevState.machineState !== this.state.machineState) {
+          if (this.instance && this.instance.componentDidTransition) {
+            this.instance.componentDidTransition(
+              prevState.machineState,
+              this.state.event
+            )
+          }
+
+          if (this.devTools) {
+            this.devTools.send(this.state.event, this.state)
+          }
         }
       } else {
         this.jumpToAction = false
@@ -78,6 +87,10 @@ const withStateChart = (statechart, options = {}) => Component => {
     }
 
     handleTransition = (event, updater) => {
+      if (this.instance && this.instance.componentWillTransition) {
+        this.instance.componentWillTransition(event)
+      }
+
       this.setState(prevState => {
         const stateChange =
           typeof updater === 'function'
@@ -103,6 +116,7 @@ const withStateChart = (statechart, options = {}) => Component => {
         <Component
           {...this.props}
           {...this.state.componentState}
+          machineState={this.state.machineState}
           ref={this.handleRef}
           transition={this.handleTransition}
         />
@@ -112,6 +126,7 @@ const withStateChart = (statechart, options = {}) => Component => {
 
   StateMachine.childContextTypes = {
     actions: PropTypes.arrayOf(PropTypes.string),
+    machineState: PropTypes.string,
   }
 
   return StateMachine
