@@ -23,6 +23,7 @@
     "function-paren-newline": ["error", "consistent"],
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
     "import/no-named-as-default": "off",
+    "no-confusing-arrow": "off",
     "no-underscore-dangle": ["error", {
       "allow": ["__REDUX_DEVTOOLS_EXTENSION__"],
     }],
@@ -38,6 +39,7 @@
     "react/prop-types": ["error", { "skipUndeclared": true }],
     "react/require-default-props": "off",
     "react/sort-comp": "off",
+    "react/no-did-update-set-state": "off",
     "semi": ["error", "never"],
   }
 }

@@ -1,61 +1,66 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import minimatch from 'minimatch'
 
-const shouldShow = (props, context) =>
-  context.machineState &&
-  (Array.isArray(props.value)
-    ? props.value.some(state => minimatch(context.machineState, state))
-    : minimatch(context.machineState, props.value))
+const matches = (actions, target) =>
+  Array.isArray(target)
+    ? actions.some(action => target.includes(action))
+    : actions.includes(target)
 
-class State extends React.Component {
+class Section extends React.Component {
   constructor(props, context) {
     super(props, context)
 
-    if (props.onEnter && shouldShow(props, context)) {
-      props.onEnter(context.machineState)
+    this.state = {
+      shouldShow: Boolean(props.initial),
     }
   }
 
-  componentWillReceiveProps(nextProps, nextContext) {
-    if (
-      this.props.onEnter &&
-      !shouldShow(this.props, this.context) &&
-      shouldShow(this.props, nextContext)
-    ) {
-      this.props.onEnter(nextContext.machineState)
-    }
+  componentDidUpdate() {
+    if (this.context.actions) {
+      if (
+        this.state.shouldShow &&
+        matches(this.context.actions, this.props.hide)
+      ) {
+        this.setState({
+          shouldShow: false,
+        })
+      }
 
-    if (
-      this.props.onLeave &&
-      shouldShow(this.props, this.context) &&
-      !shouldShow(this.props, nextContext)
-    ) {
-      this.props.onLeave(nextContext.machineState)
+      if (
+        !this.state.shouldShow &&
+        matches(this.context.actions, this.props.show)
+      ) {
+        this.setState({
+          shouldShow: true,
+        })
+      }
     }
   }
 
   render() {
-    return shouldShow(this.props, this.context) ? this.props.children : null
+    return this.state.shouldShow ? this.props.children : null
   }
 }
 
-State.defaultProps = {
+Section.contextTypes = {
+  actions: PropTypes.arrayOf(PropTypes.string),
+}
+
+Section.defaultProps = {
   children: null,
 }
 
-State.propTypes = {
-  value: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.arrayOf(PropTypes.string),
-  ]),
+Section.propTypes = {
   children: PropTypes.node,
-  onEnter: PropTypes.func,
-  onLeave: PropTypes.func,
+  hide: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.string),
+    PropTypes.string,
+  ]),
+  initial: PropTypes.bool,
+  show: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.string),
+    PropTypes.string,
+  ]),
 }
 
-State.contextTypes = {
-  machineState: PropTypes.string,
-}
-
-export default State
+export default Section
