@@ -23,6 +23,6 @@ const fixtures = {
   },
 }
 
-test('it works', () => {
+test.skip('it works', () => {
   testStateMachine({ machine, fixtures }, App)
 })

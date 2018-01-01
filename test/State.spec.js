@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import TestRenderer from 'react-test-renderer'
-import { State } from '../src'
+import { Section } from '../src'
 
-const createContext = (initialState, Tree) => {
+const createContext = (actions, Tree) => {
   class Context extends React.Component {
-    state = initialState
+    state = { actions }
 
     getChildContext() {
       return { ...this.state }
@@ -17,104 +17,85 @@ const createContext = (initialState, Tree) => {
   }
 
   Context.childContextTypes = {
-    machineState: PropTypes.string,
+    actions: PropTypes.arrayOf(PropTypes.string),
   }
 
   return Context
 }
 
-const initialState = 'a'
-const nextState = 'b'
-const nestedState = 'a.b'
-const pattern = '*.b'
+const action = 'action'
 
-test('visible (single)', () => {
-  const Context = createContext(
-    { machineState: initialState },
-    <State value={initialState}>
-      <div />
-    </State>
-  )
-
-  const { root } = TestRenderer.create(<Context />)
-
-  expect(root.findAllByType('div')).toHaveLength(1)
-})
-
-test('visible (multiple)', () => {
-  const Context = createContext(
-    { machineState: initialState },
-    <State value={['foo', initialState]}>
-      <div />
-    </State>
-  )
-
-  const { root } = TestRenderer.create(<Context />)
-
-  expect(root.findAllByType('div')).toHaveLength(1)
-})
-
-test('nested (single)', () => {
-  const Context = createContext(
-    { machineState: nestedState },
-    <State value={pattern}>
-      <div />
-    </State>
-  )
-
-  const { root } = TestRenderer.create(<Context />)
-
-  expect(root.findAllByType('div')).toHaveLength(1)
-})
-
-test('nested (multiple)', () => {
-  const Context = createContext(
-    { machineState: nestedState },
-    <State value={['foo', pattern]}>
-      <div />
-    </State>
-  )
-
-  const { root } = TestRenderer.create(<Context />)
-
-  expect(root.findAllByType('div')).toHaveLength(1)
-})
-
-test('not visible', () => {
+test('initial', () => {
   const Context = createContext(
     null,
-    <State value={initialState}>
+    <Section initial>
       <div />
-    </State>
+    </Section>
   )
 
   const { root } = TestRenderer.create(<Context />)
 
-  expect(root.findAllByType('div')).toHaveLength(0)
+  expect(root.findAllByType('div')).toHaveLength(1)
 })
 
-test('callbacks', () => {
-  const spyOnEnter = jest.fn()
-  const spyOnLeave = jest.fn()
-
+test('show', () => {
   const Context = createContext(
-    { machineState: initialState },
-    <State value={initialState} onEnter={spyOnEnter} onLeave={spyOnLeave} />
+    [action],
+    <Section show={action}>
+      <div />
+    </Section>
   )
 
-  const instance = TestRenderer.create(<Context />).getInstance()
+  const renderer = TestRenderer.create(<Context />)
+  renderer.getInstance().forceUpdate()
 
-  expect(spyOnEnter).toHaveBeenCalledTimes(1)
-  expect(spyOnEnter).toHaveBeenCalledWith(initialState)
+  expect(renderer.root.findAllByType('div')).toHaveLength(1)
+})
 
-  instance.setState({ machineState: nextState })
+test('show (multiple)', () => {
+  const Context = createContext(
+    [action],
+    <Section show={[action, 'foo']}>
+      <div />
+    </Section>
+  )
 
-  expect(spyOnLeave).toHaveBeenCalledTimes(1)
-  expect(spyOnLeave).toHaveBeenCalledWith(nextState)
+  const renderer = TestRenderer.create(<Context />)
+  renderer.getInstance().forceUpdate()
 
-  spyOnEnter.mockClear()
-  instance.setState({ machineState: initialState })
+  expect(renderer.root.findAllByType('div')).toHaveLength(1)
+})
 
-  expect(spyOnEnter).toHaveBeenCalledTimes(1)
-  expect(spyOnEnter).toHaveBeenCalledWith(initialState)
+test('hide', () => {
+  const Context = createContext(
+    [action],
+    <Section initial hide={action}>
+      <div />
+    </Section>
+  )
+
+  const renderer = TestRenderer.create(<Context />)
+
+  expect(renderer.root.findAllByType('div')).toHaveLength(1)
+
+  renderer.getInstance().forceUpdate()
+
+  expect(renderer.root.findAllByType('div')).toHaveLength(0)
+})
+
+test('hide (multiple)', () => {
+  const Context = createContext(
+    [action],
+    <Section initial hide={[action, 'foo']}>
+      <div />
+    </Section>
+  )
+
+  const renderer = TestRenderer.create(<Context />)
+
+  expect(renderer.root.findAllByType('div')).toHaveLength(1)
+
+  renderer.getInstance().forceUpdate()
+
+  expect(renderer.root.findAllByType('div')).toHaveLength(0)
 })

@@ -8,6 +8,7 @@ export const statechart = {
       on: {
         FETCH: 'fetching',
       },
+      onExit: 'onExitIdle',
     },
     fetching: {
       on: {
@@ -25,6 +26,7 @@ export const statechart = {
         FETCH: 'fetching',
       },
       onEntry: 'onEnterError',
+      onExit: 'onExitError',
     },
   },
 }
@@ -45,7 +47,7 @@ export class App extends React.Component {
     return (
       <div>
         <h1>State Machine</h1>
-        <Section initial hide="onEnterFetching">
+        <Section initial hide="onExitIdle">
           <button onClick={this.handleClick}>Fetch</button>
         </Section>
         <Section show="onEnterFetching" hide="onExitFetching">
@@ -58,7 +60,7 @@ export class App extends React.Component {
               .map(gist => <li key={gist.id}>{gist.description}</li>)}
           </ul>
         </Section>
-        <Section show="onEnterError" hide="onEnterFetching">
+        <Section show="onEnterError" hide="onExitError">
           <button onClick={this.handleClick}>Retry</button>
           Oh, snap!
         </Section>

@@ -1,6 +1,6 @@
 import React from 'react'
 import TestRenderer from 'react-test-renderer'
-import { withStateMachine } from '../src'
+import { withStateChart } from '../src'
 
 const initiaState = 'a'
 const event = 'EVENT'
@@ -17,6 +17,7 @@ const machine = {
       on: {
         [event]: initiaState,
       },
+      onEntry: 'onEnterB',
     },
   },
 }
@@ -24,7 +25,7 @@ const machine = {
 test('state', () => {
   const initialData = { counter: 0 }
   const Component = () => <div />
-  const StateMachine = withStateMachine(machine, { initialData })(Component)
+  const StateMachine = withStateChart(machine, { initialData })(Component)
   const renderer = TestRenderer.create(<StateMachine />)
   const instance = renderer.getInstance()
   const component = renderer.root.findByType(Component)
@@ -42,16 +43,12 @@ test('state', () => {
   expect(component.props.counter).toBe(2)
 })
 
-test('lifecycle hooks', () => {
+test('actions', () => {
   const spy = jest.fn()
 
   class Component extends React.Component {
-    componentWillTransition(...args) {
-      spy(...args)
-    }
-
-    componentDidTransition(...args) {
-      spy(...args)
+    onEnterB() {
+      spy()
     }
 
     render() {
@@ -59,12 +56,10 @@ test('lifecycle hooks', () => {
     }
   }
 
-  const StateMachine = withStateMachine(machine)(Component)
+  const StateMachine = withStateChart(machine)(Component)
   const instance = TestRenderer.create(<StateMachine />).getInstance()
 
   instance.handleTransition(event)
 
-  expect(spy).toHaveBeenCalledTimes(2)
-  expect(spy).toHaveBeenCalledWith(event)
-  expect(spy).toHaveBeenLastCalledWith(initiaState, event)
+  expect(spy).toHaveBeenCalledTimes(1)
 })

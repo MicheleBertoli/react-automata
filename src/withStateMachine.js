@@ -83,17 +83,17 @@ const withStateChart = (statechart, options = {}) => Component => {
           typeof updater === 'function'
             ? updater(prevState.componentState)
             : updater
-        const { value, effects } = this.machine.transition(
+        const nextState = this.machine.transition(
           prevState.machineState,
           event,
           stateChange
         )
 
         return {
-          actions: effects.entry.concat(effects.exit),
+          actions: nextState.effects.entry.concat(nextState.effects.exit),
           componentState: { ...prevState.componentState, ...stateChange },
           event,
-          machineState: value,
+          machineState: nextState.toString(),
         }
       })
     }

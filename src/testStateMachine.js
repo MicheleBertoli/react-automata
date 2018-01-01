@@ -1,6 +1,6 @@
 import React from 'react'
 import TestRenderer from 'react-test-renderer'
-import { withStateMachine } from './'
+import { withStateChart } from './'
 
 let visitedStates
 
@@ -28,12 +28,12 @@ const moveToNextState = (config, Component, machineState) => {
     })
 
     return states[state].states
-  }, config.machine.states)
+  }, config.statechart.states)
 }
 
 const toMatchSnapshot = (config, Component, machineState, event) => {
   const initialData = config.fixtures ? config.fixtures.initialData : null
-  const StateMachine = withStateMachine(config.machine, { initialData })(
+  const StateMachine = withStateChart(config.statechart, { initialData })(
     Component
   )
   const renderer = TestRenderer.create(<StateMachine />)
@@ -49,7 +49,7 @@ const toMatchSnapshot = (config, Component, machineState, event) => {
 
 const testStateMachine = (config, Component) => {
   visitedStates = []
-  toMatchSnapshot(config, Component, config.machine.initial)
+  toMatchSnapshot(config, Component, config.statechart.initial)
 }
 
 export default testStateMachine
