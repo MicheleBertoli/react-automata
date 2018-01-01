@@ -4,12 +4,12 @@ import { withStateMachine } from './'
 
 let visitedStates
 
-const transition = (renderer, machineState, action, fixtures) => {
+const transition = (renderer, machineState, event, fixtures) => {
   const instance = renderer.getInstance()
   instance.setState({ machineState })
 
-  if (action) {
-    instance.handleTransition(action, fixtures)
+  if (event) {
+    instance.handleTransition(event, fixtures)
   }
 
   return instance.state.machineState
@@ -19,11 +19,11 @@ const moveToNextState = (config, Component, machineState) => {
   visitedStates.push(machineState)
 
   machineState.split('.').reduce((states, state) => {
-    const { on: actions = {} } = states[state]
+    const { on: events = {} } = states[state]
 
-    Object.keys(actions).forEach(action => {
-      if (!visitedStates.includes(actions[action])) {
-        toMatchSnapshot(config, Component, machineState, action)
+    Object.keys(events).forEach(event => {
+      if (!visitedStates.includes(events[event])) {
+        toMatchSnapshot(config, Component, machineState, event)
       }
     })
 
@@ -31,7 +31,7 @@ const moveToNextState = (config, Component, machineState) => {
   }, config.machine.states)
 }
 
-const toMatchSnapshot = (config, Component, machineState, action) => {
+const toMatchSnapshot = (config, Component, machineState, event) => {
   const initialData = config.fixtures ? config.fixtures.initialData : null
   const StateMachine = withStateMachine(config.machine, { initialData })(
     Component
@@ -39,9 +39,9 @@ const toMatchSnapshot = (config, Component, machineState, action) => {
   const renderer = TestRenderer.create(<StateMachine />)
   const fixtures =
     config.fixtures && config.fixtures[machineState]
-      ? config.fixtures[machineState][action]
+      ? config.fixtures[machineState][event]
       : null
-  const nextMachineState = transition(renderer, machineState, action, fixtures)
+  const nextMachineState = transition(renderer, machineState, event, fixtures)
 
   expect(renderer.toJSON()).toMatchSnapshot(nextMachineState)
   moveToNextState(config, Component, nextMachineState)

@@ -114,7 +114,7 @@ It returns a new component with special [props](#props) and [lifecycle methods](
 
 ### Props
 
-#### transition(action[, updater])
+#### transition(event[, updater])
 
 The method to change the state of the state machine.
 It takes an optional updater function that receives the previous data and returns a data change.
@@ -138,14 +138,14 @@ The current state of the state machine.
 
 ### Lifecycle methods
 
-#### componentWillTransition(action)
+#### componentWillTransition(event)
 
 The lifecycle method invoked when a transition is about to happen.
-It provides the action, and it is the place to run side-effects.
+It provides the event, and it is the place to run side-effects.
 
 ```js
-componentWillTransition(action) {
-  if (action === 'FETCH') {
+componentWillTransition(event) {
+  if (event === 'FETCH') {
     fetch('https://api.github.com/users/gaearon/gists')
       .then(response => response.json())
       .then(gists => this.props.transition('SUCCESS', { gists }))
@@ -154,15 +154,15 @@ componentWillTransition(action) {
 }
 ```
 
-#### componentDidTransition(prevStateMachine, action)
+#### componentDidTransition(prevStateMachine, event)
 
 The lifecycle method invoked when a transition has happened and the state is updated.
-It provides the previous state machine, and the action.
+It provides the previous state machine, and the event.
 The current `machineState` is available in `this.state`.
 
 ```js
-componentDidTransition(prevStateMachine, action) {
-  Logger.log(action)
+componentDidTransition(prevStateMachine, event) {
+  Logger.log(event)
 }
 ```
 
