@@ -3,19 +3,19 @@ import TestRenderer from 'react-test-renderer'
 import { withStateMachine } from '../src'
 
 const initiaState = 'a'
-const action = 'ACTION'
+const event = 'EVENT'
 
 const machine = {
   initial: initiaState,
   states: {
     [initiaState]: {
       on: {
-        [action]: 'b',
+        [event]: 'b',
       },
     },
     b: {
       on: {
-        [action]: initiaState,
+        [event]: initiaState,
       },
     },
   },
@@ -31,11 +31,11 @@ test('state', () => {
 
   expect(component.props.counter).toBe(0)
 
-  instance.handleTransition(action, { counter: 1 })
+  instance.handleTransition(event, { counter: 1 })
 
   expect(component.props.counter).toBe(1)
 
-  instance.handleTransition(action, prevState => ({
+  instance.handleTransition(event, prevState => ({
     counter: prevState.counter + 1,
   }))
 
@@ -62,9 +62,9 @@ test('lifecycle hooks', () => {
   const StateMachine = withStateMachine(machine)(Component)
   const instance = TestRenderer.create(<StateMachine />).getInstance()
 
-  instance.handleTransition(action)
+  instance.handleTransition(event)
 
   expect(spy).toHaveBeenCalledTimes(2)
-  expect(spy).toHaveBeenCalledWith(action)
-  expect(spy).toHaveBeenLastCalledWith(initiaState, action)
+  expect(spy).toHaveBeenCalledWith(event)
+  expect(spy).toHaveBeenLastCalledWith(initiaState, event)
 })

@@ -25,8 +25,8 @@ export const machine = {
 }
 
 export class App extends React.Component {
-  componentWillTransition(action) {
-    if (action === 'FETCH') {
+  componentWillTransition(event) {
+    if (event === 'FETCH') {
       fetch('https://api.github.com/users/gaearon/gists')
         .then(response => response.json())
         .then(gists => this.props.transition('SUCCESS', { gists }))

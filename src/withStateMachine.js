@@ -8,8 +8,8 @@ const withStateMachine = (config, options = {}) => Component => {
     machine = Machine(config)
 
     state = {
-      action: null,
       componentState: options.initialData,
+      event: null,
       machineState: this.machine.initialState,
     }
 
@@ -48,17 +48,17 @@ const withStateMachine = (config, options = {}) => Component => {
     componentDidUpdate(prevProps, prevState) {
       if (
         prevState.machineState !== this.state.machineState &&
-        this.state.action
+        this.state.event
       ) {
         if (this.instance && this.instance.componentDidTransition) {
           this.instance.componentDidTransition(
             prevState.machineState,
-            this.state.action
+            this.state.event
           )
         }
 
         if (this.devTools) {
-          this.devTools.send(this.state.action, {
+          this.devTools.send(this.state.event, {
             componentState: this.state.componentState,
             machineState: this.state.machineState,
           })
@@ -70,9 +70,9 @@ const withStateMachine = (config, options = {}) => Component => {
       this.instance = element
     }
 
-    handleTransition = (action, updater) => {
+    handleTransition = (event, updater) => {
       if (this.instance && this.instance.componentWillTransition) {
-        this.instance.componentWillTransition(action)
+        this.instance.componentWillTransition(event)
       }
 
       this.setState(prevState => {
@@ -82,10 +82,10 @@ const withStateMachine = (config, options = {}) => Component => {
             : updater
 
         return {
-          action,
           componentState: { ...prevState.componentState, ...stateChange },
+          event,
           machineState: this.machine
-            .transition(prevState.machineState, action)
+            .transition(prevState.machineState, event)
             .toString(),
         }
       })
