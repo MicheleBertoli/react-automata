@@ -6,7 +6,7 @@ const matches = (actions, target) =>
     ? actions.some(action => target.includes(action))
     : actions.includes(target)
 
-class Section extends React.Component {
+class Block extends React.Component {
   constructor(props, context) {
     super(props, context)
 
@@ -42,15 +42,15 @@ class Section extends React.Component {
   }
 }
 
-Section.contextTypes = {
+Block.contextTypes = {
   actions: PropTypes.arrayOf(PropTypes.string),
 }
 
-Section.defaultProps = {
+Block.defaultProps = {
   children: null,
 }
 
-Section.propTypes = {
+Block.propTypes = {
   children: PropTypes.node,
   hide: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.string),
@@ -63,4 +63,4 @@ Section.propTypes = {
   ]),
 }
 
-export default Section
+export default Block

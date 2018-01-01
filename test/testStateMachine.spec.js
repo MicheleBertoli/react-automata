@@ -1,5 +1,5 @@
 import React from 'react'
-import { Section, testStateMachine } from '../src'
+import { Block, testStateMachine } from '../src'
 
 const secondMachine = {
   initial: 'a',
@@ -39,13 +39,13 @@ const firstMachine = {
 
 const App = () => (
   <div>
-    <Section initial hide="onEnterB">
+    <Block initial hide="onEnterB">
       a
-    </Section>
-    <Section show="onEnterBA" hide="onEnterBB">
+    </Block>
+    <Block show="onEnterBA" hide="onEnterBB">
       b.a
-    </Section>
-    <Section show="onEnterBB">b.b</Section>
+    </Block>
+    <Block show="onEnterBB">b.b</Block>
   </div>
 )
 
