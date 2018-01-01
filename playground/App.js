@@ -1,5 +1,5 @@
 import React from 'react'
-import { Block, withStateChart } from '../src'
+import { Action, withStateChart } from '../src'
 
 export const statechart = {
   initial: 'idle',
@@ -47,23 +47,23 @@ export class App extends React.Component {
     return (
       <div>
         <h1>State Machine</h1>
-        <Block initial hide="onExitIdle">
+        <Action initial hide="onExitIdle">
           <button onClick={this.handleClick}>Fetch</button>
-        </Block>
-        <Block show="onEnterFetching" hide="onExitFetching">
+        </Action>
+        <Action show="onEnterFetching" hide="onExitFetching">
           Loading...
-        </Block>
-        <Block show="onEnterSuccess">
+        </Action>
+        <Action show="onEnterSuccess">
           <ul>
             {this.props.gists
               .filter(gist => gist.description)
               .map(gist => <li key={gist.id}>{gist.description}</li>)}
           </ul>
-        </Block>
-        <Block show="onEnterError" hide="onExitError">
+        </Action>
+        <Action show="onEnterError" hide="onExitError">
           <button onClick={this.handleClick}>Retry</button>
           Oh, snap!
-        </Block>
+        </Action>
       </div>
     )
   }

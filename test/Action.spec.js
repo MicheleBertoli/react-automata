@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import TestRenderer from 'react-test-renderer'
-import { Block } from '../src'
+import { Action } from '../src'
 
 const createContext = (actions, Tree) => {
   class Context extends React.Component {
@@ -28,9 +28,9 @@ const action = 'action'
 test('initial', () => {
   const Context = createContext(
     null,
-    <Block initial>
+    <Action initial>
       <div />
-    </Block>
+    </Action>
   )
 
   const { root } = TestRenderer.create(<Context />)
@@ -41,9 +41,9 @@ test('initial', () => {
 test('show', () => {
   const Context = createContext(
     [action],
-    <Block show={action}>
+    <Action show={action}>
       <div />
-    </Block>
+    </Action>
   )
 
   const renderer = TestRenderer.create(<Context />)
@@ -55,9 +55,9 @@ test('show', () => {
 test('show (multiple)', () => {
   const Context = createContext(
     [action],
-    <Block show={[action, 'foo']}>
+    <Action show={[action, 'foo']}>
       <div />
-    </Block>
+    </Action>
   )
 
   const renderer = TestRenderer.create(<Context />)
@@ -69,9 +69,9 @@ test('show (multiple)', () => {
 test('hide', () => {
   const Context = createContext(
     [action],
-    <Block initial hide={action}>
+    <Action initial hide={action}>
       <div />
-    </Block>
+    </Action>
   )
 
   const renderer = TestRenderer.create(<Context />)
@@ -86,9 +86,9 @@ test('hide', () => {
 test('hide (multiple)', () => {
   const Context = createContext(
     [action],
-    <Block initial hide={[action, 'foo']}>
+    <Action initial hide={[action, 'foo']}>
       <div />
-    </Block>
+    </Action>
   )
 
   const renderer = TestRenderer.create(<Context />)
