@@ -45,11 +45,11 @@ State.defaultProps = {
 }
 
 State.propTypes = {
-  value: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.arrayOf(PropTypes.string),
-  ]),
   children: PropTypes.node,
+  value: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.string),
+    PropTypes.string,
+  ]),
   onEnter: PropTypes.func,
   onLeave: PropTypes.func,
 }

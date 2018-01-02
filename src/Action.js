@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const matches = (actions, target) =>
+const matches = (target, actions) =>
   Array.isArray(target)
     ? actions.some(action => target.includes(action))
     : actions.includes(target)
@@ -11,15 +11,15 @@ class Action extends React.Component {
     super(props, context)
 
     this.state = {
-      shouldShow: Boolean(props.initial),
+      shouldShow: !this.props.show,
     }
   }
 
-  componentDidUpdate() {
-    if (this.context.actions) {
+  componentWillReceiveProps(nextProps, nextContext) {
+    if (this.context.actions !== nextContext.actions) {
       if (
         this.state.shouldShow &&
-        matches(this.context.actions, this.props.hide)
+        matches(this.props.hide, nextContext.actions)
       ) {
         this.setState({
           shouldShow: false,
@@ -28,7 +28,7 @@ class Action extends React.Component {
 
       if (
         !this.state.shouldShow &&
-        matches(this.context.actions, this.props.show)
+        matches(this.props.show, nextContext.actions)
       ) {
         this.setState({
           shouldShow: true,
@@ -56,7 +56,6 @@ Action.propTypes = {
     PropTypes.arrayOf(PropTypes.string),
     PropTypes.string,
   ]),
-  initial: PropTypes.bool,
   show: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.string),
     PropTypes.string,

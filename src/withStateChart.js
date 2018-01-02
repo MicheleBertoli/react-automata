@@ -57,28 +57,32 @@ const withStateChart = (statechart, options = {}) => Component => {
 
     componentDidUpdate(prevProps, prevState) {
       if (!this.jumpToAction) {
-        if (this.instance && prevState.actions !== this.state.actions) {
-          this.state.actions.forEach(action => {
-            if (this.instance[action]) {
-              this.instance[action]()
-            }
-          })
-        }
-
-        if (prevState.machineState !== this.state.machineState) {
-          if (this.instance && this.instance.componentDidTransition) {
-            this.instance.componentDidTransition(
-              prevState.machineState,
-              this.state.event
-            )
-          }
-
-          if (this.devTools) {
-            this.devTools.send(this.state.event, this.state)
-          }
-        }
+        this.handleComponentDidUpdate(prevProps, prevState)
       } else {
         this.jumpToAction = false
+      }
+    }
+
+    handleComponentDidUpdate(prevProps, prevState) {
+      if (prevState.actions !== this.state.actions && this.instance) {
+        this.state.actions.forEach(action => {
+          if (this.instance[action]) {
+            this.instance[action]()
+          }
+        })
+      }
+
+      if (prevState.machineState !== this.state.machineState) {
+        if (this.instance && this.instance.componentDidTransition) {
+          this.instance.componentDidTransition(
+            prevState.machineState,
+            this.state.event
+          )
+        }
+
+        if (this.devTools) {
+          this.devTools.send(this.state.event, this.state)
+        }
       }
     }
 

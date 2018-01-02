@@ -3,16 +3,16 @@ import PropTypes from 'prop-types'
 import TestRenderer from 'react-test-renderer'
 import { State } from '../src'
 
-const createContext = (initialState, Tree) => {
+const createContext = (machineState, Component) => {
   class Context extends React.Component {
-    state = initialState
+    state = { machineState }
 
     getChildContext() {
       return { ...this.state }
     }
 
     render() {
-      return Tree
+      return Component
     }
   }
 
@@ -28,27 +28,25 @@ const nextState = 'b'
 const nestedState = 'a.b'
 const pattern = '*.b'
 
-test('visible (single)', () => {
+test('regular (single)', () => {
   const Context = createContext(
-    { machineState: initialState },
+    initialState,
     <State value={initialState}>
       <div />
     </State>
   )
-
   const { root } = TestRenderer.create(<Context />)
 
   expect(root.findAllByType('div')).toHaveLength(1)
 })
 
-test('visible (multiple)', () => {
+test('regular (multiple)', () => {
   const Context = createContext(
-    { machineState: initialState },
+    initialState,
     <State value={['foo', initialState]}>
       <div />
     </State>
   )
-
   const { root } = TestRenderer.create(<Context />)
 
   expect(root.findAllByType('div')).toHaveLength(1)
@@ -56,12 +54,11 @@ test('visible (multiple)', () => {
 
 test('nested (single)', () => {
   const Context = createContext(
-    { machineState: nestedState },
+    nestedState,
     <State value={pattern}>
       <div />
     </State>
   )
-
   const { root } = TestRenderer.create(<Context />)
 
   expect(root.findAllByType('div')).toHaveLength(1)
@@ -69,25 +66,23 @@ test('nested (single)', () => {
 
 test('nested (multiple)', () => {
   const Context = createContext(
-    { machineState: nestedState },
+    nestedState,
     <State value={['foo', pattern]}>
       <div />
     </State>
   )
-
   const { root } = TestRenderer.create(<Context />)
 
   expect(root.findAllByType('div')).toHaveLength(1)
 })
 
-test('not visible', () => {
+test('no match', () => {
   const Context = createContext(
     null,
-    <State value={initialState}>
+    <State>
       <div />
     </State>
   )
-
   const { root } = TestRenderer.create(<Context />)
 
   expect(root.findAllByType('div')).toHaveLength(0)
@@ -96,12 +91,10 @@ test('not visible', () => {
 test('callbacks', () => {
   const spyOnEnter = jest.fn()
   const spyOnLeave = jest.fn()
-
   const Context = createContext(
-    { machineState: initialState },
+    initialState,
     <State value={initialState} onEnter={spyOnEnter} onLeave={spyOnLeave} />
   )
-
   const instance = TestRenderer.create(<Context />).getInstance()
 
   expect(spyOnEnter).toHaveBeenCalledTimes(1)

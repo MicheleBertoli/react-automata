@@ -40,7 +40,6 @@
     "react/prop-types": ["error", { "skipUndeclared": true }],
     "react/require-default-props": "off",
     "react/sort-comp": "off",
-    "react/no-did-update-set-state": "off",
     "semi": ["error", "never"],
   }
 }
