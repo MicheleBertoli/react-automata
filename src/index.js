@@ -1,5 +1,5 @@
 export { default as Action } from './Action'
 export { default as State } from './State'
-export { default as testStateChart } from './testStateChart'
+export { default as testStatechart } from './testStatechart'
 export { default as testStateMachine } from './testStateMachine'
-export { default as withStateChart } from './withStateChart'
+export { default as withStatechart } from './withStatechart'

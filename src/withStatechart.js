@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Machine } from 'xstate'
 import { getComponentName, isStateless } from './utils'
 
-const withStateChart = (statechart, options = {}) => Component => {
+const withStatechart = (statechart, options = {}) => Component => {
   class StateMachine extends React.Component {
     machine = Machine(statechart)
 
@@ -136,4 +136,4 @@ const withStateChart = (statechart, options = {}) => Component => {
   return StateMachine
 }
 
-export default withStateChart
+export default withStatechart

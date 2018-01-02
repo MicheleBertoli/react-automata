@@ -2,7 +2,7 @@ import React from 'react'
 import TestRenderer from 'react-test-renderer'
 import { Machine } from 'xstate'
 // import { getShortestPaths } from 'xstate/lib/graph'
-import { withStateChart } from './'
+import { withStatechart } from './'
 
 const getShortestPaths = () => ({
   a: [],
@@ -18,7 +18,7 @@ const testStateChart = (config, Component) => {
 
   Object.keys(paths).forEach(key => {
     const initialData = config.fixtures ? config.fixtures.initialData : null
-    const StateMachine = withStateChart(config.statechart, { initialData })(
+    const StateMachine = withStatechart(config.statechart, { initialData })(
       Component
     )
     const renderer = TestRenderer.create(<StateMachine />)

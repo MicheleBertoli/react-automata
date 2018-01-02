@@ -1,6 +1,6 @@
 import React from 'react'
 import TestRenderer from 'react-test-renderer'
-import { withStateChart } from '../src'
+import { withStatechart } from '../src'
 
 const initiaState = 'a'
 const event = 'EVENT'
@@ -25,7 +25,7 @@ const machine = {
 test('state', () => {
   const initialData = { counter: 0 }
   const Component = () => <div />
-  const StateMachine = withStateChart(machine, { initialData })(Component)
+  const StateMachine = withStatechart(machine, { initialData })(Component)
   const renderer = TestRenderer.create(<StateMachine />)
   const instance = renderer.getInstance()
   const component = renderer.root.findByType(Component)
@@ -56,7 +56,7 @@ test('actions', () => {
     }
   }
 
-  const StateMachine = withStateChart(machine)(Component)
+  const StateMachine = withStatechart(machine)(Component)
   const instance = TestRenderer.create(<StateMachine />).getInstance()
 
   instance.handleTransition(event)
@@ -81,7 +81,7 @@ test('lifecycle hooks', () => {
     }
   }
 
-  const StateMachine = withStateChart(machine)(Component)
+  const StateMachine = withStatechart(machine)(Component)
   const instance = TestRenderer.create(<StateMachine />).getInstance()
 
   instance.handleTransition(event)

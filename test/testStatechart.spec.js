@@ -1,5 +1,5 @@
 import React from 'react'
-import { Action, State, testStateChart } from '../src'
+import { Action, State, testStatechart } from '../src'
 
 const secondMachine = {
   initial: 'a',
@@ -50,7 +50,7 @@ test('action', () => {
     </div>
   )
 
-  testStateChart({ statechart: firstMachine }, App)
+  testStatechart({ statechart: firstMachine }, App)
 })
 
 test('state', () => {
@@ -62,5 +62,5 @@ test('state', () => {
     </div>
   )
 
-  testStateChart({ statechart: firstMachine }, App)
+  testStatechart({ statechart: firstMachine }, App)
 })

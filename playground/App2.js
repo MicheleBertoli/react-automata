@@ -1,5 +1,5 @@
 import React from 'react'
-import { Action, withStateChart } from '../src'
+import { Action, withStatechart } from '../src'
 
 export const statechart = {
   initial: 'idle',
@@ -74,4 +74,4 @@ const options = {
   initialData: { gists: [] },
 }
 
-export default withStateChart(statechart, options)(App)
+export default withStatechart(statechart, options)(App)
