@@ -91,3 +91,31 @@ test('hide (multiple)', () => {
 
   expect(renderer.root.findAllByType('div')).toHaveLength(0)
 })
+
+test('callbacks', () => {
+  const spyOnEnter = jest.fn()
+  const spyOnLeave = jest.fn()
+  const Context = createContext(
+    <Action
+      initial
+      show="show"
+      hide="hide"
+      onEnter={spyOnEnter}
+      onLeave={spyOnLeave}
+    />
+  )
+  const instance = TestRenderer.create(<Context />).getInstance()
+
+  expect(spyOnEnter).toHaveBeenCalledTimes(1)
+
+  instance.setState({ actions: ['hide'] })
+
+  expect(spyOnLeave).toHaveBeenCalledTimes(1)
+  expect(spyOnLeave).toHaveBeenCalledWith(['hide'])
+
+  spyOnEnter.mockClear()
+  instance.setState({ actions: ['show'] })
+
+  expect(spyOnEnter).toHaveBeenCalledTimes(1)
+  expect(spyOnEnter).toHaveBeenCalledWith(['show'])
+})

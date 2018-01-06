@@ -1,10 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const matches = (target, actions) =>
-  Array.isArray(target)
-    ? actions.some(action => target.includes(action))
-    : actions.includes(target)
+const matches = (value, actions) =>
+  actions &&
+  (Array.isArray(value)
+    ? actions.some(action => value.includes(action))
+    : actions.includes(value))
 
 class Action extends React.Component {
   constructor(props, context) {
@@ -13,28 +14,38 @@ class Action extends React.Component {
     this.state = {
       shouldShow: Boolean(this.props.initial),
     }
+
+    if (this.state.shouldShow && props.onEnter) {
+      props.onEnter(context.actions)
+    }
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
-    if (this.context.actions !== nextContext.actions) {
-      if (
-        this.state.shouldShow &&
-        (this.props.hide
-          ? matches(this.props.hide, nextContext.actions)
-          : !matches(this.props.show, nextContext.actions))
-      ) {
-        this.setState({
-          shouldShow: false,
-        })
-      }
+    if (
+      !this.state.shouldShow &&
+      matches(this.props.show, nextContext.actions)
+    ) {
+      this.setState({
+        shouldShow: true,
+      })
 
-      if (
-        !this.state.shouldShow &&
-        matches(this.props.show, nextContext.actions)
-      ) {
-        this.setState({
-          shouldShow: true,
-        })
+      if (this.props.onEnter) {
+        this.props.onEnter(nextContext.actions)
+      }
+    }
+
+    if (
+      this.state.shouldShow &&
+      (this.props.hide
+        ? matches(this.props.hide, nextContext.actions)
+        : !matches(this.props.show, nextContext.actions))
+    ) {
+      this.setState({
+        shouldShow: false,
+      })
+
+      if (this.props.onLeave) {
+        this.props.onLeave(nextContext.actions)
       }
     }
   }
@@ -63,6 +74,8 @@ Action.propTypes = {
     PropTypes.arrayOf(PropTypes.string),
     PropTypes.string,
   ]),
+  onEnter: PropTypes.func,
+  onLeave: PropTypes.func,
 }
 
 export default Action

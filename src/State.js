@@ -2,41 +2,55 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import minimatch from 'minimatch'
 
-const shouldShow = (props, context) =>
-  context.machineState &&
-  (Array.isArray(props.value)
-    ? props.value.some(state => minimatch(context.machineState, state))
-    : minimatch(context.machineState, props.value))
+const matches = (value, machineState) =>
+  machineState &&
+  (Array.isArray(value)
+    ? value.some(state => minimatch(machineState, state))
+    : minimatch(machineState, value))
 
 class State extends React.Component {
   constructor(props, context) {
     super(props, context)
 
-    if (props.onEnter && shouldShow(props, context)) {
+    this.state = {
+      shouldShow: matches(props.value, context.machineState),
+    }
+
+    if (this.state.shouldShow && props.onEnter) {
       props.onEnter(context.machineState)
     }
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
     if (
-      this.props.onEnter &&
-      !shouldShow(this.props, this.context) &&
-      shouldShow(this.props, nextContext)
+      !this.state.shouldShow &&
+      matches(this.props.value, nextContext.machineState)
     ) {
-      this.props.onEnter(nextContext.machineState)
+      this.setState({
+        shouldShow: true,
+      })
+
+      if (this.props.onEnter) {
+        this.props.onEnter(nextContext.machineState)
+      }
     }
 
     if (
-      this.props.onLeave &&
-      shouldShow(this.props, this.context) &&
-      !shouldShow(this.props, nextContext)
+      this.state.shouldShow &&
+      !matches(this.props.value, nextContext.machineState)
     ) {
-      this.props.onLeave(nextContext.machineState)
+      this.setState({
+        shouldShow: false,
+      })
+
+      if (this.props.onLeave) {
+        this.props.onLeave(nextContext.machineState)
+      }
     }
   }
 
   render() {
-    return shouldShow(this.props, this.context) ? this.props.children : null
+    return this.state.shouldShow ? this.props.children : null
   }
 }
 
