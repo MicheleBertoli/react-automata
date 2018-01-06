@@ -41,7 +41,7 @@ export class App extends React.Component {
   render() {
     return (
       <div>
-        <h1>State Machine</h1>
+        <h1>State</h1>
         <State value="idle">
           <button onClick={this.handleClick}>Fetch</button>
         </State>
@@ -54,7 +54,8 @@ export class App extends React.Component {
           </ul>
         </State>
         <State value="error">
-          <button onClick={this.handleClick}>Retry</button>Oh, snap!
+          <button onClick={this.handleClick}>Retry</button>
+          Oh, snap!
         </State>
       </div>
     )

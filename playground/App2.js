@@ -8,7 +8,6 @@ export const statechart = {
       on: {
         FETCH: 'fetching',
       },
-      onExit: 'onExitIdle',
     },
     fetching: {
       on: {
@@ -16,7 +15,6 @@ export const statechart = {
         ERROR: 'error',
       },
       onEntry: 'onEnterFetching',
-      onExit: 'onExitFetching',
     },
     success: {
       onEntry: 'onEnterSuccess',
@@ -26,7 +24,6 @@ export const statechart = {
         FETCH: 'fetching',
       },
       onEntry: 'onEnterError',
-      onExit: 'onExitError',
     },
   },
 }
@@ -46,13 +43,11 @@ export class App extends React.Component {
   render() {
     return (
       <div>
-        <h1>State Machine</h1>
-        <Action initial hide="onExitIdle">
+        <h1>Actions</h1>
+        <Action initial hide="onEnterFetching">
           <button onClick={this.handleClick}>Fetch</button>
         </Action>
-        <Action show="onEnterFetching" hide="onExitFetching">
-          Loading...
-        </Action>
+        <Action show="onEnterFetching">Loading...</Action>
         <Action show="onEnterSuccess">
           <ul>
             {this.props.gists
@@ -60,7 +55,7 @@ export class App extends React.Component {
               .map(gist => <li key={gist.id}>{gist.description}</li>)}
           </ul>
         </Action>
-        <Action show="onEnterError" hide="onExitError">
+        <Action show="onEnterError">
           <button onClick={this.handleClick}>Retry</button>
           Oh, snap!
         </Action>

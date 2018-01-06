@@ -43,9 +43,7 @@ test('action', () => {
       <Action initial hide="onEnterB">
         a
       </Action>
-      <Action show="onEnterBA" hide="onEnterBB">
-        b.a
-      </Action>
+      <Action show="onEnterBA">b.a</Action>
       <Action show="onEnterBB">b.b</Action>
     </div>
   )
