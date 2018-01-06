@@ -2,6 +2,8 @@ import PropTypes from 'prop-types'
 import minimatch from 'minimatch'
 import createConditional from './createConditional'
 
+const displayName = 'State'
+
 const contextTypes = {
   machineState: PropTypes.string,
 }
@@ -31,7 +33,7 @@ const shouldHide = (props, context) =>
   !matches(props.value, context.machineState)
 
 export default createConditional({
-  displayName: 'Action',
+  displayName,
   contextTypes,
   propTypes,
   initial,

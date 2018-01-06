@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types'
 import createConditional from './createConditional'
 
+const displayName = 'Action'
+
 const contextTypes = {
   actions: PropTypes.arrayOf(PropTypes.string),
 }
@@ -36,7 +38,7 @@ const shouldHide = (props, context) =>
     : !matches(props.show, context.actions)
 
 export default createConditional({
-  displayName: 'Action',
+  displayName,
   contextTypes,
   propTypes,
   initial,
