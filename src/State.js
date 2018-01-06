@@ -26,10 +26,10 @@ const matches = (value, machineState) =>
 
 const initial = (props, context) => matches(props.value, context.machineState)
 
-const shouldShow = (props, context) =>
+export const shouldShow = (props, context) =>
   matches(props.value, context.machineState)
 
-const shouldHide = (props, context) =>
+export const shouldHide = (props, context) =>
   !matches(props.value, context.machineState)
 
 export default createConditional({

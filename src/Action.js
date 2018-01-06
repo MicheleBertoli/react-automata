@@ -30,9 +30,10 @@ const matches = (value, actions) =>
 
 const initial = props => Boolean(props.initial)
 
-const shouldShow = (props, context) => matches(props.show, context.actions)
+export const shouldShow = (props, context) =>
+  matches(props.show, context.actions)
 
-const shouldHide = (props, context) =>
+export const shouldHide = (props, context) =>
   props.hide
     ? matches(props.hide, context.actions)
     : !matches(props.show, context.actions)
