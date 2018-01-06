@@ -92,17 +92,13 @@ test('callbacks', () => {
   )
   const instance = TestRenderer.create(<Context />).getInstance()
 
-  expect(spyOnEnter).toHaveBeenCalledTimes(1)
-  expect(spyOnEnter).toHaveBeenCalledWith('a')
+  expect(spyOnEnter).toHaveBeenCalled()
 
   instance.setState({ machineState: 'b' })
 
-  expect(spyOnLeave).toHaveBeenCalledTimes(1)
-  expect(spyOnLeave).toHaveBeenCalledWith('b')
+  expect(spyOnLeave).toHaveBeenCalled()
 
-  spyOnEnter.mockClear()
   instance.setState({ machineState: 'a' })
 
-  expect(spyOnEnter).toHaveBeenCalledTimes(1)
-  expect(spyOnEnter).toHaveBeenCalledWith('a')
+  expect(spyOnEnter).toHaveBeenCalledTimes(2)
 })
