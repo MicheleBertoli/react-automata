@@ -21,25 +21,12 @@ const createContext = Component => {
   return Context
 }
 
-const action = 'action'
-
-const setState = renderer =>
-  renderer.getInstance().setState({ actions: [action] })
-
-test('initial', () => {
-  const Context = createContext(
-    <Action>
-      <div />
-    </Action>
-  )
-  const { root } = TestRenderer.create(<Context />)
-
-  expect(root.findAllByType('div')).toHaveLength(1)
-})
+const setState = (renderer, actions) =>
+  renderer.getInstance().setState({ actions })
 
 test('show', () => {
   const Context = createContext(
-    <Action show={action}>
+    <Action show="action">
       <div />
     </Action>
   )
@@ -47,14 +34,18 @@ test('show', () => {
 
   expect(renderer.root.findAllByType('div')).toHaveLength(0)
 
-  setState(renderer)
+  setState(renderer, ['action'])
 
   expect(renderer.root.findAllByType('div')).toHaveLength(1)
+
+  setState(renderer, ['foo'])
+
+  expect(renderer.root.findAllByType('div')).toHaveLength(0)
 })
 
 test('show (multiple)', () => {
   const Context = createContext(
-    <Action show={[action, 'foo']}>
+    <Action show={['action', 'foo']}>
       <div />
     </Action>
   )
@@ -62,14 +53,18 @@ test('show (multiple)', () => {
 
   expect(renderer.root.findAllByType('div')).toHaveLength(0)
 
-  setState(renderer)
+  setState(renderer, ['action'])
 
   expect(renderer.root.findAllByType('div')).toHaveLength(1)
+
+  setState(renderer, ['bar'])
+
+  expect(renderer.root.findAllByType('div')).toHaveLength(0)
 })
 
 test('hide', () => {
   const Context = createContext(
-    <Action hide={action}>
+    <Action initial hide="action">
       <div />
     </Action>
   )
@@ -77,14 +72,14 @@ test('hide', () => {
 
   expect(renderer.root.findAllByType('div')).toHaveLength(1)
 
-  setState(renderer)
+  setState(renderer, ['action'])
 
   expect(renderer.root.findAllByType('div')).toHaveLength(0)
 })
 
 test('hide (multiple)', () => {
   const Context = createContext(
-    <Action hide={[action, 'foo']}>
+    <Action initial hide={['action', 'foo']}>
       <div />
     </Action>
   )
@@ -92,7 +87,7 @@ test('hide (multiple)', () => {
 
   expect(renderer.root.findAllByType('div')).toHaveLength(1)
 
-  setState(renderer)
+  setState(renderer, ['action'])
 
   expect(renderer.root.findAllByType('div')).toHaveLength(0)
 })

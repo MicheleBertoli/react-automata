@@ -2,20 +2,17 @@ import React from 'react'
 import TestRenderer from 'react-test-renderer'
 import { withStatechart } from '../src'
 
-const initiaState = 'a'
-const event = 'EVENT'
-
 const machine = {
-  initial: initiaState,
+  initial: 'a',
   states: {
-    [initiaState]: {
+    a: {
       on: {
-        [event]: 'b',
+        EVENT: 'b',
       },
     },
     b: {
       on: {
-        [event]: initiaState,
+        EVENT: 'a',
       },
       onEntry: 'onEnterB',
     },
@@ -32,11 +29,11 @@ test('state', () => {
 
   expect(component.props.counter).toBe(0)
 
-  instance.handleTransition(event, { counter: 1 })
+  instance.handleTransition('EVENT', { counter: 1 })
 
   expect(component.props.counter).toBe(1)
 
-  instance.handleTransition(event, prevState => ({
+  instance.handleTransition('EVENT', prevState => ({
     counter: prevState.counter + 1,
   }))
 
@@ -59,7 +56,7 @@ test('actions', () => {
   const StateMachine = withStatechart(machine)(Component)
   const instance = TestRenderer.create(<StateMachine />).getInstance()
 
-  instance.handleTransition(event)
+  instance.handleTransition('EVENT')
 
   expect(spy).toHaveBeenCalledTimes(1)
 })
@@ -84,9 +81,9 @@ test('lifecycle hooks', () => {
   const StateMachine = withStatechart(machine)(Component)
   const instance = TestRenderer.create(<StateMachine />).getInstance()
 
-  instance.handleTransition(event)
+  instance.handleTransition('EVENT')
 
   expect(spy).toHaveBeenCalledTimes(2)
-  expect(spy).toHaveBeenCalledWith(event)
-  expect(spy).toHaveBeenLastCalledWith(initiaState, event)
+  expect(spy).toHaveBeenCalledWith('EVENT')
+  expect(spy).toHaveBeenLastCalledWith('a', 'EVENT')
 })

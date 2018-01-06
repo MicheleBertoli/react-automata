@@ -11,7 +11,7 @@ class Action extends React.Component {
     super(props, context)
 
     this.state = {
-      shouldShow: !this.props.show,
+      shouldShow: Boolean(this.props.initial),
     }
   }
 
@@ -19,7 +19,9 @@ class Action extends React.Component {
     if (this.context.actions !== nextContext.actions) {
       if (
         this.state.shouldShow &&
-        matches(this.props.hide, nextContext.actions)
+        (this.props.hide
+          ? matches(this.props.hide, nextContext.actions)
+          : !matches(this.props.show, nextContext.actions))
       ) {
         this.setState({
           shouldShow: false,
@@ -56,6 +58,7 @@ Action.propTypes = {
     PropTypes.arrayOf(PropTypes.string),
     PropTypes.string,
   ]),
+  initial: PropTypes.bool,
   show: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.string),
     PropTypes.string,

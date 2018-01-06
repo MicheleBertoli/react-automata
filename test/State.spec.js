@@ -23,15 +23,10 @@ const createContext = (machineState, Component) => {
   return Context
 }
 
-const initialState = 'a'
-const nextState = 'b'
-const nestedState = 'a.b'
-const pattern = '*.b'
-
-test('regular (single)', () => {
+test('regular', () => {
   const Context = createContext(
-    initialState,
-    <State value={initialState}>
+    'a',
+    <State value="a">
       <div />
     </State>
   )
@@ -42,8 +37,8 @@ test('regular (single)', () => {
 
 test('regular (multiple)', () => {
   const Context = createContext(
-    initialState,
-    <State value={['foo', initialState]}>
+    'a',
+    <State value={['foo', 'a']}>
       <div />
     </State>
   )
@@ -52,10 +47,10 @@ test('regular (multiple)', () => {
   expect(root.findAllByType('div')).toHaveLength(1)
 })
 
-test('nested (single)', () => {
+test('nested', () => {
   const Context = createContext(
-    nestedState,
-    <State value={pattern}>
+    'a.b',
+    <State value="*.b">
       <div />
     </State>
   )
@@ -66,8 +61,8 @@ test('nested (single)', () => {
 
 test('nested (multiple)', () => {
   const Context = createContext(
-    nestedState,
-    <State value={['foo', pattern]}>
+    'a.b',
+    <State value={['foo', '*.b']}>
       <div />
     </State>
   )
@@ -92,22 +87,22 @@ test('callbacks', () => {
   const spyOnEnter = jest.fn()
   const spyOnLeave = jest.fn()
   const Context = createContext(
-    initialState,
-    <State value={initialState} onEnter={spyOnEnter} onLeave={spyOnLeave} />
+    'a',
+    <State value="a" onEnter={spyOnEnter} onLeave={spyOnLeave} />
   )
   const instance = TestRenderer.create(<Context />).getInstance()
 
   expect(spyOnEnter).toHaveBeenCalledTimes(1)
-  expect(spyOnEnter).toHaveBeenCalledWith(initialState)
+  expect(spyOnEnter).toHaveBeenCalledWith('a')
 
-  instance.setState({ machineState: nextState })
+  instance.setState({ machineState: 'b' })
 
   expect(spyOnLeave).toHaveBeenCalledTimes(1)
-  expect(spyOnLeave).toHaveBeenCalledWith(nextState)
+  expect(spyOnLeave).toHaveBeenCalledWith('b')
 
   spyOnEnter.mockClear()
-  instance.setState({ machineState: initialState })
+  instance.setState({ machineState: 'a' })
 
   expect(spyOnEnter).toHaveBeenCalledTimes(1)
-  expect(spyOnEnter).toHaveBeenCalledWith(initialState)
+  expect(spyOnEnter).toHaveBeenCalledWith('a')
 })
