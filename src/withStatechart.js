@@ -67,7 +67,7 @@ const withStatechart = (statechart, options = {}) => Component => {
       if (prevState.actions !== this.state.actions && this.instance) {
         this.state.actions.forEach(action => {
           if (this.instance[action]) {
-            this.instance[action](this.state.componentState)
+            this.instance[action]()
           }
         })
       }
@@ -107,7 +107,7 @@ const withStatechart = (statechart, options = {}) => Component => {
         )
 
         return {
-          actions: nextState.effects.entry.concat(nextState.effects.exit),
+          actions: nextState.effects.exit.concat(nextState.effects.entry),
           componentState: { ...prevState.componentState, ...stateChange },
           event,
           machineState: nextState.toString(),
