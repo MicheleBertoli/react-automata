@@ -14,22 +14,22 @@ export const statechart = {
         SUCCESS: 'success',
         ERROR: 'error',
       },
-      onEntry: 'onEnterFetching',
+      onEntry: 'enterFetching',
     },
     success: {
-      onEntry: 'onEnterSuccess',
+      onEntry: 'enterSuccess',
     },
     error: {
       on: {
         FETCH: 'fetching',
       },
-      onEntry: 'onEnterError',
+      onEntry: 'enterError',
     },
   },
 }
 
 export class App extends React.Component {
-  onEnterFetching() {
+  enterFetching() {
     fetch('https://api.github.com/users/gaearon/gists')
       .then(response => response.json())
       .then(gists => this.props.transition('SUCCESS', { gists }))
@@ -44,18 +44,18 @@ export class App extends React.Component {
     return (
       <div>
         <h1>Actions</h1>
-        <Action initial hide="onEnterFetching">
+        <Action initial hide="enterFetching">
           <button onClick={this.handleClick}>Fetch</button>
         </Action>
-        <Action show="onEnterFetching">Loading...</Action>
-        <Action show="onEnterSuccess">
+        <Action show="enterFetching">Loading...</Action>
+        <Action show="enterSuccess">
           <ul>
             {this.props.gists
               .filter(gist => gist.description)
               .map(gist => <li key={gist.id}>{gist.description}</li>)}
           </ul>
         </Action>
-        <Action show="onEnterError">
+        <Action show="enterError">
           <button onClick={this.handleClick}>Retry</button>
           Oh, snap!
         </Action>
