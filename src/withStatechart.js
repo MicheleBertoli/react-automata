@@ -67,7 +67,7 @@ const withStatechart = (statechart, options = {}) => Component => {
       if (prevState.actions !== this.state.actions && this.instance) {
         this.state.actions.forEach(action => {
           if (this.instance[action]) {
-            this.instance[action]()
+            this.instance[action](this.state.componentState)
           }
         })
       }
