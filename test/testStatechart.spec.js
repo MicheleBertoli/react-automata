@@ -8,13 +8,13 @@ const secondMachine = {
       on: {
         SECOND_NEXT: 'b',
       },
-      onEntry: 'onEnterBA',
+      onEntry: 'enterBA',
     },
     b: {
       on: {
         SECOND_NEXT: 'a',
       },
-      onEntry: 'onEnterBB',
+      onEntry: 'enterBB',
     },
   },
 }
@@ -31,7 +31,7 @@ const firstMachine = {
       on: {
         FIRST_NEXT: 'a',
       },
-      onEntry: 'onEnterB',
+      onEntry: 'enterB',
       ...secondMachine,
     },
   },
@@ -40,11 +40,11 @@ const firstMachine = {
 test('action', () => {
   const App = () => (
     <div>
-      <Action initial hide="onEnterB">
+      <Action initial hide="enterB">
         a
       </Action>
-      <Action show="onEnterBA">b.a</Action>
-      <Action show="onEnterBB">b.b</Action>
+      <Action show="enterBA">b.a</Action>
+      <Action show="enterBB">b.b</Action>
     </div>
   )
 
