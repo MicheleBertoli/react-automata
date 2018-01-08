@@ -1,5 +1,5 @@
 import { testStatechart } from '../src'
-import { App, statechart } from './App1'
+import { App, statechart } from './App'
 
 global.fetch = jest.fn(() => new Promise(resolve => resolve()))
 
