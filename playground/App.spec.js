@@ -1,4 +1,4 @@
-import { testStateMachine } from '../src'
+import { testStatechart } from '../src'
 import { App, statechart } from './App1'
 
 global.fetch = jest.fn(() => new Promise(resolve => resolve()))
@@ -24,5 +24,5 @@ const fixtures = {
 }
 
 test('it works', () => {
-  testStateMachine({ statechart, fixtures }, App)
+  testStatechart({ statechart, fixtures }, App)
 })

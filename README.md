@@ -207,8 +207,8 @@ The component to define which parts of the tree should be rendered for a given a
 | initial | bool | Whether the children should be shown on the initial state. |
 | show | oneOfType(string, arrayOf(string)) | The action(s) for which the children should be shown. When both `show` and `hide` are defined, the children are shown from the first `show` match to the first `hide` match. |
 | hide | oneOfType(string, arrayOf(string)) | The action(s) for which the children should be hidden. |
-| onEnter(machineState) | func | The function invoked when the component becomes visible, it provides the current machine state. |
-| onLeave(machineState) | func | The function invoked when the component becomes invisible, it provides the current machine state. |
+| onEnter | func | The function invoked when the component becomes visible, it provides the current machine state. |
+| onLeave | func | The function invoked when the component becomes invisible, it provides the current machine state. |
 
 ```js
 <Action show="enterError">Oh, snap!</Action>
@@ -221,8 +221,8 @@ The component to define which parts of the tree should be rendered for a given s
 | Prop | Type | Description |
 | ---- | ---- | ----------- |
 | value | oneOfType(string, arrayOf(string)) | The state(s) for which the children should be shown. It accepts the exact state, a glob expression or an array of states/expressions (e.g. `value="idle"`, `value="error.*"` or `value={['idle', 'error.*']`). |
-| onEnter(machineState) | func | The function invoked when the component becomes visible, it provides the current machine state. |
-| onLeave(machineState) | func | The function invoked when the component becomes invisible, it provides the current machine state. |
+| onEnter | func | The function invoked when the component becomes visible, it provides the current machine state. |
+| onLeave | func | The function invoked when the component becomes invisible, it provides the current machine state. |
 
 ```js
 <State value="error">Oh, snap!</State>

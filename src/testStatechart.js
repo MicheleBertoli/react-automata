@@ -1,19 +1,10 @@
 import React from 'react'
 import TestRenderer from 'react-test-renderer'
 import { Machine } from 'xstate'
-// import { getShortestPaths } from 'xstate/lib/graph'
+import { getShortestPaths } from 'xstate/lib/graph'
 import { withStatechart } from './'
 
-const getShortestPaths = () => ({
-  a: [],
-  'b.a': [{ state: 'a', event: 'FIRST_NEXT' }],
-  'b.b': [
-    { state: 'a', event: 'FIRST_NEXT' },
-    { state: 'b.a', event: 'SECOND_NEXT' },
-  ],
-})
-
-const testStateChart = (config, Component) => {
+const testStatechart = (config, Component) => {
   const paths = getShortestPaths(Machine(config.statechart))
 
   Object.keys(paths).forEach(key => {
@@ -33,8 +24,9 @@ const testStateChart = (config, Component) => {
       instance.handleTransition(event, fixtures)
     })
 
-    expect(renderer.toJSON()).toMatchSnapshot(key)
+    const { machineState } = instance.state
+    expect(renderer.toJSON()).toMatchSnapshot(machineState)
   })
 }
 
-export default testStateChart
+export default testStatechart

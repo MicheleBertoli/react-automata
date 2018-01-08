@@ -48,7 +48,7 @@
   "dependencies": {
     "minimatch": "^3.0.4",
     "prop-types": "^15.6.0",
-    "xstate": "^2.1.0"
+    "xstate": "^3.0.1"
   },
   "peerDependencies": {
     "react": "^16.0.0"

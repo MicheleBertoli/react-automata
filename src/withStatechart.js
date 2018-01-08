@@ -10,7 +10,7 @@ const withStatechart = (statechart, options = {}) => Component => {
     state = {
       actions: null,
       componentState: options.initialData,
-      machineState: this.machine.initialState,
+      machineState: this.machine.initialState.toString(),
     }
 
     constructor(props) {
@@ -107,7 +107,7 @@ const withStatechart = (statechart, options = {}) => Component => {
         )
 
         return {
-          actions: nextState.effects.exit.concat(nextState.effects.entry),
+          actions: nextState.actions,
           componentState: { ...prevState.componentState, ...stateChange },
           event,
           machineState: nextState.toString(),
