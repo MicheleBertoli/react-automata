@@ -231,7 +231,7 @@ The component to define which parts of the tree should be rendered for a given s
 ## testStatechart({ statechart[, fixtures] }, Component)
 
 The method to automagically generate tests given a statechart definition, and a component.
-It accepts an optional `fixtures` configuration to describe which data that should be injected into the component for a given transition.
+It accepts an optional `fixtures` configuration to describe which data should be injected into the component for a given transition.
 
 ```js
 const fixtures = {
