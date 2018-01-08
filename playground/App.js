@@ -1,7 +1,7 @@
 import React from 'react'
-import { State, withStateMachine } from '../src'
+import { Action, withStatechart } from '../src'
 
-export const machine = {
+export const statechart = {
   initial: 'idle',
   states: {
     idle: {
@@ -14,24 +14,26 @@ export const machine = {
         SUCCESS: 'success',
         ERROR: 'error',
       },
+      onEntry: 'enterFetching',
     },
-    success: {},
+    success: {
+      onEntry: 'enterSuccess',
+    },
     error: {
       on: {
         FETCH: 'fetching',
       },
+      onEntry: 'enterError',
     },
   },
 }
 
 export class App extends React.Component {
-  componentWillTransition(event) {
-    if (event === 'FETCH') {
-      fetch('https://api.github.com/users/gaearon/gists')
-        .then(response => response.json())
-        .then(gists => this.props.transition('SUCCESS', { gists }))
-        .catch(() => this.props.transition('ERROR'))
-    }
+  enterFetching() {
+    fetch('https://api.github.com/users/gaearon/gists')
+      .then(response => response.json())
+      .then(gists => this.props.transition('SUCCESS', { gists }))
+      .catch(() => this.props.transition('ERROR'))
   }
 
   handleClick = () => {
@@ -41,21 +43,22 @@ export class App extends React.Component {
   render() {
     return (
       <div>
-        <h1>State Machine</h1>
-        <State value={['idle', 'error']}>
-          <button onClick={this.handleClick}>
-            {this.props.machineState === 'idle' ? 'Fetch' : 'Retry'}
-          </button>
-        </State>
-        <State value="fetching">Loading...</State>
-        <State value="success">
+        <h1>Actions</h1>
+        <Action initial hide="enterFetching">
+          <button onClick={this.handleClick}>Fetch</button>
+        </Action>
+        <Action show="enterFetching">Loading...</Action>
+        <Action show="enterSuccess">
           <ul>
             {this.props.gists
               .filter(gist => gist.description)
               .map(gist => <li key={gist.id}>{gist.description}</li>)}
           </ul>
-        </State>
-        <State value="error">Oh, snap!</State>
+        </Action>
+        <Action show="enterError">
+          <button onClick={this.handleClick}>Retry</button>
+          Oh, snap!
+        </Action>
       </div>
     )
   }
@@ -66,4 +69,4 @@ const options = {
   initialData: { gists: [] },
 }
 
-export default withStateMachine(machine, options)(App)
+export default withStatechart(statechart, options)(App)

@@ -1,61 +1,42 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import minimatch from 'minimatch'
+import createConditional from './createConditional'
 
-const shouldShow = (props, context) =>
-  context.machineState &&
-  (Array.isArray(props.value)
-    ? props.value.some(state => minimatch(context.machineState, state))
-    : minimatch(context.machineState, props.value))
+const displayName = 'State'
 
-class State extends React.Component {
-  constructor(props, context) {
-    super(props, context)
-
-    if (props.onEnter && shouldShow(props, context)) {
-      props.onEnter(context.machineState)
-    }
-  }
-
-  componentWillReceiveProps(nextProps, nextContext) {
-    if (
-      this.props.onEnter &&
-      !shouldShow(this.props, this.context) &&
-      shouldShow(this.props, nextContext)
-    ) {
-      this.props.onEnter(nextContext.machineState)
-    }
-
-    if (
-      this.props.onLeave &&
-      shouldShow(this.props, this.context) &&
-      !shouldShow(this.props, nextContext)
-    ) {
-      this.props.onLeave(nextContext.machineState)
-    }
-  }
-
-  render() {
-    return shouldShow(this.props, this.context) ? this.props.children : null
-  }
+const contextTypes = {
+  machineState: PropTypes.string,
 }
 
-State.defaultProps = {
-  children: null,
-}
-
-State.propTypes = {
-  value: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.arrayOf(PropTypes.string),
-  ]),
+const propTypes = {
   children: PropTypes.node,
+  value: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.string),
+    PropTypes.string,
+  ]),
   onEnter: PropTypes.func,
   onLeave: PropTypes.func,
 }
 
-State.contextTypes = {
-  machineState: PropTypes.string,
-}
+const matches = (value, machineState) =>
+  machineState &&
+  (Array.isArray(value)
+    ? value.some(state => minimatch(machineState, state))
+    : minimatch(machineState, value))
 
-export default State
+const initial = (props, context) => matches(props.value, context.machineState)
+
+export const shouldShow = (props, context) =>
+  matches(props.value, context.machineState)
+
+export const shouldHide = (props, context) =>
+  !matches(props.value, context.machineState)
+
+export default createConditional({
+  displayName,
+  contextTypes,
+  propTypes,
+  initial,
+  shouldShow,
+  shouldHide,
+})

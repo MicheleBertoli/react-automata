@@ -5820,9 +5820,9 @@ xml-name-validator@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/xml-name-validator/-/xml-name-validator-2.0.1.tgz#4d8b8f1eccd3419aa362061becef515e1e559635"
 
-xstate@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/xstate/-/xstate-2.1.0.tgz#6d07fc4e99abe4284067a4c2f9985c265f4417e1"
+xstate@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/xstate/-/xstate-3.0.1.tgz#dde36edc0f3a0cfda651cfe55988aa129575ea5b"
 
 xtend@^4.0.0, xtend@^4.0.1:
   version "4.0.1"

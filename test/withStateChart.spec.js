@@ -1,22 +1,20 @@
 import React from 'react'
 import TestRenderer from 'react-test-renderer'
-import { withStateMachine } from '../src'
-
-const initiaState = 'a'
-const event = 'EVENT'
+import { withStatechart } from '../src'
 
 const machine = {
-  initial: initiaState,
+  initial: 'a',
   states: {
-    [initiaState]: {
+    a: {
       on: {
-        [event]: 'b',
+        EVENT: 'b',
       },
     },
     b: {
       on: {
-        [event]: initiaState,
+        EVENT: 'a',
       },
+      onEntry: 'onEnterB',
     },
   },
 }
@@ -24,22 +22,43 @@ const machine = {
 test('state', () => {
   const initialData = { counter: 0 }
   const Component = () => <div />
-  const StateMachine = withStateMachine(machine, { initialData })(Component)
+  const StateMachine = withStatechart(machine, { initialData })(Component)
   const renderer = TestRenderer.create(<StateMachine />)
   const instance = renderer.getInstance()
   const component = renderer.root.findByType(Component)
 
   expect(component.props.counter).toBe(0)
 
-  instance.handleTransition(event, { counter: 1 })
+  instance.handleTransition('EVENT', { counter: 1 })
 
   expect(component.props.counter).toBe(1)
 
-  instance.handleTransition(event, prevState => ({
+  instance.handleTransition('EVENT', prevState => ({
     counter: prevState.counter + 1,
   }))
 
   expect(component.props.counter).toBe(2)
+})
+
+test('actions', () => {
+  const spy = jest.fn()
+
+  class Component extends React.Component {
+    onEnterB() {
+      spy()
+    }
+
+    render() {
+      return <div />
+    }
+  }
+
+  const StateMachine = withStatechart(machine)(Component)
+  const instance = TestRenderer.create(<StateMachine />).getInstance()
+
+  instance.handleTransition('EVENT')
+
+  expect(spy).toHaveBeenCalledTimes(1)
 })
 
 test('lifecycle hooks', () => {
@@ -59,12 +78,12 @@ test('lifecycle hooks', () => {
     }
   }
 
-  const StateMachine = withStateMachine(machine)(Component)
+  const StateMachine = withStatechart(machine)(Component)
   const instance = TestRenderer.create(<StateMachine />).getInstance()
 
-  instance.handleTransition(event)
+  instance.handleTransition('EVENT')
 
   expect(spy).toHaveBeenCalledTimes(2)
-  expect(spy).toHaveBeenCalledWith(event)
-  expect(spy).toHaveBeenLastCalledWith(initiaState, event)
+  expect(spy).toHaveBeenCalledWith('EVENT')
+  expect(spy).toHaveBeenLastCalledWith('a', 'EVENT')
 })

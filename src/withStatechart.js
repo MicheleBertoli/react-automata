@@ -3,18 +3,27 @@ import PropTypes from 'prop-types'
 import { Machine } from 'xstate'
 import { getComponentName, isStateless } from './utils'
 
-const withStateMachine = (config, options = {}) => Component => {
+const withStatechart = (statechart, options = {}) => Component => {
   class StateMachine extends React.Component {
-    machine = Machine(config)
+    machine = Machine(statechart)
 
     state = {
+      actions: null,
       componentState: options.initialData,
-      event: null,
-      machineState: this.machine.initialState,
+      machineState: this.machine.initialState.toString(),
+    }
+
+    constructor(props) {
+      super(props)
+
+      this.handleRef = isStateless(Component) ? null : this.handleRef
     }
 
     getChildContext() {
-      return { machineState: this.state.machineState }
+      return {
+        actions: this.state.actions,
+        machineState: this.state.machineState,
+      }
     }
 
     componentDidMount() {
@@ -22,13 +31,14 @@ const withStateMachine = (config, options = {}) => Component => {
         this.devTools = window.__REDUX_DEVTOOLS_EXTENSION__.connect({
           name: getComponentName(Component),
         })
-        this.devTools.init({ machineState: this.state.machineState })
+        this.devTools.init(this.state)
 
         this.unsubscribe = this.devTools.subscribe(message => {
           if (
             message.type === 'DISPATCH' &&
             message.payload.type === 'JUMP_TO_ACTION'
           ) {
+            this.jumpToAction = true
             this.setState(JSON.parse(message.state))
           }
         })
@@ -46,10 +56,23 @@ const withStateMachine = (config, options = {}) => Component => {
     }
 
     componentDidUpdate(prevProps, prevState) {
-      if (
-        prevState.machineState !== this.state.machineState &&
-        this.state.event
-      ) {
+      if (!this.jumpToAction) {
+        this.handleComponentDidUpdate(prevProps, prevState)
+      } else {
+        this.jumpToAction = false
+      }
+    }
+
+    handleComponentDidUpdate(prevProps, prevState) {
+      if (prevState.actions !== this.state.actions && this.instance) {
+        this.state.actions.forEach(action => {
+          if (this.instance[action]) {
+            this.instance[action]()
+          }
+        })
+      }
+
+      if (prevState.machineState !== this.state.machineState) {
         if (this.instance && this.instance.componentDidTransition) {
           this.instance.componentDidTransition(
             prevState.machineState,
@@ -58,10 +81,7 @@ const withStateMachine = (config, options = {}) => Component => {
         }
 
         if (this.devTools) {
-          this.devTools.send(this.state.event, {
-            componentState: this.state.componentState,
-            machineState: this.state.machineState,
-          })
+          this.devTools.send(this.state.event, this.state)
         }
       }
     }
@@ -80,13 +100,17 @@ const withStateMachine = (config, options = {}) => Component => {
           typeof updater === 'function'
             ? updater(prevState.componentState)
             : updater
+        const nextState = this.machine.transition(
+          prevState.machineState,
+          event,
+          stateChange
+        )
 
         return {
+          actions: nextState.actions,
           componentState: { ...prevState.componentState, ...stateChange },
           event,
-          machineState: this.machine
-            .transition(prevState.machineState, event)
-            .toString(),
+          machineState: nextState.toString(),
         }
       })
     }
@@ -97,7 +121,7 @@ const withStateMachine = (config, options = {}) => Component => {
           {...this.props}
           {...this.state.componentState}
           machineState={this.state.machineState}
-          ref={isStateless(Component) ? null : this.handleRef}
+          ref={this.handleRef}
           transition={this.handleTransition}
         />
       )
@@ -105,10 +129,11 @@ const withStateMachine = (config, options = {}) => Component => {
   }
 
   StateMachine.childContextTypes = {
+    actions: PropTypes.arrayOf(PropTypes.string),
     machineState: PropTypes.string,
   }
 
   return StateMachine
 }
 
-export default withStateMachine
+export default withStatechart
