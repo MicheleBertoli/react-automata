@@ -1,3 +1,4 @@
+/* @flow */
 import PropTypes from 'prop-types'
 import createConditional from './createConditional'
 
@@ -22,18 +23,27 @@ const propTypes = {
   onLeave: PropTypes.func,
 }
 
-const matches = (value, actions) =>
+const matches = (
+  value: string | Array<string>,
+  actions: Array<string>
+): boolean =>
   actions &&
   (Array.isArray(value)
-    ? actions.some(action => value.includes(action))
+    ? actions.some((action: string): boolean => value.includes(action))
     : actions.includes(value))
 
-const initial = props => Boolean(props.initial)
+const initial = (props: { initial?: boolean }): boolean =>
+  Boolean(props.initial)
 
-export const shouldShow = (props, context) =>
-  matches(props.show, context.actions)
+export const shouldShow = (
+  props: { show: string },
+  context: { actions: Array<string> }
+) => matches(props.show, context.actions)
 
-export const shouldHide = (props, context) =>
+export const shouldHide = (
+  props: { hide?: string, show: string },
+  context: { actions: Array<string> }
+): boolean =>
   props.hide
     ? matches(props.hide, context.actions)
     : !matches(props.show, context.actions)

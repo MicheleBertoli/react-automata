@@ -1,3 +1,4 @@
+/* @flow */
 import PropTypes from 'prop-types'
 import minimatch from 'minimatch'
 import createConditional from './createConditional'
@@ -18,19 +19,29 @@ const propTypes = {
   onLeave: PropTypes.func,
 }
 
-const matches = (value, machineState) =>
-  machineState &&
+const matches = (
+  value: string | Array<string>,
+  machineState: string
+): boolean =>
+  Boolean(machineState) &&
   (Array.isArray(value)
     ? value.some(state => minimatch(machineState, state))
     : minimatch(machineState, value))
 
-const initial = (props, context) => matches(props.value, context.machineState)
+const initial = (
+  props: { value: string | Array<string> },
+  context: { machineState: string }
+) => matches(props.value, context.machineState)
 
-export const shouldShow = (props, context) =>
-  matches(props.value, context.machineState)
+export const shouldShow = (
+  props: { value: string | Array<string> },
+  context: { machineState: string }
+): boolean => matches(props.value, context.machineState)
 
-export const shouldHide = (props, context) =>
-  !matches(props.value, context.machineState)
+export const shouldHide = (
+  props: { value: string | Array<string> },
+  context: { machineState: string }
+): boolean => !matches(props.value, context.machineState)
 
 export default createConditional({
   displayName,
