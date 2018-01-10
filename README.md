@@ -2,9 +2,11 @@
 [![tested with jest](https://img.shields.io/badge/tested_with-jest-99424f.svg)](https://github.com/facebook/jest)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
+> This is a work in progress
+
 # React Automata
 
-A state machine abstraction for React, which provides declarative state management and automatic test generation.
+If components' state is deterministic, tests can be automagically generated.
 
 # Quick Start
 
@@ -20,22 +22,20 @@ yarn add react-automata
 // App.js
 
 import React from 'react'
-import { Action, withStatechart } from 'react-automata'
+import { State, withStateMachine } from 'react-automata'
 
-export const statechart = {
+export const machine = {
   initial: 'a',
   states: {
     a: {
       on: {
         NEXT: 'b',
       },
-      onEntry: 'enterA',
     },
     b: {
       on: {
         NEXT: 'a',
       },
-      onEntry: 'enterB',
     },
   },
 }
@@ -49,24 +49,24 @@ export class App extends React.Component {
     return (
       <div>
         <button onClick={this.handleClick}>NEXT</button>
-        <Action initial show="enterA">Hello, A</Action>
-        <Action show="enterB">Ciao, B</Action>
+        <State name="a">Hello, A</State>
+        <State name="b">Ciao, B</State>
       </div>
     )
   }
 }
 
-export default withStatechart(statechart)(App)
+export default withStateMachine(machine)(App)
 ```
 
 ```js
 // App.spec.js
 
-import { testStatechart } from 'react-automata'
-import { App, statechart } from './App'
+import { testStateMachine } from 'react-automata'
+import { App, machine } from './App'
 
 test('it works', () => {
-  testStatechart({ statechart }, App)
+  testStateMachine({ machine }, App)
 })
 ```
 
@@ -98,10 +98,10 @@ exports[`b 1`] = `
 
 # API
 
-## withStatechart(statechart[, options])(Component)
+## withStateMachine(machine, [options])(Component)
 
-The `withStatechart` higher-order component takes a statechart definition (see [xstate](https://github.com/davidkpiano/xstate)), some optional [options](#options) and a component.
-It returns a new component with special [props](#props), [action functions](#action-functions) and [lifecycle methods](#lifecycle-methods).
+The `withStateMachine` higher-order component takes a state machine definition (see [xstate](https://github.com/davidkpiano/xstate)), some optional [options](#options) and a component.
+It returns a new component with special [props](#props) and [lifecycle methods](#lifecycle-methods).
 
 > This package works with regular and nested state machines - parallel state machines are not supported yet.
 
@@ -110,15 +110,13 @@ It returns a new component with special [props](#props), [action functions](#act
 | Option | Type | Description |
 | ------ | ---- | ----------- |
 | devTools | bool | To connect the state machine to the [Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension). |
-| initialData | object | The initial data, passed to the component as props. |
 
 ### Props
 
-#### transition(event[, updater])
+#### transition(action, [payload])
 
 The method to change the state of the state machine.
-It takes an optional updater function that receives the previous data and returns a data change.
-The updater can also be an object, which gets merged into the current data.
+It takes an optional payload, which is stored into the container and can be consumed in form of props.
 
 ```js
 handleClick = () => {
@@ -129,7 +127,6 @@ handleClick = () => {
 #### machineState
 
 The current state of the state machine.
-Using this value is discouraged, as it couples the UI and the state machine.
 
 ```js
 <button onClick={this.handleClick}>
@@ -137,47 +134,17 @@ Using this value is discouraged, as it couples the UI and the state machine.
 </button>
 ```
 
-### Action functions
-
-All the component's functions whose names match the names of the actions, are fired when the related transition happen.
-For example:
-
-```js
-const statechart = {
-  // ...
-  fetching: {
-    on: {
-      SUCCESS: 'success',
-      ERROR: 'error',
-    },
-    onEntry: 'enterFetching',
-  },
-  // ...
-}
-
-class App extends React.Component {
-  // ...
-  enterFetching() {
-    fetch('https://api.github.com/users/gaearon/gists')
-      .then(response => response.json())
-      .then(gists => this.props.transition('SUCCESS', { gists }))
-      .catch(() => this.props.transition('ERROR'))
-  }
-  // ...
-}
-
-```
-
 ### Lifecycle methods
 
-#### componentWillTransition(event)
+#### componentWillTransition(action, [payload])
 
 The lifecycle method invoked when a transition is about to happen.
-It provides the event, and can be used to run side-effects.
+It provides the action, and an optional payload.
+This is the place to fire side-effects.
 
 ```js
-componentWillTransition(event) {
-  if (event === 'FETCH') {
+componentWillTransition(action) {
+  if (action === 'FETCH') {
     fetch('https://api.github.com/users/gaearon/gists')
       .then(response => response.json())
       .then(gists => this.props.transition('SUCCESS', { gists }))
@@ -186,58 +153,40 @@ componentWillTransition(event) {
 }
 ```
 
-#### componentDidTransition(prevStateMachine, event)
+#### componentDidTransition(prevStateMachine, action, [payload])
 
-The lifecycle method invoked when a transition has happened and the state is updated.
-It provides the previous state machine, and the event.
+The lifecycle method invoked when a transition is happened and the state is updated.
+It provides the previous state machine, the action, and an optional payload.
 The current `machineState` is available in `this.state`.
 
 ```js
-componentDidTransition(prevStateMachine, event) {
-  Logger.log(event)
+componentDidTransition(prevStateMachine, action, payload) {
+  Logger.log(action, payload)
 }
 ```
 
-## &lt;Action /&gt;
+## State
 
-The component to define which parts of the tree should be rendered for a given action (or set of actions).
-
-| Prop | Type | Description |
-| ---- | ---- | ----------- |
-| initial | bool | Whether the children should be shown on the initial state. |
-| show | oneOfType(string, arrayOf(string)) | The action(s) for which the children should be shown. When both `show` and `hide` are defined, the children are shown from the first `show` match to the first `hide` match. |
-| hide | oneOfType(string, arrayOf(string)) | The action(s) for which the children should be hidden. |
-| onEnter | func | The function invoked when the component becomes visible, it provides the current machine state. |
-| onLeave | func | The function invoked when the component becomes invisible, it provides the current machine state. |
-
-```js
-<Action show="enterError">Oh, snap!</Action>
-```
-
-## &lt;State /&gt;
-
-The component to define which parts of the tree should be rendered for a given state (or set of states).
+The component to define which parts of the tree should be rendered in a given state (or a set of states).
 
 | Prop | Type | Description |
 | ---- | ---- | ----------- |
-| value | oneOfType(string, arrayOf(string)) | The state(s) for which the children should be shown. It accepts the exact state, a glob expression or an array of states/expressions (e.g. `value="idle"`, `value="error.*"` or `value={['idle', 'error.*']`). |
-| onEnter | func | The function invoked when the component becomes visible, it provides the current machine state. |
-| onLeave | func | The function invoked when the component becomes invisible, it provides the current machine state. |
+| name  | string  | The name of the state for which the children should be shown, it can be the exact state or a glob expression (e.g. `name="idle"` or `name="error.*"`). |
+| names  | arrayOf(string)  | The names of the states for which the children should be shown, it can be an array exact states or glob expressions (e.g. `name={['idle', 'error.*']`). The `name` prop has precedence over `names`. |
+| onEnter(machineState)  | func  | The function invoked when the component becomes visible, it provides the current machine state. |
+| onLeave(machineState)  | func  | The function invoked when the component becomes invisible, it provides the current machine state. |
 
 ```js
-<State value="error">Oh, snap!</State>
+<State name="error">Oh, snap!</State>
 ```
 
-## testStatechart({ statechart[, fixtures] }, Component)
+## testStateMachine({ machine, [fixtures] }, Component)
 
-The method to automagically generate tests given a statechart definition, and a component.
-It accepts an optional `fixtures` configuration to describe which data should be injected into the component for a given transition.
+The method to automagically generate tests given a state machine definition, and a component.
+It accepts an optional `fixtures` configuration to describe which data that should be injected into the component for a given transition.
 
 ```js
 const fixtures = {
-  initialData: {
-    gists: [],
-  },
   fetching: {
     SUCCESS: {
       gists: [
@@ -255,7 +204,7 @@ const fixtures = {
 }
 
 test('it works', () => {
-  testStatechart({ statechart, fixtures }, App)
+  testStateMachine({ machine, fixtures }, App)
 })
 ```
 
@@ -265,6 +214,4 @@ test('it works', () => {
 
 [David](https://twitter.com/DavidKPiano), for giving a very informative (and fun) [talk](https://www.youtube.com/watch?v=VU1NKX6Qkxc) about infinitely better UIs, and building [xstate](https://github.com/davidkpiano/xstate).
 
-[Ryan](https://twitter.com/ryanflorence), for [experimenting](https://www.youtube.com/watch?v=MkdV2-U16tc) with xstate and React - Ryan's approach to React has always been a source of inspiration.
-
-[Erik](https://twitter.com/mogsie), for writing about [statecharts](https://statecharts.github.io/), and showing me how to keep UI and state machine decoupled.
+[Ryan](https://twitter.com/ryanflorence), for [experimenting](https://www.youtube.com/watch?v=MkdV2-U16tc) with xstate and React - Ryan's approach to React has always been a source of inspiration to me.
