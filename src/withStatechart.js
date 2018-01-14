@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Machine } from 'xstate'
-import { getComponentName, isStateless } from './utils'
+import { getComponentName, isStateless, stringify } from './utils'
 
 const withStatechart = (statechart, options = {}) => Component => {
   class StateMachine extends React.Component {
@@ -10,7 +10,7 @@ const withStatechart = (statechart, options = {}) => Component => {
     state = {
       actions: null,
       componentState: options.initialData,
-      machineState: this.machine.initialState.toString(),
+      machineState: this.machine.initialState,
     }
 
     constructor(props) {
@@ -22,7 +22,9 @@ const withStatechart = (statechart, options = {}) => Component => {
     getChildContext() {
       return {
         actions: this.state.actions,
-        machineState: this.state.machineState,
+        machineState:
+          this.state.machineState.toString() ||
+          stringify(this.state.machineState.value),
       }
     }
 
@@ -75,7 +77,7 @@ const withStatechart = (statechart, options = {}) => Component => {
       if (prevState.machineState !== this.state.machineState) {
         if (this.instance && this.instance.componentDidTransition) {
           this.instance.componentDidTransition(
-            prevState.machineState,
+            prevState.machineState.value,
             this.state.event
           )
         }
@@ -101,7 +103,7 @@ const withStatechart = (statechart, options = {}) => Component => {
             ? updater(prevState.componentState)
             : updater
         const nextState = this.machine.transition(
-          prevState.machineState,
+          prevState.machineState.value,
           event,
           stateChange
         )
@@ -110,7 +112,7 @@ const withStatechart = (statechart, options = {}) => Component => {
           actions: nextState.actions,
           componentState: { ...prevState.componentState, ...stateChange },
           event,
-          machineState: nextState.toString(),
+          machineState: nextState,
         }
       })
     }
@@ -120,7 +122,7 @@ const withStatechart = (statechart, options = {}) => Component => {
         <Component
           {...this.props}
           {...this.state.componentState}
-          machineState={this.state.machineState}
+          machineState={this.state.machineState.value}
           ref={this.handleRef}
           transition={this.handleTransition}
         />
@@ -130,7 +132,10 @@ const withStatechart = (statechart, options = {}) => Component => {
 
   StateMachine.childContextTypes = {
     actions: PropTypes.arrayOf(PropTypes.string),
-    machineState: PropTypes.string,
+    machineState: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.string),
+      PropTypes.string,
+    ]),
   }
 
   return StateMachine

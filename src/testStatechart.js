@@ -24,7 +24,8 @@ const testStatechart = (config, Component) => {
       instance.handleTransition(event, fixtures)
     })
 
-    const { machineState } = instance.state
+    const { machineState } = instance.getChildContext()
+
     expect(renderer.toJSON()).toMatchSnapshot(machineState)
   })
 }

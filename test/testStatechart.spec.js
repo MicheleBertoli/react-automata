@@ -62,3 +62,75 @@ test('state', () => {
 
   testStatechart({ statechart: firstMachine }, App)
 })
+
+test('parallel', () => {
+  const wordMachine = {
+    initial: 'bold.off',
+    parallel: true,
+    states: {
+      bold: {
+        initial: 'off',
+        states: {
+          on: {
+            on: { TOGGLE_BOLD: 'off' },
+          },
+          off: {
+            on: { TOGGLE_BOLD: 'on' },
+          },
+        },
+      },
+      underline: {
+        initial: 'off',
+        states: {
+          on: {
+            on: { TOGGLE_UNDERLINE: 'off' },
+          },
+          off: {
+            on: { TOGGLE_UNDERLINE: 'on' },
+          },
+        },
+      },
+      italics: {
+        initial: 'off',
+        states: {
+          on: {
+            on: { TOGGLE_ITALICS: 'off' },
+          },
+          off: {
+            on: { TOGGLE_ITALICS: 'on' },
+          },
+        },
+      },
+      list: {
+        initial: 'none',
+        states: {
+          none: {
+            on: { BULLETS: 'bullets', NUMBERS: 'numbers' },
+          },
+          bullets: {
+            on: { NONE: 'none', NUMBERS: 'numbers' },
+          },
+          numbers: {
+            on: { BULLETS: 'bullets', NONE: 'none' },
+          },
+        },
+      },
+    },
+  }
+
+  const App = () => (
+    <div>
+      <State value="bold.on">bold.on</State>
+      <State value="bold.off">bold.off</State>
+      <State value="underline.on">underline.on</State>
+      <State value="underline.off">underline.off</State>
+      <State value="italics.on">italics.on</State>
+      <State value="italics.off">italics.off</State>
+      <State value="list.none">list.none</State>
+      <State value="list.bullets">list.bullets</State>
+      <State value="list.numbers">list.numbers</State>
+    </div>
+  )
+
+  testStatechart({ statechart: wordMachine }, App)
+})

@@ -103,8 +103,6 @@ exports[`b 1`] = `
 The `withStatechart` higher-order component takes a statechart definition (see [xstate](https://github.com/davidkpiano/xstate)), some optional [options](#options) and a component.
 It returns a new component with special [props](#props), [action functions](#action-functions) and [lifecycle methods](#lifecycle-methods).
 
-> This package works with regular and nested state machines - parallel state machines are not supported yet.
-
 ### Options
 
 | Option | Type | Description |

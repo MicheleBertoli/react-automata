@@ -18,6 +18,222 @@ exports[`action: b.b 1`] = `
 </div>
 `;
 
+exports[`parallel: bold.off,underline.off,italics.off,list.bullets 1`] = `
+<div>
+  bold.off
+  underline.off
+  italics.off
+  list.bullets
+</div>
+`;
+
+exports[`parallel: bold.off,underline.off,italics.off,list.none 1`] = `
+<div>
+  bold.off
+  underline.off
+  italics.off
+  list.none
+</div>
+`;
+
+exports[`parallel: bold.off,underline.off,italics.off,list.numbers 1`] = `
+<div>
+  bold.off
+  underline.off
+  italics.off
+  list.numbers
+</div>
+`;
+
+exports[`parallel: bold.off,underline.off,italics.on,list.bullets 1`] = `
+<div>
+  bold.off
+  underline.off
+  italics.on
+  list.bullets
+</div>
+`;
+
+exports[`parallel: bold.off,underline.off,italics.on,list.none 1`] = `
+<div>
+  bold.off
+  underline.off
+  italics.on
+  list.none
+</div>
+`;
+
+exports[`parallel: bold.off,underline.off,italics.on,list.numbers 1`] = `
+<div>
+  bold.off
+  underline.off
+  italics.on
+  list.numbers
+</div>
+`;
+
+exports[`parallel: bold.off,underline.on,italics.off,list.bullets 1`] = `
+<div>
+  bold.off
+  underline.on
+  italics.off
+  list.bullets
+</div>
+`;
+
+exports[`parallel: bold.off,underline.on,italics.off,list.none 1`] = `
+<div>
+  bold.off
+  underline.on
+  italics.off
+  list.none
+</div>
+`;
+
+exports[`parallel: bold.off,underline.on,italics.off,list.numbers 1`] = `
+<div>
+  bold.off
+  underline.on
+  italics.off
+  list.numbers
+</div>
+`;
+
+exports[`parallel: bold.off,underline.on,italics.on,list.bullets 1`] = `
+<div>
+  bold.off
+  underline.on
+  italics.on
+  list.bullets
+</div>
+`;
+
+exports[`parallel: bold.off,underline.on,italics.on,list.none 1`] = `
+<div>
+  bold.off
+  underline.on
+  italics.on
+  list.none
+</div>
+`;
+
+exports[`parallel: bold.off,underline.on,italics.on,list.numbers 1`] = `
+<div>
+  bold.off
+  underline.on
+  italics.on
+  list.numbers
+</div>
+`;
+
+exports[`parallel: bold.on,underline.off,italics.off,list.bullets 1`] = `
+<div>
+  bold.on
+  underline.off
+  italics.off
+  list.bullets
+</div>
+`;
+
+exports[`parallel: bold.on,underline.off,italics.off,list.none 1`] = `
+<div>
+  bold.on
+  underline.off
+  italics.off
+  list.none
+</div>
+`;
+
+exports[`parallel: bold.on,underline.off,italics.off,list.numbers 1`] = `
+<div>
+  bold.on
+  underline.off
+  italics.off
+  list.numbers
+</div>
+`;
+
+exports[`parallel: bold.on,underline.off,italics.on,list.bullets 1`] = `
+<div>
+  bold.on
+  underline.off
+  italics.on
+  list.bullets
+</div>
+`;
+
+exports[`parallel: bold.on,underline.off,italics.on,list.none 1`] = `
+<div>
+  bold.on
+  underline.off
+  italics.on
+  list.none
+</div>
+`;
+
+exports[`parallel: bold.on,underline.off,italics.on,list.numbers 1`] = `
+<div>
+  bold.on
+  underline.off
+  italics.on
+  list.numbers
+</div>
+`;
+
+exports[`parallel: bold.on,underline.on,italics.off,list.bullets 1`] = `
+<div>
+  bold.on
+  underline.on
+  italics.off
+  list.bullets
+</div>
+`;
+
+exports[`parallel: bold.on,underline.on,italics.off,list.none 1`] = `
+<div>
+  bold.on
+  underline.on
+  italics.off
+  list.none
+</div>
+`;
+
+exports[`parallel: bold.on,underline.on,italics.off,list.numbers 1`] = `
+<div>
+  bold.on
+  underline.on
+  italics.off
+  list.numbers
+</div>
+`;
+
+exports[`parallel: bold.on,underline.on,italics.on,list.bullets 1`] = `
+<div>
+  bold.on
+  underline.on
+  italics.on
+  list.bullets
+</div>
+`;
+
+exports[`parallel: bold.on,underline.on,italics.on,list.none 1`] = `
+<div>
+  bold.on
+  underline.on
+  italics.on
+  list.none
+</div>
+`;
+
+exports[`parallel: bold.on,underline.on,italics.on,list.numbers 1`] = `
+<div>
+  bold.on
+  underline.on
+  italics.on
+  list.numbers
+</div>
+`;
+
 exports[`state: a 1`] = `
 <div>
   a

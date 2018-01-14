@@ -5,7 +5,10 @@ import createConditional from './createConditional'
 const displayName = 'State'
 
 const contextTypes = {
-  machineState: PropTypes.string,
+  machineState: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.string),
+    PropTypes.string,
+  ]),
 }
 
 const propTypes = {
@@ -18,11 +21,12 @@ const propTypes = {
   onLeave: PropTypes.func,
 }
 
-const matches = (value, machineState) =>
-  machineState &&
-  (Array.isArray(value)
-    ? value.some(state => minimatch(machineState, state))
-    : minimatch(machineState, value))
+const matches = (value, machineState) => {
+  const values = Array.isArray(value) ? value : [value]
+  const states = Array.isArray(machineState) ? machineState : [machineState]
+
+  return values.some(val => states.some(state => minimatch(state, val)))
+}
 
 const initial = (props, context) => matches(props.value, context.machineState)
 
