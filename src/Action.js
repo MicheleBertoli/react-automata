@@ -9,6 +9,7 @@ const contextTypes = {
 
 const propTypes = {
   children: PropTypes.node,
+  render: PropTypes.func,
   hide: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.string),
     PropTypes.string,

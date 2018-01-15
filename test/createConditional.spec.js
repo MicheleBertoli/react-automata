@@ -81,3 +81,27 @@ test('not visible', () => {
   expect(root.findAllByType('div')).toHaveLength(0)
   expect(onEnter).not.toHaveBeenCalled()
 })
+
+test('render prop', () => {
+  const options = {
+    ...defaultOptions,
+    initial: jest.fn(() => true),
+    shouldShow: jest.fn(() => true),
+    shouldHide: jest.fn(() => true),
+  }
+  const Conditional = createConditional(options)
+  const Container = wrap(Conditional)
+  const renderProp = jest.fn(() => null)
+  const renderer = TestRenderer.create(<Container render={renderProp} />)
+  const instance = renderer.getInstance()
+
+  expect(renderProp).toHaveBeenCalledWith(true)
+
+  instance.forceUpdate()
+
+  expect(renderProp).toHaveBeenCalledWith(false)
+
+  instance.forceUpdate()
+
+  expect(renderProp).toHaveBeenCalledWith(true)
+})

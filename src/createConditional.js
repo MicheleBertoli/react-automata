@@ -45,6 +45,9 @@ export const createConditional = ({
     }
 
     render() {
+      if (typeof this.props.render === 'function') {
+        return this.props.render(this.state.visible)
+      }
       return this.state.visible ? this.props.children : null
     }
   }
@@ -56,6 +59,7 @@ export const createConditional = ({
   Conditional.propTypes = {
     ...propTypes,
     children: PropTypes.node,
+    render: PropTypes.func,
   }
 
   Conditional.defaultProps = {
