@@ -119,7 +119,7 @@ const withStatechart = (statechart, options = {}) => Component => {
       return (
         <Component
           {...this.props}
-          {...this.state.componentState}
+          data={this.state.componentState}
           machineState={this.state.machineState}
           ref={this.handleRef}
           transition={this.handleTransition}

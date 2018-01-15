@@ -50,7 +50,7 @@ export class App extends React.Component {
         <Action show="enterFetching">Loading...</Action>
         <Action show="enterSuccess">
           <ul>
-            {this.props.gists
+            {this.props.data.gists
               .filter(gist => gist.description)
               .map(gist => <li key={gist.id}>{gist.description}</li>)}
           </ul>
