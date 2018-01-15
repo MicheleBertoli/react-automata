@@ -27,17 +27,17 @@ test('state', () => {
   const instance = renderer.getInstance()
   const component = renderer.root.findByType(Component)
 
-  expect(component.props.counter).toBe(0)
+  expect(component.props.data.counter).toBe(0)
 
   instance.handleTransition('EVENT', { counter: 1 })
 
-  expect(component.props.counter).toBe(1)
+  expect(component.props.data.counter).toBe(1)
 
   instance.handleTransition('EVENT', prevState => ({
     counter: prevState.counter + 1,
   }))
 
-  expect(component.props.counter).toBe(2)
+  expect(component.props.data.counter).toBe(2)
 })
 
 test('actions', () => {
