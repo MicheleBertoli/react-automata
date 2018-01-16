@@ -26,6 +26,7 @@ const firstMachine = {
       on: {
         FIRST_NEXT: 'b',
       },
+      onEntry: 'enterA',
     },
     b: {
       on: {
@@ -40,7 +41,7 @@ const firstMachine = {
 test('action', () => {
   const App = () => (
     <div>
-      <Action initial hide="enterB">
+      <Action show="enterA" hide="enterB">
         a
       </Action>
       <Action show="enterBA">b.a</Action>

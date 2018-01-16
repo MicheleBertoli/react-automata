@@ -4,7 +4,7 @@
 
 # React Automata
 
-A state machine abstraction for React, which provides declarative state management and automatic test generation.
+A state machine abstraction for React that provides declarative state management and automatic test generation.
 
 # Quick Start
 
@@ -49,7 +49,7 @@ export class App extends React.Component {
     return (
       <div>
         <button onClick={this.handleClick}>NEXT</button>
-        <Action initial show="enterA">Hello, A</Action>
+        <Action show="enterA">Hello, A</Action>
         <Action show="enterB">Ciao, B</Action>
       </div>
     )
@@ -73,7 +73,7 @@ test('it works', () => {
 ```js
 // App.spec.js.snap
 
-exports[`a 1`] = `
+exports[`it works: a 1`] = `
 <div>
   <button
     onClick={[Function]}
@@ -84,7 +84,7 @@ exports[`a 1`] = `
 </div>
 `;
 
-exports[`b 1`] = `
+exports[`it works: b 1`] = `
 <div>
   <button
     onClick={[Function]}
@@ -101,7 +101,7 @@ exports[`b 1`] = `
 ## withStatechart(statechart[, options])(Component)
 
 The `withStatechart` higher-order component takes a statechart definition (see [xstate](https://github.com/davidkpiano/xstate)), some optional [options](#options) and a component.
-It returns a new component with special [props](#props), [action functions](#action-functions) and [lifecycle methods](#lifecycle-methods).
+It returns a new component with special [props](#props), [action methods](#action-methods) and [lifecycle methods](#lifecycle-methods).
 
 ### Options
 
@@ -135,9 +135,9 @@ Using this value is discouraged, as it couples the UI and the state machine.
 </button>
 ```
 
-### Action functions
+### Action methods
 
-All the component's functions whose names match the names of the actions, are fired when the related transition happen.
+All the component's methods whose names match the names of the actions, are fired when the related transition happen.
 For example:
 
 ```js

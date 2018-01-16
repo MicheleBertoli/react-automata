@@ -28,8 +28,6 @@ const matches = (value, machineState) => {
   return values.some(val => states.some(state => minimatch(state, val)))
 }
 
-const initial = (props, context) => matches(props.value, context.machineState)
-
 export const shouldShow = (props, context) =>
   matches(props.value, context.machineState)
 
@@ -40,7 +38,6 @@ export default createConditional({
   displayName,
   contextTypes,
   propTypes,
-  initial,
   shouldShow,
   shouldHide,
 })

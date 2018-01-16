@@ -33,7 +33,6 @@ test('statics', () => {
 test('visible', () => {
   const options = {
     ...defaultOptions,
-    initial: jest.fn(() => true),
     shouldShow: jest.fn(() => true),
     shouldHide: jest.fn(() => true),
   }
@@ -47,7 +46,7 @@ test('visible', () => {
   const { root } = renderer
   const instance = renderer.getInstance()
 
-  expect(options.initial).toHaveBeenCalled()
+  expect(options.shouldShow).toHaveBeenCalled()
   expect(root.findAllByType('div')).toHaveLength(1)
   expect(onEnter).toHaveBeenCalled()
 
@@ -59,7 +58,7 @@ test('visible', () => {
 
   instance.forceUpdate()
 
-  expect(options.shouldShow).toHaveBeenCalled()
+  expect(options.shouldShow).toHaveBeenCalledTimes(2)
   expect(root.findAllByType('div')).toHaveLength(1)
   expect(onEnter).toHaveBeenCalledTimes(2)
 })
@@ -77,7 +76,7 @@ test('not visible', () => {
   const renderer = TestRenderer.create(<Container onEnter={onEnter} />)
   const { root } = renderer
 
-  expect(options.initial).toHaveBeenCalled()
+  expect(options.shouldShow).toHaveBeenCalled()
   expect(root.findAllByType('div')).toHaveLength(0)
   expect(onEnter).not.toHaveBeenCalled()
 })
