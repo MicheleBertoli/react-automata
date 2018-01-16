@@ -4,7 +4,7 @@
 
 # React Automata
 
-A state machine abstraction for React, which provides declarative state management and automatic test generation.
+A state machine abstraction for React that provides declarative state management and automatic test generation.
 
 # Quick Start
 
