@@ -22,10 +22,9 @@ const propTypes = {
 }
 
 const matches = (value, actions) =>
-  actions &&
-  (Array.isArray(value)
+  Array.isArray(value)
     ? actions.some(action => value.includes(action))
-    : actions.includes(value))
+    : actions.includes(value)
 
 export const shouldShow = (props, context) =>
   matches(props.show, context.actions)
