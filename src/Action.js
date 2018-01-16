@@ -13,7 +13,6 @@ const propTypes = {
     PropTypes.arrayOf(PropTypes.string),
     PropTypes.string,
   ]),
-  initial: PropTypes.bool,
   show: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.string),
     PropTypes.string,
@@ -28,8 +27,6 @@ const matches = (value, actions) =>
     ? actions.some(action => value.includes(action))
     : actions.includes(value))
 
-const initial = props => Boolean(props.initial)
-
 export const shouldShow = (props, context) =>
   matches(props.show, context.actions)
 
@@ -42,7 +39,6 @@ export default createConditional({
   displayName,
   contextTypes,
   propTypes,
-  initial,
   shouldShow,
   shouldHide,
 })

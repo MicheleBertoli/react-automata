@@ -5,7 +5,6 @@ export const createConditional = ({
   displayName,
   contextTypes,
   propTypes,
-  initial,
   shouldShow,
   shouldHide,
 }) => {
@@ -14,7 +13,7 @@ export const createConditional = ({
       super(props, context)
 
       this.state = {
-        visible: initial(props, context),
+        visible: shouldShow(props, context),
       }
 
       if (this.state.visible && props.onEnter) {

@@ -8,6 +8,7 @@ export const statechart = {
       on: {
         FETCH: 'fetching',
       },
+      onEntry: 'enterIdle',
     },
     fetching: {
       on: {
@@ -44,7 +45,7 @@ export class App extends React.Component {
     return (
       <div>
         <h1>Actions</h1>
-        <Action initial hide="enterFetching">
+        <Action show="enterIdle" hide="enterFetching">
           <button onClick={this.handleClick}>Fetch</button>
         </Action>
         <Action show="enterFetching">Loading...</Action>

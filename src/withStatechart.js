@@ -8,7 +8,7 @@ const withStatechart = (statechart, options = {}) => Component => {
     machine = Machine(statechart)
 
     state = {
-      actions: null,
+      actions: this.machine.initialState.actions,
       componentState: options.initialData,
       machineState: this.machine.initialState,
     }
@@ -45,6 +45,8 @@ const withStatechart = (statechart, options = {}) => Component => {
           }
         })
       }
+
+      this.runActionMethods()
     }
 
     componentWillUnmount() {
@@ -65,13 +67,19 @@ const withStatechart = (statechart, options = {}) => Component => {
       }
     }
 
-    handleComponentDidUpdate(prevProps, prevState) {
-      if (prevState.actions !== this.state.actions && this.instance) {
+    runActionMethods() {
+      if (this.instance) {
         this.state.actions.forEach(action => {
           if (this.instance[action]) {
             this.instance[action]()
           }
         })
+      }
+    }
+
+    handleComponentDidUpdate(prevProps, prevState) {
+      if (prevState.actions !== this.state.actions) {
+        this.runActionMethods()
       }
 
       if (prevState.machineState !== this.state.machineState) {
