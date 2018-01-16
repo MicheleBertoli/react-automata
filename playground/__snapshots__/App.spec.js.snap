@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`error 1`] = `
+exports[`it works: error 1`] = `
 <div>
   <h1>
     Actions
@@ -14,7 +14,7 @@ exports[`error 1`] = `
 </div>
 `;
 
-exports[`fetching 1`] = `
+exports[`it works: fetching 1`] = `
 <div>
   <h1>
     Actions
@@ -23,7 +23,7 @@ exports[`fetching 1`] = `
 </div>
 `;
 
-exports[`idle 1`] = `
+exports[`it works: idle 1`] = `
 <div>
   <h1>
     Actions
@@ -36,7 +36,7 @@ exports[`idle 1`] = `
 </div>
 `;
 
-exports[`success 1`] = `
+exports[`it works: success 1`] = `
 <div>
   <h1>
     Actions

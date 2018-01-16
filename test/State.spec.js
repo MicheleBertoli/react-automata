@@ -7,5 +7,6 @@ test('shouldShow', () => {
   expect(shouldShow({ value: ['a', '*.b'] }, { machineState: 'a.b' })).toBe(
     true
   )
+  expect(shouldShow({ value: 'a' }, { machineState: ['a', 'b'] })).toBe(true)
   expect(shouldShow({ value: 'a' }, { machineState: 'b' })).toBe(false)
 })
