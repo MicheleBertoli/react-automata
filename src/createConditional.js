@@ -44,6 +44,9 @@ export const createConditional = ({
     }
 
     render() {
+      if (typeof this.props.children === 'function') {
+        return this.props.children({ visible: this.state.visible })
+      }
       return this.state.visible ? this.props.children : null
     }
   }
