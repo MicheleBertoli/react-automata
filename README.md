@@ -202,7 +202,6 @@ The component to define which parts of the tree should be rendered for a given a
 
 | Prop | Type | Description |
 | ---- | ---- | ----------- |
-| initial | bool | Whether the children should be shown on the initial state. |
 | show | oneOfType(string, arrayOf(string)) | The action(s) for which the children should be shown. When both `show` and `hide` are defined, the children are shown from the first `show` match to the first `hide` match. |
 | hide | oneOfType(string, arrayOf(string)) | The action(s) for which the children should be hidden. |
 | onEnter | func | The function invoked when the component becomes visible, it provides the current machine state. |
