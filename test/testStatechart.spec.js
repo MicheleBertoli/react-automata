@@ -66,7 +66,6 @@ test('state', () => {
 
 test('parallel', () => {
   const wordMachine = {
-    initial: 'bold.off',
     parallel: true,
     states: {
       bold: {
