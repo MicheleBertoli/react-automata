@@ -19,11 +19,27 @@ const machine = {
   },
 }
 
+test('initialisation', () => {
+  const initialData = { counter: 0 }
+  const Component = () => <div />
+  const StateMachine = withStatechart(machine)(Component)
+  const renderer = TestRenderer.create(
+    <StateMachine initial="b" initialData={initialData} />
+  )
+  const instance = renderer.getInstance()
+  const component = renderer.root.findByType(Component)
+
+  expect(component.props.counter).toBe(0)
+  expect(instance.state.machineState.value).toBe('b')
+})
+
 test('state', () => {
   const initialData = { counter: 0 }
   const Component = () => <div />
-  const StateMachine = withStatechart(machine, { initialData })(Component)
-  const renderer = TestRenderer.create(<StateMachine />)
+  const StateMachine = withStatechart(machine)(Component)
+  const renderer = TestRenderer.create(
+    <StateMachine initialData={initialData} />
+  )
   const instance = renderer.getInstance()
   const component = renderer.root.findByType(Component)
 

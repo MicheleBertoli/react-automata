@@ -100,7 +100,7 @@ exports[`it works: b 1`] = `
 
 ## withStatechart(statechart[, options])(Component)
 
-The `withStatechart` higher-order component takes a statechart definition (see [xstate](https://github.com/davidkpiano/xstate)), some optional [options](#options) and a component.
+The `withStatechart` higher-order component takes a statechart definition (see [xstate](https://github.com/davidkpiano/xstate)), some optional [options](#options) and a component. You can set the `initial` machine state and `initialData` via props, e.g. `<withStatemachine(Component) initial="b" initialData={{ counter: 0 }} />`.
 It returns a new component with special [props](#props), [action methods](#action-methods) and [lifecycle methods](#lifecycle-methods).
 
 ### Options
@@ -108,7 +108,6 @@ It returns a new component with special [props](#props), [action methods](#actio
 | Option | Type | Description |
 | ------ | ---- | ----------- |
 | devTools | bool | To connect the state machine to the [Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension). |
-| initialData | object | The initial data, passed to the component as props. |
 
 ### Props
 

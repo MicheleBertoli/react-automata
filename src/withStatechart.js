@@ -1,20 +1,26 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Machine } from 'xstate'
+import { State, Machine } from 'xstate'
 import { getComponentName, isStateless, stringify } from './utils'
 
 const withStatechart = (statechart, options = {}) => Component => {
   class StateMachine extends React.Component {
     machine = Machine(statechart)
 
-    state = {
-      actions: this.machine.initialState.actions,
-      componentState: options.initialData,
-      machineState: this.machine.initialState,
-    }
-
     constructor(props) {
       super(props)
+
+      const { initial, initialData } = props
+
+      const initialMachineState = initial
+        ? State.from(initial)
+        : this.machine.initialState
+
+      this.state = {
+        actions: initialMachineState.actions,
+        componentState: initialData,
+        machineState: initialMachineState,
+      }
 
       this.handleRef = isStateless(Component) ? null : this.handleRef
     }
@@ -136,6 +142,11 @@ const withStatechart = (statechart, options = {}) => Component => {
         />
       )
     }
+  }
+
+  StateMachine.propTypes = {
+    initial: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    initialData: PropTypes.any,
   }
 
   StateMachine.childContextTypes = {

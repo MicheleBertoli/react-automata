@@ -38,6 +38,7 @@
     "react/no-unused-prop-types": "off",
     "react/prefer-stateless-function": "off",
     "react/prop-types": ["error", { "skipUndeclared": true }],
+    "react/forbid-prop-types": "off",
     "react/require-default-props": "off",
     "react/sort-comp": "off",
     "semi": ["error", "never"],
