@@ -27,18 +27,16 @@
     "no-underscore-dangle": ["error", {
       "allow": ["__REDUX_DEVTOOLS_EXTENSION__"],
     }],
-    "no-use-before-define": "off",
     "prettier/prettier": ["error", {
       "semi": false,
       "singleQuote": true,
       "trailingComma": "es5"
     }],
+    "react/forbid-prop-types": ["error", { "forbid": "any" }],
     "react/jsx-filename-extension": ["error", { "extensions": [".js"] }],
     "react/no-multi-comp": "off",
-    "react/no-unused-prop-types": "off",
     "react/prefer-stateless-function": "off",
     "react/prop-types": ["error", { "skipUndeclared": true }],
-    "react/forbid-prop-types": ["on", { "forbid": "any" }],
     "react/require-default-props": "off",
     "react/sort-comp": "off",
     "semi": ["error", "never"],

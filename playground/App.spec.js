@@ -4,9 +4,6 @@ import { App, statechart } from './App'
 global.fetch = jest.fn(() => new Promise(resolve => resolve()))
 
 const fixtures = {
-  initialData: {
-    gists: [],
-  },
   fetching: {
     SUCCESS: {
       gists: [

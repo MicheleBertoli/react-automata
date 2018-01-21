@@ -100,8 +100,9 @@ exports[`it works: b 1`] = `
 
 ## withStatechart(statechart[, options])(Component)
 
-The `withStatechart` higher-order component takes a statechart definition (see [xstate](https://github.com/davidkpiano/xstate)), some optional [options](#options) and a component. You can set the `initialMachineState` and `initialData` via props, e.g. `<withStatemachine(Component) initial="b" initialData={{ counter: 0 }} />`.
+The `withStatechart` higher-order component takes a statechart definition (see [xstate](https://github.com/davidkpiano/xstate)), some optional [options](#options) and a component.
 It returns a new component with special [props](#props), [action methods](#action-methods) and [lifecycle methods](#lifecycle-methods).
+The initial machine state and the initial data can be passed to the resulting component through the `initialMachineState` and `initialData` props.
 
 ### Options
 

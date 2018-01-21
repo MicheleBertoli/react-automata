@@ -65,6 +65,10 @@ export class App extends React.Component {
   }
 }
 
+App.defaultProps = {
+  gists: [],
+}
+
 const options = {
   devTools: true,
 }
