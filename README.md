@@ -202,12 +202,12 @@ The component to define which parts of the tree should be rendered for a given a
 
 | Prop | Type | Description |
 | ---- | ---- | ----------- |
-| show | oneOfType(string, arrayOf(string)) | The action(s) for which the children should be shown. When both `show` and `hide` are defined, the children are shown from the first `show` match to the first `hide` match. |
+| children | node | The children to be rendered when the conditions match. |
 | hide | oneOfType(string, arrayOf(string)) | The action(s) for which the children should be hidden. |
+| render | func | The [render prop](https://reactjs.org/docs/render-props.html) receives a bool (true when the conditions match) and it takes precedence over children. |
+| show | oneOfType(string, arrayOf(string)) | The action(s) for which the children should be shown. When both `show` and `hide` are defined, the children are shown from the first `show` match to the first `hide` match. |
 | onEnter | func | The function invoked when the component becomes visible, it provides the current machine state. |
 | onLeave | func | The function invoked when the component becomes invisible, it provides the current machine state. |
-| children | node | The children to be rendered if visible. |
-| render | func | The is called with `visible: boolean`. The render prop takes precendence over children. |
 
 ```js
 <Action show="enterError">Oh, snap!</Action>
@@ -219,11 +219,11 @@ The component to define which parts of the tree should be rendered for a given s
 
 | Prop | Type | Description |
 | ---- | ---- | ----------- |
+| children | node | The children to be rendered when the conditions match. |
+| render | func | The [render prop](https://reactjs.org/docs/render-props.html) receives a bool (true when the conditions match) and it takes precedence over children. |
 | value | oneOfType(string, arrayOf(string)) | The state(s) for which the children should be shown. It accepts the exact state, a glob expression or an array of states/expressions (e.g. `value="idle"`, `value="error.*"` or `value={['idle', 'error.*']`). |
 | onEnter | func | The function invoked when the component becomes visible, it provides the current machine state. |
 | onLeave | func | The function invoked when the component becomes invisible, it provides the current machine state. |
-| children | node | The children to be rendered if visible. |
-| render | func | The is called with `visible: boolean`. The render prop takes precendence over children. |
 
 ```js
 <State value="error">Oh, snap!</State>
