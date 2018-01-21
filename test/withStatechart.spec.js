@@ -24,7 +24,7 @@ test('initialisation', () => {
   const Component = () => <div />
   const StateMachine = withStatechart(machine)(Component)
   const renderer = TestRenderer.create(
-    <StateMachine initial="b" initialData={initialData} />
+    <StateMachine initialMachineState="b" initialData={initialData} />
   )
   const instance = renderer.getInstance()
   const component = renderer.root.findByType(Component)

@@ -10,10 +10,10 @@ const withStatechart = (statechart, options = {}) => Component => {
     constructor(props) {
       super(props)
 
-      const { initial, initialData } = props
+      const { initialData } = props
 
-      const initialMachineState = initial
-        ? State.from(initial)
+      const initialMachineState = this.props.initialMachineState
+        ? State.from(this.props.initialMachineState)
         : this.machine.initialState
 
       this.state = {
@@ -145,7 +145,10 @@ const withStatechart = (statechart, options = {}) => Component => {
   }
 
   StateMachine.propTypes = {
-    initial: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    initialMachineState: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.object,
+    ]),
     initialData: PropTypes.any,
   }
 
