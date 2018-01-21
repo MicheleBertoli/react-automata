@@ -67,7 +67,6 @@ export class App extends React.Component {
 
 const options = {
   devTools: true,
-  initialData: { gists: [] },
 }
 
 export default withStatechart(statechart, options)(App)
