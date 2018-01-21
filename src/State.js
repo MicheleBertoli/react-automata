@@ -13,6 +13,7 @@ const contextTypes = {
 
 const propTypes = {
   children: PropTypes.node,
+  render: PropTypes.func,
   value: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.string),
     PropTypes.string,

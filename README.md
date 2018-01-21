@@ -206,6 +206,8 @@ The component to define which parts of the tree should be rendered for a given a
 | hide | oneOfType(string, arrayOf(string)) | The action(s) for which the children should be hidden. |
 | onEnter | func | The function invoked when the component becomes visible, it provides the current machine state. |
 | onLeave | func | The function invoked when the component becomes invisible, it provides the current machine state. |
+| children | node | The children to be rendered if visible. |
+| render | func | The is called with `visible: boolean`. The render prop takes precendence over children. |
 
 ```js
 <Action show="enterError">Oh, snap!</Action>
@@ -220,6 +222,8 @@ The component to define which parts of the tree should be rendered for a given s
 | value | oneOfType(string, arrayOf(string)) | The state(s) for which the children should be shown. It accepts the exact state, a glob expression or an array of states/expressions (e.g. `value="idle"`, `value="error.*"` or `value={['idle', 'error.*']`). |
 | onEnter | func | The function invoked when the component becomes visible, it provides the current machine state. |
 | onLeave | func | The function invoked when the component becomes invisible, it provides the current machine state. |
+| children | node | The children to be rendered if visible. |
+| render | func | The is called with `visible: boolean`. The render prop takes precendence over children. |
 
 ```js
 <State value="error">Oh, snap!</State>
