@@ -1,3 +1,4 @@
+[![npm](https://img.shields.io/npm/v/react-automata.svg)](https://www.npmjs.com/package/react-automata)
 [![Build Status](https://travis-ci.org/MicheleBertoli/react-automata.svg?branch=master)](https://travis-ci.org/MicheleBertoli/react-automata)
 [![tested with jest](https://img.shields.io/badge/tested_with-jest-99424f.svg)](https://github.com/facebook/jest)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
@@ -100,8 +101,8 @@ exports[`it works: b 1`] = `
 
 ## withStatechart(statechart[, options])(Component)
 
-The `withStatechart` higher-order component takes a statechart definition (see [xstate](https://github.com/davidkpiano/xstate)), some optional [options](#options) and a component.
-It returns a new component with special [props](#props), [action methods](#action-methods) and [lifecycle methods](#lifecycle-methods).
+The `withStatechart` higher-order component takes a statechart (see [xstate](https://github.com/davidkpiano/xstate)), some [options](#options) and a component.
+It returns a new component with special [props](#props), [action methods](#action-methods) and [lifecycle hooks](#lifecycle-hooks).
 The initial machine state and the initial data can be passed to the resulting component through the `initialMachineState` and `initialData` props.
 
 ### Options
@@ -148,14 +149,14 @@ const statechart = {
       SUCCESS: 'success',
       ERROR: 'error',
     },
-    onEntry: 'enterFetching',
+    onEntry: 'fetchGists',
   },
   // ...
 }
 
 class App extends React.Component {
   // ...
-  enterFetching() {
+  fetchGists() {
     fetch('https://api.github.com/users/gaearon/gists')
       .then(response => response.json())
       .then(gists => this.props.transition('SUCCESS', { gists }))
@@ -166,7 +167,7 @@ class App extends React.Component {
 
 ```
 
-### Lifecycle methods
+### Lifecycle hooks
 
 #### componentWillTransition(event)
 
@@ -206,11 +207,18 @@ The component to define which parts of the tree should be rendered for a given a
 | hide | oneOfType(string, arrayOf(string)) | The action(s) for which the children should be hidden. |
 | render | func | The [render prop](https://reactjs.org/docs/render-props.html) receives a bool (true when the conditions match) and it takes precedence over children. |
 | show | oneOfType(string, arrayOf(string)) | The action(s) for which the children should be shown. When both `show` and `hide` are defined, the children are shown from the first `show` match to the first `hide` match. |
-| onEnter | func | The function invoked when the component becomes visible, it provides the current machine state. |
-| onLeave | func | The function invoked when the component becomes invisible, it provides the current machine state. |
+| onEnter | func | The function invoked when the component becomes visible. |
+| onLeave | func | The function invoked when the component becomes invisible. |
 
 ```js
 <Action show="enterError">Oh, snap!</Action>
+```
+
+```js
+<Action
+  show="enterError"
+  render={visible => (visible ? <div>Oh, snap!</div> : null)}
+/>
 ```
 
 ## &lt;State /&gt;
@@ -222,11 +230,18 @@ The component to define which parts of the tree should be rendered for a given s
 | children | node | The children to be rendered when the conditions match. |
 | render | func | The [render prop](https://reactjs.org/docs/render-props.html) receives a bool (true when the conditions match) and it takes precedence over children. |
 | value | oneOfType(string, arrayOf(string)) | The state(s) for which the children should be shown. It accepts the exact state, a glob expression or an array of states/expressions (e.g. `value="idle"`, `value="error.*"` or `value={['idle', 'error.*']`). |
-| onEnter | func | The function invoked when the component becomes visible, it provides the current machine state. |
-| onLeave | func | The function invoked when the component becomes invisible, it provides the current machine state. |
+| onEnter | func | The function invoked when the component becomes visible. |
+| onLeave | func | The function invoked when the component becomes invisible. |
 
 ```js
 <State value="error">Oh, snap!</State>
+```
+
+```js
+<State
+  value="error"
+  render={visible => (visible ? <div>Oh, snap!</div> : null)}
+/>
 ```
 
 ## testStatechart({ statechart[, fixtures] }, Component)
@@ -259,6 +274,14 @@ test('it works', () => {
   testStatechart({ statechart, fixtures }, App)
 })
 ```
+
+# Examples
+
+- [Ian Horrocks's Calculator](https://codesandbox.io/s/n5vvn4jrpm)
+
+- [React Flickr Gallery App](https://codesandbox.io/s/z20llylz9l)
+
+- [Playground](./playground)
 
 # Inspiration
 
