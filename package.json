@@ -32,11 +32,11 @@
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-prettier": "^2.5.0",
-    "eslint-plugin-react": "^7.5.1",
+    "eslint-plugin-react": "^7.6.0",
     "html-webpack-plugin": "^2.30.1",
     "husky": "^0.14.3",
     "jest": "^22.1.4",
-    "lint-staged": "^6.0.1",
+    "lint-staged": "^6.1.0",
     "prettier": "^1.10.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
@@ -48,7 +48,7 @@
     "minimatch": "^3.0.4",
     "prop-types": "^15.6.0",
     "react-test-renderer": "^16.2.0",
-    "xstate": "^3.0.2"
+    "xstate": "^3.0.3"
   },
   "peerDependencies": {
     "react": "^16.0.0"
