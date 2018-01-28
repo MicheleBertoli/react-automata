@@ -53,7 +53,7 @@ test('state', () => {
   expect(component.props.counter).toBe(2)
 })
 
-test('actions', () => {
+test('action methods', () => {
   const spy = jest.fn()
 
   class Component extends React.Component {
