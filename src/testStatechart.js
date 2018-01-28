@@ -8,8 +8,11 @@ const testStatechart = (config, Component) => {
   const paths = getShortestPaths(Machine(config.statechart))
 
   Object.keys(paths).forEach(key => {
+    const initialData = config.fixtures ? config.fixtures.initialData : null
     const StateMachine = withStatechart(config.statechart)(Component)
-    const renderer = TestRenderer.create(<StateMachine />)
+    const renderer = TestRenderer.create(
+      <StateMachine initialData={initialData} />
+    )
     const instance = renderer.getInstance()
 
     paths[key].forEach(({ event, state }) => {
