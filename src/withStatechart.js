@@ -20,7 +20,7 @@ const withStatechart = (statechart, options = {}) => Component => {
         machineState: initialMachineState,
       }
 
-      this.handleRef = isStateless(Component) ? null : this.handleRef
+      this.handleRef = !isStateless(Component) ? this.handleRef : null
     }
 
     getChildContext() {
