@@ -65,8 +65,11 @@ export const createConditional = ({
 
   Conditional.propTypes = {
     ...propTypes,
+    channel: PropTypes.string,
     children: PropTypes.node,
     render: PropTypes.func,
+    onEnter: PropTypes.func,
+    onLeave: PropTypes.func,
   }
 
   Conditional.defaultProps = {

@@ -9,8 +9,6 @@ const propTypes = {
     PropTypes.arrayOf(PropTypes.string),
     PropTypes.string,
   ]),
-  onEnter: PropTypes.func,
-  onLeave: PropTypes.func,
 }
 
 const matches = (value, machineState) => {
