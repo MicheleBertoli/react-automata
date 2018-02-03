@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { getContextValue } from './utils'
 
 export const createConditional = ({
   displayName,
-  contextTypes,
   propTypes,
   shouldShow,
   shouldHide,
@@ -13,7 +13,7 @@ export const createConditional = ({
       super(props, context)
 
       this.state = {
-        visible: shouldShow(props, context),
+        visible: shouldShow(props, getContextValue(props, context)),
       }
 
       if (this.state.visible && props.onEnter) {
@@ -22,7 +22,10 @@ export const createConditional = ({
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
-      if (!this.state.visible && shouldShow(nextProps, nextContext)) {
+      if (
+        !this.state.visible &&
+        shouldShow(nextProps, getContextValue(nextProps, nextContext))
+      ) {
         this.setState({
           visible: true,
         })
@@ -32,7 +35,10 @@ export const createConditional = ({
         }
       }
 
-      if (this.state.visible && shouldHide(nextProps, nextContext)) {
+      if (
+        this.state.visible &&
+        shouldHide(nextProps, getContextValue(nextProps, nextContext))
+      ) {
         this.setState({
           visible: false,
         })
@@ -53,7 +59,9 @@ export const createConditional = ({
 
   Conditional.displayName = displayName
 
-  Conditional.contextTypes = contextTypes
+  Conditional.contextTypes = {
+    automata: PropTypes.object,
+  }
 
   Conditional.propTypes = {
     ...propTypes,

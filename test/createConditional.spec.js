@@ -4,7 +4,6 @@ import createConditional from '../src/createConditional'
 
 const defaultOptions = {
   displayName: 'Conditional',
-  contextTypes: {},
   propTypes: {},
 }
 
@@ -22,7 +21,6 @@ const wrap = Conditional =>
 test('statics', () => {
   const Conditional = createConditional(defaultOptions)
   expect(Conditional.displayName).toBe(defaultOptions.displayName)
-  expect(Conditional.contextTypes).toBe(defaultOptions.contextTypes)
   expect(Conditional.propTypes).toEqual(
     expect.objectContaining({
       children: expect.any(Function),

@@ -18,6 +18,16 @@ exports[`action: b.b 1`] = `
 </div>
 `;
 
+exports[`channel: a 1`] = `
+<div>
+  a
+  <div>
+    b
+    a
+  </div>
+</div>
+`;
+
 exports[`parallel: bold.off,underline.off,italics.off,list.bullets 1`] = `
 <div>
   bold.off

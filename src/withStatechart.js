@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { State, Machine } from 'xstate'
-import { getComponentName, isStateless, stringify } from './utils'
+import { CHANNEL, getComponentName, isStateless, stringify } from './utils'
 
 const withStatechart = (statechart, options = {}) => Component => {
   class StateMachine extends React.Component {
@@ -25,10 +25,15 @@ const withStatechart = (statechart, options = {}) => Component => {
 
     getChildContext() {
       return {
-        actions: this.state.actions,
-        machineState:
-          this.state.machineState.toString() ||
-          stringify(this.state.machineState.value),
+        automata: {
+          ...this.context.automata,
+          [statechart.key || CHANNEL]: {
+            actions: this.state.actions,
+            machineState:
+              this.state.machineState.toString() ||
+              stringify(this.state.machineState.value),
+          },
+        },
       }
     }
 
@@ -150,12 +155,12 @@ const withStatechart = (statechart, options = {}) => Component => {
     ]),
   }
 
+  StateMachine.contextTypes = {
+    automata: PropTypes.object,
+  }
+
   StateMachine.childContextTypes = {
-    actions: PropTypes.arrayOf(PropTypes.string),
-    machineState: PropTypes.oneOfType([
-      PropTypes.arrayOf(PropTypes.string),
-      PropTypes.string,
-    ]),
+    automata: PropTypes.object,
   }
 
   return StateMachine

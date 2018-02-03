@@ -2,7 +2,8 @@ import React from 'react'
 import TestRenderer from 'react-test-renderer'
 import { Machine } from 'xstate'
 import { getShortestPaths } from 'xstate/lib/graph'
-import { withStatechart } from './'
+import { getContextValue } from './utils'
+import withStatechart from './withStatechart'
 
 const testStatechart = (config, Component) => {
   const paths = getShortestPaths(Machine(config.statechart))
@@ -24,7 +25,7 @@ const testStatechart = (config, Component) => {
       instance.handleTransition(event, fixtures)
     })
 
-    const { machineState } = instance.getChildContext()
+    const { machineState } = getContextValue({}, instance.getChildContext())
 
     expect(renderer.toJSON()).toMatchSnapshot(machineState)
   })
