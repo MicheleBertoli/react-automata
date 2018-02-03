@@ -136,7 +136,7 @@ test('parallel', () => {
 })
 
 test('channel', () => {
-  const inner = {
+  const statechart = {
     initial: 'a',
     states: {
       a: {},
@@ -152,14 +152,11 @@ test('channel', () => {
     </div>
   )
 
-  const InnerMachine = withStatechart(inner)(Inner)
+  const InnerMachine = withStatechart(statechart)(Inner)
 
   const outer = {
+    ...statechart,
     key: 'outer',
-    initial: 'a',
-    states: {
-      a: {},
-    },
   }
 
   const App = () => (
