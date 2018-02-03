@@ -1,7 +1,16 @@
 import idx from 'idx'
+import invariant from 'invariant'
 
-export const getContextValue = (props, context) =>
-  idx(context, _ => _.automata.state[props.channel || context.automata.channel])
+export const getContextValue = (context, name) => {
+  invariant(context.automata, 'No context received')
+
+  const channel = name || 'DEFAULT'
+  const value = idx(context, _ => _.automata[channel])
+
+  invariant(value, 'No value for channel: %s', channel)
+
+  return value
+}
 
 export const getComponentName = Component =>
   Component.displayName || Component.name || 'Component'

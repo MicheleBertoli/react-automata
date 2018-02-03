@@ -2,6 +2,8 @@ import React from 'react'
 import TestRenderer from 'react-test-renderer'
 import createConditional from '../src/createConditional'
 
+jest.mock('../src/utils', () => ({ getContextValue: () => {} }))
+
 const defaultOptions = {
   displayName: 'Conditional',
   propTypes: {},

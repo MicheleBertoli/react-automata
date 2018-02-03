@@ -7,11 +7,12 @@ import { getContextValue } from './utils'
 import withStatechart from './withStatechart'
 
 const testStatechart = (config, Component) => {
-  const paths = getShortestPaths(Machine(config.statechart))
+  const { channel, statechart } = config
+  const paths = getShortestPaths(Machine(statechart))
 
   Object.keys(paths).forEach(key => {
     const initialData = idx(config, _ => _.fixtures.initialData)
-    const StateMachine = withStatechart(config.statechart)(Component)
+    const StateMachine = withStatechart(statechart, { channel })(Component)
     const renderer = TestRenderer.create(
       <StateMachine initialData={initialData} />
     )
@@ -23,7 +24,10 @@ const testStatechart = (config, Component) => {
       instance.handleTransition(event, fixtures)
     })
 
-    const { machineState } = getContextValue({}, instance.getChildContext())
+    const { machineState } = getContextValue(
+      instance.getChildContext(),
+      channel
+    )
 
     expect(renderer.toJSON()).toMatchSnapshot(machineState)
   })

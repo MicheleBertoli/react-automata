@@ -25,20 +25,17 @@ const withStatechart = (statechart, options = {}) => Component => {
     }
 
     getChildContext() {
-      const channel = statechart.key || 'DEFAULT'
+      const channel = options.channel || 'DEFAULT'
 
       return {
         automata: {
-          state: {
-            ...idx(this.context, _ => _.automata.state),
-            [channel]: {
-              actions: this.state.actions,
-              machineState:
-                this.state.machineState.toString() ||
-                stringify(this.state.machineState.value),
-            },
+          ...this.context.automata,
+          [channel]: {
+            actions: this.state.actions,
+            machineState:
+              this.state.machineState.toString() ||
+              stringify(this.state.machineState.value),
           },
-          channel,
         },
       }
     }
@@ -98,7 +95,7 @@ const withStatechart = (statechart, options = {}) => Component => {
       }
 
       if (prevState.machineState !== this.state.machineState) {
-        if (this.instance && this.instance.componentDidTransition) {
+        if (idx(this, _ => _.instance.componentDidTransition)) {
           this.instance.componentDidTransition(
             prevState.machineState.value,
             this.state.event
@@ -116,7 +113,7 @@ const withStatechart = (statechart, options = {}) => Component => {
     }
 
     handleTransition = (event, updater) => {
-      if (this.instance && this.instance.componentWillTransition) {
+      if (idx(this, _ => _.instance.componentWillTransition)) {
         this.instance.componentWillTransition(event)
       }
 

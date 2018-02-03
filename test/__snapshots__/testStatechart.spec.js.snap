@@ -18,12 +18,12 @@ exports[`action: b.b 1`] = `
 </div>
 `;
 
-exports[`channel: a 1`] = `
+exports[`channel: outer 1`] = `
 <div>
-  outer (local)
+  outer
   <div>
     inner
-    outer (channel)
+    outer
   </div>
 </div>
 `;

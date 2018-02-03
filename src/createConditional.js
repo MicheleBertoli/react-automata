@@ -13,7 +13,7 @@ export const createConditional = ({
       super(props, context)
 
       this.state = {
-        visible: shouldShow(props, getContextValue(props, context)),
+        visible: shouldShow(props, getContextValue(context, props.channel)),
       }
 
       if (this.state.visible && props.onEnter) {
@@ -24,7 +24,7 @@ export const createConditional = ({
     componentWillReceiveProps(nextProps, nextContext) {
       if (
         !this.state.visible &&
-        shouldShow(nextProps, getContextValue(nextProps, nextContext))
+        shouldShow(nextProps, getContextValue(nextContext, nextProps.channel))
       ) {
         this.setState({
           visible: true,
@@ -37,7 +37,7 @@ export const createConditional = ({
 
       if (
         this.state.visible &&
-        shouldHide(nextProps, getContextValue(nextProps, nextContext))
+        shouldHide(nextProps, getContextValue(nextContext, nextProps.channel))
       ) {
         this.setState({
           visible: false,
