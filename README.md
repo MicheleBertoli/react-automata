@@ -109,6 +109,7 @@ The initial machine state and the initial data can be passed to the resulting co
 
 | Option | Type | Description |
 | ------ | ---- | ----------- |
+| channel | string | The key of the context on which to set the state. |
 | devTools | bool | To connect the state machine to the [Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension). |
 
 ### Props
@@ -205,7 +206,7 @@ The component to define which parts of the tree should be rendered for a given a
 | ---- | ---- | ----------- |
 | hide | oneOfType(string, arrayOf(string)) | The action(s) for which the children should be hidden. |
 | show | oneOfType(string, arrayOf(string)) | The action(s) for which the children should be shown. When both `show` and `hide` are defined, the children are shown from the first `show` match to the first `hide` match. |
-| channel | string | The key of the statechart to which the component should react to (useful to nest components wrapped into [withStatechart](#withstatechartstatechart-optionscomponent)). |
+| channel | string | The key of the context from where to read the state. |
 | children | node | The children to be rendered when the conditions match. |
 | render | func | The [render prop](https://reactjs.org/docs/render-props.html) receives a bool (true when the conditions match) and it takes precedence over children. |
 | onEnter | func | The function invoked when the component becomes visible. |
@@ -229,7 +230,7 @@ The component to define which parts of the tree should be rendered for a given s
 | Prop | Type | Description |
 | ---- | ---- | ----------- |
 | value | oneOfType(string, arrayOf(string)) | The state(s) for which the children should be shown. It accepts the exact state, a glob expression or an array of states/expressions (e.g. `value="idle"`, `value="error.*"` or `value={['idle', 'error.*']`). |
-| channel | string | The key of the statechart to which the component should react to (useful to nest components wrapped into [withStatechart](#withstatechartstatechart-optionscomponent)). |
+| channel | string | The key of the context from where to read the state. |
 | children | node | The children to be rendered when the conditions match. |
 | render | func | The [render prop](https://reactjs.org/docs/render-props.html) receives a bool (true when the conditions match) and it takes precedence over children. |
 | onEnter | func | The function invoked when the component becomes visible. |

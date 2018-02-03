@@ -2,12 +2,12 @@ import idx from 'idx'
 import invariant from 'invariant'
 
 export const getContextValue = (context, name) => {
-  invariant(context.automata, 'No context received')
+  invariant(context.automata, 'No context received.')
 
   const channel = name || 'DEFAULT'
-  const value = idx(context, _ => _.automata[channel])
+  const value = context.automata[channel]
 
-  invariant(value, 'No value for channel: %s', channel)
+  invariant(value, 'No value for channel: "%s".', channel)
 
   return value
 }
