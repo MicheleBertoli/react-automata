@@ -20,10 +20,10 @@ exports[`action: b.b 1`] = `
 
 exports[`channel: a 1`] = `
 <div>
-  a
+  outer (local)
   <div>
-    b
-    a
+    inner
+    outer (channel)
   </div>
 </div>
 `;

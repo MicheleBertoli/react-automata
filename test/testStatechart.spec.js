@@ -137,25 +137,25 @@ test('parallel', () => {
 
 test('channel', () => {
   const inner = {
-    key: 'inner',
-    initial: 'b',
+    initial: 'a',
     states: {
-      b: {},
+      a: {},
     },
   }
 
   const Inner = () => (
     <div>
-      <State channel="inner" value="b">
-        b
+      <State value="a">inner</State>
+      <State channel="outer" value="a">
+        outer (channel)
       </State>
-      <State value="a">a</State>
     </div>
   )
 
   const InnerMachine = withStatechart(inner)(Inner)
 
   const outer = {
+    key: 'outer',
     initial: 'a',
     states: {
       a: {},
@@ -164,7 +164,7 @@ test('channel', () => {
 
   const App = () => (
     <div>
-      <State value="a">a</State>
+      <State value="a">outer (local)</State>
       <InnerMachine />
     </div>
   )

@@ -1,24 +1,13 @@
-export const CHANNEL = 'CHANNEL'
+import idx from 'idx'
 
-export const getContextValue = (props, context) => {
-  if (!context.automata) {
-    return null
-  }
-
-  const keys = Object.keys(context.automata)
-
-  if (!props.channel && keys.length === 1) {
-    return context.automata[keys[0]]
-  }
-
-  return context.automata[props.channel || CHANNEL]
-}
+export const getContextValue = (props, context) =>
+  idx(context, _ => _.automata.state[props.channel || context.automata.channel])
 
 export const getComponentName = Component =>
   Component.displayName || Component.name || 'Component'
 
 export const isStateless = Component =>
-  !(Component.prototype && Component.prototype.isReactComponent)
+  !idx(Component, _ => _.prototype.isReactComponent)
 
 export const stringify = (state, path = []) => {
   if (typeof state === 'string') {

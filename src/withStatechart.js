@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { State, Machine } from 'xstate'
-import { CHANNEL, getComponentName, isStateless, stringify } from './utils'
+import idx from 'idx'
+import { getComponentName, isStateless, stringify } from './utils'
 
 const withStatechart = (statechart, options = {}) => Component => {
   class StateMachine extends React.Component {
@@ -24,15 +25,20 @@ const withStatechart = (statechart, options = {}) => Component => {
     }
 
     getChildContext() {
+      const channel = statechart.key || 'DEFAULT'
+
       return {
         automata: {
-          ...this.context.automata,
-          [statechart.key || CHANNEL]: {
-            actions: this.state.actions,
-            machineState:
-              this.state.machineState.toString() ||
-              stringify(this.state.machineState.value),
+          state: {
+            ...idx(this.context, _ => _.automata.state),
+            [channel]: {
+              actions: this.state.actions,
+              machineState:
+                this.state.machineState.toString() ||
+                stringify(this.state.machineState.value),
+            },
           },
+          channel,
         },
       }
     }
