@@ -8,7 +8,8 @@ import withStatechart from './withStatechart'
 
 const testStatechart = (config, Component) => {
   const { channel, statechart } = config
-  const paths = getShortestPaths(Machine(statechart))
+  const machine = Machine(statechart)
+  const paths = getShortestPaths(machine)
 
   Object.keys(paths).forEach(key => {
     const initialData = idx(config, _ => _.fixtures.initialData)

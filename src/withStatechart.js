@@ -153,8 +153,8 @@ const withStatechart = (statechart, options = {}) => Component => {
   StateMachine.propTypes = {
     initialData: PropTypes.object,
     initialMachineState: PropTypes.oneOfType([
-      PropTypes.string,
       PropTypes.object,
+      PropTypes.string,
     ]),
   }
 

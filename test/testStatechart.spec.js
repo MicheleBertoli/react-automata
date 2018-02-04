@@ -135,7 +135,7 @@ test('parallel', () => {
   testStatechart({ statechart: wordMachine }, App)
 })
 
-test('channel', () => {
+test('channels', () => {
   const inner = {
     initial: 'inner',
     states: {

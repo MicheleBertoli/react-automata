@@ -18,7 +18,7 @@ exports[`action: b.b 1`] = `
 </div>
 `;
 
-exports[`channel: outer 1`] = `
+exports[`channels: outer 1`] = `
 <div>
   outer
   <div>

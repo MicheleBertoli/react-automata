@@ -12,8 +12,10 @@ export const createConditional = ({
     constructor(props, context) {
       super(props, context)
 
+      const value = getContextValue(context, props.channel)
+
       this.state = {
-        visible: shouldShow(props, getContextValue(context, props.channel)),
+        visible: shouldShow(props, value),
       }
 
       if (this.state.visible && props.onEnter) {
@@ -22,10 +24,9 @@ export const createConditional = ({
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
-      if (
-        !this.state.visible &&
-        shouldShow(nextProps, getContextValue(nextContext, nextProps.channel))
-      ) {
+      const value = getContextValue(nextContext, nextProps.channel)
+
+      if (!this.state.visible && shouldShow(nextProps, value)) {
         this.setState({
           visible: true,
         })
@@ -35,10 +36,7 @@ export const createConditional = ({
         }
       }
 
-      if (
-        this.state.visible &&
-        shouldHide(nextProps, getContextValue(nextContext, nextProps.channel))
-      ) {
+      if (this.state.visible && shouldHide(nextProps, value)) {
         this.setState({
           visible: false,
         })
@@ -53,6 +51,7 @@ export const createConditional = ({
       if (typeof this.props.render === 'function') {
         return this.props.render(this.state.visible)
       }
+
       return this.state.visible ? this.props.children : null
     }
   }
