@@ -1,6 +1,6 @@
 import React from 'react'
-import TestRenderer from 'react-test-renderer'
 import PropTypes from 'prop-types'
+import TestRenderer from 'react-test-renderer'
 import createConditional from '../src/createConditional'
 
 jest.mock('../src/utils', () => ({ getContextValue: () => {} }))
