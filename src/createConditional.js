@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { getContextValue } from './utils'
 
 export const createConditional = ({
   displayName,
-  contextTypes,
   propTypes,
   shouldShow,
   shouldHide,
@@ -12,8 +12,10 @@ export const createConditional = ({
     constructor(props, context) {
       super(props, context)
 
+      const value = getContextValue(context, props.channel)
+
       this.state = {
-        visible: shouldShow(props, context),
+        visible: shouldShow(props, value),
       }
 
       if (this.state.visible && props.onEnter) {
@@ -22,7 +24,9 @@ export const createConditional = ({
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
-      if (!this.state.visible && shouldShow(nextProps, nextContext)) {
+      const value = getContextValue(nextContext, nextProps.channel)
+
+      if (!this.state.visible && shouldShow(nextProps, value)) {
         this.setState({
           visible: true,
         })
@@ -32,7 +36,7 @@ export const createConditional = ({
         }
       }
 
-      if (this.state.visible && shouldHide(nextProps, nextContext)) {
+      if (this.state.visible && shouldHide(nextProps, value)) {
         this.setState({
           visible: false,
         })
@@ -47,18 +51,24 @@ export const createConditional = ({
       if (typeof this.props.render === 'function') {
         return this.props.render(this.state.visible)
       }
+
       return this.state.visible ? this.props.children : null
     }
   }
 
   Conditional.displayName = displayName
 
-  Conditional.contextTypes = contextTypes
+  Conditional.contextTypes = {
+    automata: PropTypes.object,
+  }
 
   Conditional.propTypes = {
     ...propTypes,
+    channel: PropTypes.string,
     children: PropTypes.node,
     render: PropTypes.func,
+    onEnter: PropTypes.func,
+    onLeave: PropTypes.func,
   }
 
   Conditional.defaultProps = {

@@ -1,11 +1,15 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import TestRenderer from 'react-test-renderer'
 import createConditional from '../src/createConditional'
 
+jest.mock('../src/utils', () => ({ getContextValue: () => {} }))
+
 const defaultOptions = {
   displayName: 'Conditional',
-  contextTypes: {},
-  propTypes: {},
+  propTypes: {
+    prop: PropTypes.string,
+  },
 }
 
 const wrap = Conditional =>
@@ -21,12 +25,11 @@ const wrap = Conditional =>
 
 test('statics', () => {
   const Conditional = createConditional(defaultOptions)
+
   expect(Conditional.displayName).toBe(defaultOptions.displayName)
-  expect(Conditional.contextTypes).toBe(defaultOptions.contextTypes)
   expect(Conditional.propTypes).toEqual(
     expect.objectContaining({
-      children: expect.any(Function),
-      render: expect.any(Function),
+      prop: expect.any(Function),
     })
   )
 })

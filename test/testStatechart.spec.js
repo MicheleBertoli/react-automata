@@ -1,5 +1,5 @@
 import React from 'react'
-import { Action, State, testStatechart } from '../src'
+import { Action, State, testStatechart, withStatechart } from '../src'
 
 const secondMachine = {
   initial: 'a',
@@ -133,4 +133,44 @@ test('parallel', () => {
   )
 
   testStatechart({ statechart: wordMachine }, App)
+})
+
+test('channels', () => {
+  const inner = {
+    initial: 'inner',
+    states: {
+      inner: {},
+    },
+  }
+
+  const Inner = () => (
+    <div>
+      <State channel="inner" value="inner">
+        inner
+      </State>
+      <State channel="outer" value="outer">
+        outer
+      </State>
+    </div>
+  )
+
+  const InnerMachine = withStatechart(inner, { channel: 'inner' })(Inner)
+
+  const outer = {
+    initial: 'outer',
+    states: {
+      outer: {},
+    },
+  }
+
+  const Outer = () => (
+    <div>
+      <State channel="outer" value="outer">
+        outer
+      </State>
+      <InnerMachine />
+    </div>
+  )
+
+  testStatechart({ statechart: outer, channel: 'outer' }, Outer)
 })

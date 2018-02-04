@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { State, Machine } from 'xstate'
+import idx from 'idx'
 import { getComponentName, isStateless, stringify } from './utils'
 
 const withStatechart = (statechart, options = {}) => Component => {
@@ -15,7 +16,6 @@ const withStatechart = (statechart, options = {}) => Component => {
         : this.machine.initialState
 
       this.state = {
-        actions: initialMachineState.actions,
         componentState: this.props.initialData,
         machineState: initialMachineState,
       }
@@ -24,11 +24,18 @@ const withStatechart = (statechart, options = {}) => Component => {
     }
 
     getChildContext() {
+      const channel = options.channel || 'DEFAULT'
+
       return {
-        actions: this.state.actions,
-        machineState:
-          this.state.machineState.toString() ||
-          stringify(this.state.machineState.value),
+        automata: {
+          ...this.context.automata,
+          [channel]: {
+            actions: this.state.machineState.actions,
+            machineState:
+              this.state.machineState.toString() ||
+              stringify(this.state.machineState.value),
+          },
+        },
       }
     }
 
@@ -73,7 +80,7 @@ const withStatechart = (statechart, options = {}) => Component => {
 
     runActionMethods() {
       if (this.instance) {
-        this.state.actions.forEach(action => {
+        this.state.machineState.actions.forEach(action => {
           if (this.instance[action]) {
             this.instance[action]()
           }
@@ -82,12 +89,12 @@ const withStatechart = (statechart, options = {}) => Component => {
     }
 
     handleComponentDidUpdate(prevProps, prevState) {
-      if (prevState.actions !== this.state.actions) {
+      if (prevState.machineState.actions !== this.state.machineState.actions) {
         this.runActionMethods()
       }
 
       if (prevState.machineState !== this.state.machineState) {
-        if (this.instance && this.instance.componentDidTransition) {
+        if (idx(this, _ => _.instance.componentDidTransition)) {
           this.instance.componentDidTransition(
             prevState.machineState.value,
             this.state.event
@@ -105,7 +112,7 @@ const withStatechart = (statechart, options = {}) => Component => {
     }
 
     handleTransition = (event, updater) => {
-      if (this.instance && this.instance.componentWillTransition) {
+      if (idx(this, _ => _.instance.componentWillTransition)) {
         this.instance.componentWillTransition(event)
       }
 
@@ -121,7 +128,6 @@ const withStatechart = (statechart, options = {}) => Component => {
         )
 
         return {
-          actions: nextState.actions,
           componentState: { ...prevState.componentState, ...stateChange },
           event,
           machineState: nextState,
@@ -145,17 +151,17 @@ const withStatechart = (statechart, options = {}) => Component => {
   StateMachine.propTypes = {
     initialData: PropTypes.object,
     initialMachineState: PropTypes.oneOfType([
-      PropTypes.string,
       PropTypes.object,
+      PropTypes.string,
     ]),
   }
 
+  StateMachine.contextTypes = {
+    automata: PropTypes.object,
+  }
+
   StateMachine.childContextTypes = {
-    actions: PropTypes.arrayOf(PropTypes.string),
-    machineState: PropTypes.oneOfType([
-      PropTypes.arrayOf(PropTypes.string),
-      PropTypes.string,
-    ]),
+    automata: PropTypes.object,
   }
 
   return StateMachine

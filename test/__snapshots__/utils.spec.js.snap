@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getContextValue channel 1`] = `"No value for channel: \\"foo\\"."`;
+
+exports[`getContextValue context 1`] = `"No context received."`;

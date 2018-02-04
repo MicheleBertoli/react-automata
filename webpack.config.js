@@ -23,6 +23,7 @@ module.exports = {
             plugins: [
               'transform-class-properties',
               'transform-object-rest-spread',
+              'babel-plugin-idx',
               'react-hot-loader/babel',
             ],
           },

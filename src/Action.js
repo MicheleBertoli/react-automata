@@ -3,10 +3,6 @@ import createConditional from './createConditional'
 
 const displayName = 'Action'
 
-const contextTypes = {
-  actions: PropTypes.arrayOf(PropTypes.string),
-}
-
 const propTypes = {
   hide: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.string),
@@ -16,8 +12,6 @@ const propTypes = {
     PropTypes.arrayOf(PropTypes.string),
     PropTypes.string,
   ]),
-  onEnter: PropTypes.func,
-  onLeave: PropTypes.func,
 }
 
 const matches = (value, actions) =>
@@ -35,7 +29,6 @@ export const shouldHide = (props, context) =>
 
 export default createConditional({
   displayName,
-  contextTypes,
   propTypes,
   shouldShow,
   shouldHide,

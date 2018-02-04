@@ -4,20 +4,11 @@ import createConditional from './createConditional'
 
 const displayName = 'State'
 
-const contextTypes = {
-  machineState: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.string),
-    PropTypes.string,
-  ]),
-}
-
 const propTypes = {
   value: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.string),
     PropTypes.string,
   ]),
-  onEnter: PropTypes.func,
-  onLeave: PropTypes.func,
 }
 
 const matches = (value, machineState) => {
@@ -35,7 +26,6 @@ export const shouldHide = (props, context) =>
 
 export default createConditional({
   displayName,
-  contextTypes,
   propTypes,
   shouldShow,
   shouldHide,
