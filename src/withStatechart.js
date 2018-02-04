@@ -16,7 +16,6 @@ const withStatechart = (statechart, options = {}) => Component => {
         : this.machine.initialState
 
       this.state = {
-        actions: initialMachineState.actions,
         componentState: this.props.initialData,
         machineState: initialMachineState,
       }
@@ -31,7 +30,7 @@ const withStatechart = (statechart, options = {}) => Component => {
         automata: {
           ...this.context.automata,
           [channel]: {
-            actions: this.state.actions,
+            actions: this.state.machineState.actions,
             machineState:
               this.state.machineState.toString() ||
               stringify(this.state.machineState.value),
@@ -81,7 +80,7 @@ const withStatechart = (statechart, options = {}) => Component => {
 
     runActionMethods() {
       if (this.instance) {
-        this.state.actions.forEach(action => {
+        this.state.machineState.actions.forEach(action => {
           if (this.instance[action]) {
             this.instance[action]()
           }
@@ -90,7 +89,7 @@ const withStatechart = (statechart, options = {}) => Component => {
     }
 
     handleComponentDidUpdate(prevProps, prevState) {
-      if (prevState.actions !== this.state.actions) {
+      if (prevState.machineState.actions !== this.state.machineState.actions) {
         this.runActionMethods()
       }
 
@@ -129,7 +128,6 @@ const withStatechart = (statechart, options = {}) => Component => {
         )
 
         return {
-          actions: nextState.actions,
           componentState: { ...prevState.componentState, ...stateChange },
           event,
           machineState: nextState,
