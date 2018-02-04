@@ -1,6 +1,6 @@
 {
   "name": "react-automata",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "A state machine abstraction for React",
   "main": "lib/index.js",
   "repository": "git@github.com:MicheleBertoli/react-automata.git",
