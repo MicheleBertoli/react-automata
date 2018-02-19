@@ -1,15 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { State, Machine } from 'xstate'
+import { State, Machine, StateNode } from 'xstate'
 import idx from 'idx'
 import { getComponentName, isStateless, stringify } from './utils'
 
 const withStatechart = (statechart, options = {}) => Component => {
   class StateMachine extends React.Component {
-    machine = Machine(statechart)
-
     constructor(props) {
       super(props)
+      this.machine =
+        statechart instanceof StateNode ? statechart : Machine(statechart)
 
       const initialMachineState = this.props.initialMachineState
         ? State.from(this.props.initialMachineState)
