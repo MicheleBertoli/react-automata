@@ -98,5 +98,8 @@ test('lifecycle hooks', () => {
 
   expect(spy).toHaveBeenCalledTimes(2)
   expect(spy).toHaveBeenCalledWith('EVENT')
-  expect(spy).toHaveBeenLastCalledWith('a', 'EVENT')
+  expect(spy).toHaveBeenLastCalledWith(
+    expect.objectContaining({ value: 'a' }),
+    'EVENT'
+  )
 })
