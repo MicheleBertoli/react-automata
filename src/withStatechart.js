@@ -96,7 +96,7 @@ const withStatechart = (statechart, options = {}) => Component => {
       if (prevState.machineState !== this.state.machineState) {
         if (idx(this, _ => _.instance.componentDidTransition)) {
           this.instance.componentDidTransition(
-            prevState.machineState.value,
+            prevState.machineState,
             this.state.event
           )
         }
@@ -122,7 +122,7 @@ const withStatechart = (statechart, options = {}) => Component => {
             ? updater(prevState.componentState)
             : updater
         const nextState = this.machine.transition(
-          prevState.machineState.value,
+          prevState.machineState,
           event,
           stateChange
         )
@@ -140,7 +140,7 @@ const withStatechart = (statechart, options = {}) => Component => {
         <Component
           {...this.props}
           {...this.state.componentState}
-          machineState={this.state.machineState.value}
+          machineState={this.state.machineState}
           ref={this.handleRef}
           transition={this.handleTransition}
         />
