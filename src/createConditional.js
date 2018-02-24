@@ -18,8 +18,8 @@ export const createConditional = ({
         visible: shouldShow(props, value),
       }
 
-      if (this.state.visible && props.onEnter) {
-        props.onEnter()
+      if (this.state.visible && props.onShow) {
+        props.onShow()
       }
     }
 
@@ -31,8 +31,8 @@ export const createConditional = ({
           visible: true,
         })
 
-        if (nextProps.onEnter) {
-          nextProps.onEnter()
+        if (nextProps.onShow) {
+          nextProps.onShow()
         }
       }
 
@@ -41,8 +41,8 @@ export const createConditional = ({
           visible: false,
         })
 
-        if (nextProps.onLeave) {
-          nextProps.onLeave()
+        if (nextProps.onHide) {
+          nextProps.onHide()
         }
       }
     }
@@ -67,8 +67,8 @@ export const createConditional = ({
     channel: PropTypes.string,
     children: PropTypes.node,
     render: PropTypes.func,
-    onEnter: PropTypes.func,
-    onLeave: PropTypes.func,
+    onHide: PropTypes.func,
+    onShow: PropTypes.func,
   }
 
   Conditional.defaultProps = {

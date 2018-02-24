@@ -209,8 +209,8 @@ The component to define which parts of the tree should be rendered for a given a
 | channel | string | The key of the context from where to read the state. |
 | children | node | The children to be rendered when the conditions match. |
 | render | func | The [render prop](https://reactjs.org/docs/render-props.html) receives a bool (true when the conditions match) and it takes precedence over children. |
-| onEnter | func | The function invoked when the component becomes visible. |
-| onLeave | func | The function invoked when the component becomes invisible. |
+| onHide | func | The function invoked when the component becomes invisible. |
+| onShow | func | The function invoked when the component becomes visible. |
 
 ```js
 <Action show="enterError">Oh, snap!</Action>
@@ -233,8 +233,8 @@ The component to define which parts of the tree should be rendered for a given s
 | channel | string | The key of the context from where to read the state. |
 | children | node | The children to be rendered when the conditions match. |
 | render | func | The [render prop](https://reactjs.org/docs/render-props.html) receives a bool (true when the conditions match) and it takes precedence over children. |
-| onEnter | func | The function invoked when the component becomes visible. |
-| onLeave | func | The function invoked when the component becomes invisible. |
+| onHide | func | The function invoked when the component becomes invisible. |
+| onShow | func | The function invoked when the component becomes visible. |
 
 ```js
 <State value="error">Oh, snap!</State>

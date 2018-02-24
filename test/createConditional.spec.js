@@ -97,18 +97,18 @@ test('callbacks', () => {
   }
   const Conditional = createConditional(options)
   const Container = wrap(Conditional)
-  const onEnter = jest.fn()
-  const onLeave = jest.fn()
+  const onShow = jest.fn()
+  const onHide = jest.fn()
   const renderer = TestRenderer.create(
-    <Container onEnter={onEnter} onLeave={onLeave} />
+    <Container onShow={onShow} onHide={onHide} />
   )
   const instance = renderer.getInstance()
 
   expect(options.shouldShow).toHaveBeenCalled()
-  expect(onEnter).toHaveBeenCalled()
+  expect(onShow).toHaveBeenCalled()
 
   instance.forceUpdate()
 
   expect(options.shouldHide).toHaveBeenCalled()
-  expect(onLeave).toHaveBeenCalled()
+  expect(onHide).toHaveBeenCalled()
 })
