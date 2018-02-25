@@ -101,7 +101,7 @@ exports[`it works: b 1`] = `
 
 ## withStatechart(statechart[, options])(Component)
 
-The `withStatechart` higher-order component takes a statechart (see [xstate](https://github.com/davidkpiano/xstate)) or an instance returned by `Machine` function, some [options](#options) and a component.
+The `withStatechart` higher-order component takes an [xstate configuration object](http://davidkpiano.github.io/xstate/docs/#/api/config) or an [xstate machine](http://davidkpiano.github.io/xstate/docs/#/api/machine), some [options](#options) and a component.
 It returns a new component with special [props](#props), [action methods](#action-methods) and [lifecycle hooks](#lifecycle-hooks).
 The initial machine state and the initial data can be passed to the resulting component through the `initialMachineState` and `initialData` props.
 

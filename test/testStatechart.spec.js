@@ -142,7 +142,6 @@ test('channels', () => {
       inner: {},
     },
   }
-
   const Inner = () => (
     <div>
       <State channel="inner" value="inner">
@@ -153,7 +152,6 @@ test('channels', () => {
       </State>
     </div>
   )
-
   const InnerMachine = withStatechart(inner, { channel: 'inner' })(Inner)
 
   const outer = {
@@ -162,7 +160,6 @@ test('channels', () => {
       outer: {},
     },
   }
-
   const Outer = () => (
     <div>
       <State channel="outer" value="outer">
