@@ -1,5 +1,6 @@
 import React from 'react'
 import TestRenderer from 'react-test-renderer'
+import { Machine } from 'xstate'
 import { withStatechart } from '../src'
 
 const machine = {
@@ -102,4 +103,24 @@ test('lifecycle hooks', () => {
     expect.objectContaining({ value: 'a' }),
     'EVENT'
   )
+})
+
+test('Should accept an xstate StateNode object instead of a plain object statechart', () => {
+  const spy = jest.fn()
+  const stateNode = Machine(machine)
+  class Component extends React.Component {
+    onEnterB() {
+      spy()
+    }
+
+    render() {
+      return <div />
+    }
+  }
+  const StateMachine = withStatechart(stateNode)(Component)
+  const instance = TestRenderer.create(<StateMachine />).getInstance()
+
+  instance.handleTransition('EVENT')
+
+  expect(spy).toHaveBeenCalledTimes(1)
 })
