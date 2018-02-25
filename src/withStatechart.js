@@ -11,13 +11,13 @@ const withStatechart = (statechart, options = {}) => Component => {
       this.machine =
         statechart instanceof StateNode ? statechart : Machine(statechart)
 
-      const initialMachineState = this.props.initialMachineState
-        ? State.from(this.props.initialMachineState)
+      const machineState = this.props.initialMachineState
+        ? this.props.initialMachineState
         : this.machine.initialState
 
       this.state = {
         componentState: this.props.initialData,
-        machineState: initialMachineState,
+        machineState,
       }
 
       this.handleRef = !isStateless(Component) ? this.handleRef : null
@@ -150,10 +150,7 @@ const withStatechart = (statechart, options = {}) => Component => {
 
   StateMachine.propTypes = {
     initialData: PropTypes.object,
-    initialMachineState: PropTypes.oneOfType([
-      PropTypes.object,
-      PropTypes.string,
-    ]),
+    initialMachineState: PropTypes.instanceOf(State),
   }
 
   StateMachine.contextTypes = {

@@ -1,4 +1,5 @@
 import React from 'react'
+import { State } from 'xstate'
 import TestRenderer from 'react-test-renderer'
 import { Machine } from 'xstate'
 import { withStatechart } from '../src'
@@ -23,8 +24,12 @@ const machine = {
 test('props', () => {
   const Component = () => <div />
   const StateMachine = withStatechart(machine)(Component)
+  const machineState = new State('b', undefined, ['onEnterB'])
   const renderer = TestRenderer.create(
-    <StateMachine initialData={{ counter: 0 }} initialMachineState="b" />
+    <StateMachine
+      initialData={{ counter: 0 }}
+      initialMachineState={machineState}
+    />
   )
   const instance = renderer.getInstance()
   const component = renderer.root.findByType(Component)
