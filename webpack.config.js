@@ -18,14 +18,7 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            babelrc: false,
-            presets: [['env', { modules: false }], 'react'],
-            plugins: [
-              'transform-class-properties',
-              'transform-object-rest-spread',
-              'babel-plugin-idx',
-              'react-hot-loader/babel',
-            ],
+            plugins: ['react-hot-loader/babel'],
           },
         },
       },
