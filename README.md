@@ -286,6 +286,8 @@ test('it works', () => {
 
 - [Playground](./playground)
 
+- [React Loads](https://github.com/jxom/react-loads)
+
 # Inspiration
 
 [Federico](https://twitter.com/gandellinux), for telling me "Hey, I think building UIs using state machines is the future".
