@@ -11,6 +11,7 @@
     "DISCLAIMER",
     "dist"
   ],
+  "sideEffects": false,
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "rollup -c",
