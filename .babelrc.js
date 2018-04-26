@@ -11,5 +11,6 @@ module.exports = {
     'transform-class-properties',
     'transform-object-rest-spread',
     'babel-plugin-idx',
+    'annotate-pure-calls',
   ].filter(Boolean),
 }
