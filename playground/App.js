@@ -1,4 +1,5 @@
 import React from 'react'
+import { hot } from 'react-hot-loader'
 import { Action, withStatechart } from '../src'
 
 export const statechart = {
@@ -73,4 +74,6 @@ const options = {
   devTools: true,
 }
 
-export default withStatechart(statechart, options)(App)
+const StateMachine = withStatechart(statechart, options)(App)
+
+export default hot(module)(StateMachine)

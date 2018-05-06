@@ -3,7 +3,7 @@ const path = require('path')
 const webpack = require('webpack')
 
 module.exports = {
-  entry: ['react-hot-loader/patch', './playground/index.js'],
+  entry: './playground/index.js',
 
   devServer: {
     contentBase: './dist',
