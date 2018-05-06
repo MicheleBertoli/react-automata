@@ -30,13 +30,13 @@ export const statechart = {
       on: {
         NEXT: 'b',
       },
-      onEntry: 'enterA',
+      onEntry: 'sayHello',
     },
     b: {
       on: {
         NEXT: 'a',
       },
-      onEntry: 'enterB',
+      onEntry: 'sayCiao',
     },
   },
 }
@@ -50,8 +50,8 @@ export class App extends React.Component {
     return (
       <div>
         <button onClick={this.handleClick}>NEXT</button>
-        <Action show="enterA">Hello, A</Action>
-        <Action show="enterB">Ciao, B</Action>
+        <Action show="sayHello">Hello, A</Action>
+        <Action show="sayCiao">Ciao, B</Action>
       </div>
     )
   }
@@ -64,7 +64,6 @@ export default withStatechart(statechart)(App)
 // App.spec.js
 
 import { testStatechart } from 'react-automata'
-// Note, we use the unwrapped component here
 import { App, statechart } from './App'
 
 test('it works', () => {
@@ -103,7 +102,7 @@ exports[`it works: b 1`] = `
 ## withStatechart(statechart[, options])(Component)
 
 The `withStatechart` higher-order component takes an [xstate configuration object](http://davidkpiano.github.io/xstate/docs/#/api/config) or an [xstate machine](http://davidkpiano.github.io/xstate/docs/#/api/machine), some [options](#options) and a component.
-It returns a new component with special [props](#props), [action methods](#action-methods) and [lifecycle hooks](#lifecycle-hooks).
+It returns a new component with special [props](#props), [action methods](#action-methods) and additional [lifecycle hooks](#lifecycle-hooks).
 The initial machine state and the initial data can be passed to the resulting component through the `initialMachineState` and `initialData` props.
 
 ### Options
@@ -130,7 +129,8 @@ handleClick = () => {
 #### machineState
 
 The current state of the state machine.
-Using this value is discouraged, as it couples the UI and the state machine.
+
+> The use of this value is discouraged, as it couples the component and the state machine.
 
 ```js
 <button onClick={this.handleClick}>
@@ -214,12 +214,12 @@ The component to define which parts of the tree should be rendered for a given a
 | onShow | func | The function invoked when the component becomes visible. |
 
 ```js
-<Action show="enterError">Oh, snap!</Action>
+<Action show="showError">Oh, snap!</Action>
 ```
 
 ```js
 <Action
-  show="enterError"
+  show="showError"
   render={visible => (visible ? <div>Oh, snap!</div> : null)}
 />
 ```
@@ -250,8 +250,10 @@ The component to define which parts of the tree should be rendered for a given s
 
 ## testStatechart({ statechart[, fixtures] }, Component)
 
-The method to automagically generate tests given a statechart definition, and a component.  Export your base component that has not been wrapped in the HOC `withStatechart` for use in `testStatechart`.
+The method to automagically generate tests given a statechart definition, and a component.
 It accepts an optional `fixtures` configuration to describe which data should be injected into the component for a given transition.
+
+> Please note that the component should be a base component not wrapped into `withStateChart` (see [#46](https://github.com/MicheleBertoli/react-automata/issues/46)).
 
 ```js
 const fixtures = {
