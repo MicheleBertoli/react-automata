@@ -9,20 +9,9 @@ const withStatechart = (statechart, options = {}) => Component => {
   class StateMachine extends React.Component {
     machine = statechart instanceof StateNode ? statechart : Machine(statechart)
 
-    lastEvent = null
-
-    constructor(props) {
-      super(props)
-
-      const machineState =
-        this.props.initialMachineState || this.machine.initialState
-
-      this.state = {
-        componentState: this.props.initialData,
-        machineState,
-      }
-
-      this.handleRef = !isStateless(Component) ? this.handleRef : null
+    state = {
+      componentState: this.props.initialData,
+      machineState: this.props.initialMachineState || this.machine.initialState,
     }
 
     getChildContext() {
@@ -111,9 +100,11 @@ const withStatechart = (statechart, options = {}) => Component => {
       this.isTransitioning = false
     }
 
-    handleRef = element => {
+    setInstance = element => {
       this.instance = element
     }
+
+    handleRef = !isStateless(Component) ? this.setInstance : null
 
     handleTransition = (event, updater) => {
       invariant(
