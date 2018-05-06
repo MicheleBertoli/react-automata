@@ -64,6 +64,7 @@ export default withStatechart(statechart)(App)
 // App.spec.js
 
 import { testStatechart } from 'react-automata'
+// Note, we use the unwrapped component here
 import { App, statechart } from './App'
 
 test('it works', () => {
@@ -249,7 +250,7 @@ The component to define which parts of the tree should be rendered for a given s
 
 ## testStatechart({ statechart[, fixtures] }, Component)
 
-The method to automagically generate tests given a statechart definition, and a component.
+The method to automagically generate tests given a statechart definition, and a component.  Export your base component that has not been wrapped in the HOC `withStatechart` for use in `testStatechart`.
 It accepts an optional `fixtures` configuration to describe which data should be injected into the component for a given transition.
 
 ```js
