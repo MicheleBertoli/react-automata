@@ -3,10 +3,17 @@ import TestRenderer from 'react-test-renderer'
 import { Machine } from 'xstate'
 import { getShortestPaths } from 'xstate/lib/graph'
 import idx from 'idx'
+import invariant from 'invariant'
 import { getContextValue } from './utils'
 import withStatechart from './withStatechart'
 
 const testStatechart = (config, Component) => {
+  invariant(
+    !Component.isStateMachine,
+    `It seems you are testing a component wrapped into \`withStatechart\`, please use a base component instead.
+    See https://github.com/MicheleBertoli/react-automata/issues/46`
+  )
+
   const { channel, statechart } = config
   const machine = Machine(statechart)
   const paths = getShortestPaths(machine)

@@ -175,6 +175,8 @@ const withStatechart = (statechart, options = {}) => Component => {
     automata: PropTypes.object,
   }
 
+  StateMachine.isStateMachine = true
+
   return StateMachine
 }
 
