@@ -12,5 +12,6 @@ module.exports = {
     'transform-object-rest-spread',
     'babel-plugin-idx',
     'annotate-pure-calls',
+    ['transform-react-remove-prop-types', { mode: 'unsafe-wrap' }],
   ].filter(Boolean),
 }
