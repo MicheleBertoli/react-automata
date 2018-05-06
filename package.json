@@ -1,6 +1,6 @@
 {
   "name": "react-automata",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "A state machine abstraction for React",
   "main": "dist/react-automata.js",
   "module": "dist/react-automata.es.js",
@@ -21,11 +21,11 @@
     "test": "jest"
   },
   "devDependencies": {
-    "babel-plugin-annotate-pure-calls": "^0.2.2",
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.3",
     "babel-jest": "^22.4.3",
     "babel-loader": "^7.1.4",
+    "babel-plugin-annotate-pure-calls": "^0.2.2",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-idx": "^2.2.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
