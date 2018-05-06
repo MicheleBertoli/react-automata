@@ -10,6 +10,8 @@ module.exports = {
     hot: true,
   },
 
+  mode: 'development',
+
   module: {
     rules: [
       {
