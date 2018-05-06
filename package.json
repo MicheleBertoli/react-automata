@@ -54,6 +54,7 @@
     "webpack-dev-server": "^2.11.1"
   },
   "dependencies": {
+    "babel-plugin-annotate-pure-calls": "^0.2.2",
     "invariant": "^2.2.3",
     "minimatch": "^3.0.4",
     "prop-types": "^15.6.0",
