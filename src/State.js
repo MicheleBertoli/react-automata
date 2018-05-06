@@ -26,7 +26,7 @@ export const shouldHide = (props, context) =>
 
 export default createConditional({
   displayName,
-  propTypes,
+  propTypes: process.env.NODE_ENV !== 'production' ? propTypes : null,
   shouldShow,
   shouldHide,
 })
