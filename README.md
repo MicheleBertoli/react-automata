@@ -289,6 +289,8 @@ test('it works', () => {
 
 - [React Loads](https://github.com/jxom/react-loads)
 
+- Packing List ([React](https://codesandbox.io/s/github/GantMan/ReactStateMuseum/tree/master/React/react-automata) | [React Native](https://github.com/GantMan/ReactStateMuseum/tree/master/ReactNative/ReactAutomata))
+
 # Inspiration
 
 [Federico](https://twitter.com/gandellinux), for telling me "Hey, I think building UIs using state machines is the future".
