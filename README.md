@@ -191,7 +191,7 @@ componentWillTransition(event) {
 
 The lifecycle method invoked when a transition has happened and the state is updated.
 It provides the previous state machine, and the event.
-The current `machineState` is available in `this.state`.
+The current `machineState` is available in `this.props`.
 
 ```js
 componentDidTransition(prevStateMachine, event) {
