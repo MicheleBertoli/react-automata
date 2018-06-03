@@ -248,10 +248,10 @@ The component to define which parts of the tree should be rendered for a given s
 />
 ```
 
-## testStatechart({ statechart[, fixtures] }, Component)
+## testStatechart({ statechart[, fixtures][, extendedState] }, Component)
 
 The method to automagically generate tests given a statechart definition, and a component.
-It accepts an optional `fixtures` configuration to describe which data should be injected into the component for a given transition.
+It accepts an additional `fixtures` option to describe the data to be injected into the component for a given transition, and an `extendedState` option to control the statechart's conditions - both are optional.
 
 > Please note that the component should be a base component not wrapped into `withStateChart` (see [#46](https://github.com/MicheleBertoli/react-automata/issues/46)).
 
