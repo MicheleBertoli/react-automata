@@ -61,7 +61,7 @@
     "minimatch": "^3.0.4",
     "prop-types": "^15.6.1",
     "react-test-renderer": "^16.3.2",
-    "xstate": "^3.2.1"
+    "xstate": "^3.3.0"
   },
   "peerDependencies": {
     "react": "^16.0.0"
