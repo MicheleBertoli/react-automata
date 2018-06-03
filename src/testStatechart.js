@@ -37,7 +37,7 @@ const testStatechart = (config, Component) => {
       channel
     )
 
-    expect(renderer.toJSON()).toMatchSnapshot(machineState)
+    expect(renderer.toJSON()).toMatchSnapshot(undefined, machineState)
   })
 }
 
