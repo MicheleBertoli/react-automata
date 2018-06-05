@@ -1,23 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`action: a 1`] = `
-<div>
-  a
-</div>
-`;
-
-exports[`action: b.a 1`] = `
-<div>
-  b.a
-</div>
-`;
-
-exports[`action: b.b 1`] = `
-<div>
-  b.b
-</div>
-`;
-
 exports[`channels: outer 1`] = `
 <div>
   outer
@@ -25,6 +7,48 @@ exports[`channels: outer 1`] = `
     inner
     outer
   </div>
+</div>
+`;
+
+exports[`cond fail: a 1`] = `"A"`;
+
+exports[`cond pass: a 1`] = `"A"`;
+
+exports[`cond pass: b 1`] = `"B"`;
+
+exports[`conditional action: a 1`] = `
+<div>
+  a
+</div>
+`;
+
+exports[`conditional action: b.a 1`] = `
+<div>
+  b.a
+</div>
+`;
+
+exports[`conditional action: b.b 1`] = `
+<div>
+  b.b
+</div>
+`;
+
+exports[`conditional state: a 1`] = `
+<div>
+  a
+</div>
+`;
+
+exports[`conditional state: b.a 1`] = `
+<div>
+  b.a
+</div>
+`;
+
+exports[`conditional state: b.b 1`] = `
+<div>
+  b.b
 </div>
 `;
 
@@ -241,23 +265,5 @@ exports[`parallel: bold.on,underline.on,italics.on,list.numbers 1`] = `
   underline.on
   italics.on
   list.numbers
-</div>
-`;
-
-exports[`state: a 1`] = `
-<div>
-  a
-</div>
-`;
-
-exports[`state: b.a 1`] = `
-<div>
-  b.a
-</div>
-`;
-
-exports[`state: b.b 1`] = `
-<div>
-  b.b
 </div>
 `;
