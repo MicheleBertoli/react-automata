@@ -299,6 +299,6 @@ test('it works', () => {
 
 [David](https://twitter.com/DavidKPiano), for giving a very informative (and fun) [talk](https://www.youtube.com/watch?v=VU1NKX6Qkxc) about infinitely better UIs, and building [xstate](https://github.com/davidkpiano/xstate).
 
-[Ryan](https://twitter.com/ryanflorence), for [experimenting](https://gist.github.com/ryanflorence/eed0b770187b6358079560d0e8e8a35f) with xstate and React - Ryan's approach to React has always been a source of inspiration.
+[Ryan](https://twitter.com/ryanflorence), for [experimenting](https://www.youtube.com/watch?v=WbhpQXH7XMw) with xstate and React - Ryan's approach to React has always been a source of inspiration.
 
 [Erik](https://twitter.com/mogsie), for writing about [statecharts](https://statecharts.github.io/), and showing me how to keep UI and state machine decoupled.
