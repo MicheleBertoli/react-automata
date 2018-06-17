@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import minimatch from 'minimatch'
+import globToRegExp from 'glob-to-regexp'
 import createConditional from './createConditional'
 
 const displayName = 'State'
@@ -15,7 +15,10 @@ const matches = (value, machineState) => {
   const values = Array.isArray(value) ? value : [value]
   const states = Array.isArray(machineState) ? machineState : [machineState]
 
-  return values.some(val => states.some(state => minimatch(state, val)))
+  return values.some(val => {
+    const matcher = globToRegExp(val)
+    return states.some(state => matcher.test(state))
+  })
 }
 
 export const shouldShow = (props, context) =>
