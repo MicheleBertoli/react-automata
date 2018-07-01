@@ -258,7 +258,7 @@ It accepts an additional `fixtures` option to describe the data to be injected i
 Install "react-test-renderer" with a matching version to your React version.
 
 ```
-npm install -D react-test-renderer
+yarn add --dev react-test-renderer
 ```
 
 ```js
