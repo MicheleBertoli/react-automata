@@ -255,6 +255,12 @@ It accepts an additional `fixtures` option to describe the data to be injected i
 
 > Please note that the component should be a base component not wrapped into `withStateChart` (see [#46](https://github.com/MicheleBertoli/react-automata/issues/46)).
 
+Install "react-test-renderer" with a matching version to your React version.
+
+```
+npm install -D react-test-renderer
+```
+
 ```js
 const fixtures = {
   initialData: {
