@@ -7,6 +7,8 @@ import { getComponentName, isStateless, stringify } from './utils'
 
 const withStatechart = (statechart, options = {}) => Component => {
   class StateMachine extends React.Component {
+    instance = React.createRef()
+
     machine = statechart instanceof StateNode ? statechart : Machine(statechart)
 
     state = {
@@ -70,10 +72,10 @@ const withStatechart = (statechart, options = {}) => Component => {
     }
 
     runActionMethods() {
-      if (this.instance) {
+      if (idx(this, _ => _.instance.current)) {
         this.state.machineState.actions.forEach(action => {
-          if (this.instance[action]) {
-            this.instance[action]()
+          if (this.instance.current[action]) {
+            this.instance.current[action]()
           }
         })
       }
@@ -85,26 +87,20 @@ const withStatechart = (statechart, options = {}) => Component => {
       }
 
       if (prevState.machineState !== this.state.machineState) {
-        if (idx(this, _ => _.instance.componentDidTransition)) {
-          this.instance.componentDidTransition(
+        if (idx(this, _ => _.instance.current.componentDidTransition)) {
+          this.instance.current.componentDidTransition(
             prevState.machineState,
-            this.state.event
+            this.lastEvent
           )
         }
 
         if (this.devTools) {
-          this.devTools.send(this.state.event, this.state)
+          this.devTools.send(this.lastEvent, this.state)
         }
       }
 
       this.isTransitioning = false
     }
-
-    setInstance = element => {
-      this.instance = element
-    }
-
-    handleRef = !isStateless(Component) ? this.setInstance : null
 
     handleTransition = (event, updater) => {
       invariant(
@@ -117,8 +113,8 @@ const withStatechart = (statechart, options = {}) => Component => {
       this.lastEvent = event
       this.isTransitioning = true
 
-      if (idx(this, _ => _.instance.componentWillTransition)) {
-        this.instance.componentWillTransition(event)
+      if (idx(this, _ => _.instance.current.componentWillTransition)) {
+        this.instance.current.componentWillTransition(event)
       }
 
       this.setState(prevState => {
@@ -134,7 +130,6 @@ const withStatechart = (statechart, options = {}) => Component => {
 
         return {
           componentState: { ...prevState.componentState, ...stateChange },
-          event,
           machineState: nextState,
         }
       })
@@ -146,7 +141,7 @@ const withStatechart = (statechart, options = {}) => Component => {
           {...this.props}
           {...this.state.componentState}
           machineState={this.state.machineState}
-          ref={this.handleRef}
+          ref={!isStateless(Component) ? this.instance : null}
           transition={this.handleTransition}
         />
       )
