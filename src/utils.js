@@ -1,4 +1,5 @@
 import idx from 'idx'
+import globToRegExp from 'glob-to-regexp'
 
 export const getComponentName = Component =>
   Component.displayName || Component.name || 'Component'
@@ -16,3 +17,17 @@ export const stringify = (state, path = []) => {
     []
   )
 }
+
+export const getPatterns = glob =>
+  Array.isArray(glob)
+    ? glob.map(pattern => globToRegExp(pattern))
+    : [globToRegExp(glob)]
+
+export const match = (patterns, value) => {
+  const values = Array.isArray(value) ? value : [value]
+
+  return patterns.some(pattern => values.some(val => pattern.test(val)))
+}
+
+export const cacheKey = (...args) =>
+  JSON.stringify(Array.from(args).map(argument => argument.toString()))

@@ -3,11 +3,11 @@ import PropTypes from 'prop-types'
 import { Machine, State, StateNode } from 'xstate'
 import idx from 'idx'
 import invariant from 'invariant'
-import memoizeOne from 'memoize-one'
+import mem from 'mem'
 import Context from './context'
 import { getComponentName, isStateless, stringify } from './utils'
 
-const memoizedStringify = memoizeOne(stringify)
+const memoizedStringify = mem(stringify)
 
 const withStatechart = (statechart, options = {}) => Component => {
   class Automata extends React.PureComponent {

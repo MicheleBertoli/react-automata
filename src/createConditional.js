@@ -1,49 +1,41 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import globToRegExp from 'glob-to-regexp'
 import idx from 'idx'
+import mem from 'mem'
 import Context from './context'
+import { getPatterns, match, cacheKey } from './utils'
 
-export const createConditional = (displayName, contextField) => {
-  class Conditional extends React.PureComponent {
-    static getDerivedStateFromProps(props) {
-      const expectedValues = Array.isArray(props.is) ? props.is : [props.is]
-      const actualValues = Array.isArray(props.value)
-        ? props.value
-        : [props.value]
+const memoizedGetPatterns = mem(getPatterns)
+const memoizedMatch = mem(match, { cacheKey })
 
-      return {
-        visible: expectedValues.some(expectedValue => {
-          const matcher = globToRegExp(expectedValue)
-          return actualValues.some(actualValue => matcher.test(actualValue))
-        }),
-      }
-    }
-
-    state = {}
-
+const createConditional = (displayName, contextField) => {
+  class Conditional extends React.Component {
     componentDidMount() {
-      if (this.state.visible && this.props.onShow) {
+      if (this.isVisible && this.props.onShow) {
         this.props.onShow()
       }
     }
 
-    componentDidUpdate(prevProps, prevState) {
-      if (!prevState.visible && this.state.visible && this.props.onShow) {
+    componentDidUpdate() {
+      if (!this.wasVisible && this.isVisible && this.props.onShow) {
         this.props.onShow()
       }
 
-      if (prevState.visible && !this.state.visible && this.props.onHide) {
+      if (this.wasVisible && !this.isVisible && this.props.onHide) {
         this.props.onHide()
       }
     }
 
     render() {
-      if (typeof this.props.render === 'function') {
-        return this.props.render(this.state.visible)
+      this.wasVisible = this.isVisible
+      const patterns = memoizedGetPatterns(this.props.is)
+      this.isVisible = memoizedMatch(patterns, this.props.value)
+
+      if (this.props.render) {
+        return this.props.render(this.isVisible)
       }
 
-      return this.state.visible ? this.props.children : null
+      return this.isVisible ? this.props.children : null
     }
   }
 
