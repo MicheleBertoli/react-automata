@@ -1,32 +1,39 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import globToRegExp from 'glob-to-regexp'
 import { getContextValue } from './utils'
 
-export const createConditional = ({
-  displayName,
-  propTypes,
-  shouldShow,
-  shouldHide,
-}) => {
+export const createConditional = (displayName, contextField) => {
   class Conditional extends React.Component {
-    constructor(props, context) {
-      super(props, context)
+    matches = (is, contextValue) => {
+      const expectedValues = Array.isArray(is) ? is : [is]
+      const actualValues = Array.isArray(contextValue[contextField])
+        ? contextValue[contextField]
+        : [contextValue[contextField]]
 
-      const value = getContextValue(context, props.channel)
+      return expectedValues.some(expectedValue => {
+        const matcher = globToRegExp(expectedValue)
+        return actualValues.some(actualValue => matcher.test(actualValue))
+      })
+    }
 
-      this.state = {
-        visible: shouldShow(props, value),
-      }
+    state = {
+      visible: this.matches(
+        this.props.is,
+        getContextValue(this.context, this.props.channel)
+      ),
+    }
 
-      if (this.state.visible && props.onShow) {
-        props.onShow()
+    componentDidMount() {
+      if (this.state.visible && this.props.onShow) {
+        this.props.onShow()
       }
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
-      const value = getContextValue(nextContext, nextProps.channel)
+      const contextValue = getContextValue(nextContext, nextProps.channel)
 
-      if (!this.state.visible && shouldShow(nextProps, value)) {
+      if (!this.state.visible && this.matches(nextProps.is, contextValue)) {
         this.setState({
           visible: true,
         })
@@ -36,7 +43,7 @@ export const createConditional = ({
         }
       }
 
-      if (this.state.visible && shouldHide(nextProps, value)) {
+      if (this.state.visible && !this.matches(nextProps.is, contextValue)) {
         this.setState({
           visible: false,
         })
@@ -56,6 +63,10 @@ export const createConditional = ({
     }
   }
 
+  Conditional.defaultProps = {
+    children: null,
+  }
+
   Conditional.displayName = displayName
 
   Conditional.contextTypes = {
@@ -63,16 +74,15 @@ export const createConditional = ({
   }
 
   Conditional.propTypes = {
-    ...propTypes,
     channel: PropTypes.string,
     children: PropTypes.node,
+    is: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.string),
+      PropTypes.string,
+    ]),
     render: PropTypes.func,
     onHide: PropTypes.func,
     onShow: PropTypes.func,
-  }
-
-  Conditional.defaultProps = {
-    children: null,
   }
 
   return Conditional

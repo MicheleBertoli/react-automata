@@ -46,18 +46,18 @@ export class App extends React.Component {
     return (
       <div>
         <h1>Actions</h1>
-        <Action show="showButton" hide="fetchGists">
+        <Action is="showButton">
           <button onClick={this.handleClick}>Fetch</button>
         </Action>
-        <Action show="fetchGists">Loading...</Action>
-        <Action show="showGists">
+        <Action is="fetchGists">Loading...</Action>
+        <Action is="showGists">
           <ul>
             {this.props.gists.filter(gist => gist.description).map(gist => (
               <li key={gist.id}>{gist.description}</li>
             ))}
           </ul>
         </Action>
-        <Action show="showError">
+        <Action is="showError">
           <button onClick={this.handleClick}>Retry</button>
           Oh, snap!
         </Action>

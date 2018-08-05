@@ -33,7 +33,6 @@ describe('conditional', () => {
         on: {
           FIRST_NEXT: 'a',
         },
-        onEntry: 'enterB',
         ...secondMachine,
       },
     },
@@ -42,11 +41,9 @@ describe('conditional', () => {
   test('action', () => {
     const App = () => (
       <div>
-        <Action show="enterA" hide="enterB">
-          a
-        </Action>
-        <Action show="enterBA">b.a</Action>
-        <Action show="enterBB">b.b</Action>
+        <Action is="enterA">a</Action>
+        <Action is="enterBA">b.a</Action>
+        <Action is="enterBB">b.b</Action>
       </div>
     )
 
@@ -56,9 +53,9 @@ describe('conditional', () => {
   test('state', () => {
     const App = () => (
       <div>
-        <State value="a">a</State>
-        <State value="b.a">b.a</State>
-        <State value="b.b">b.b</State>
+        <State is="a">a</State>
+        <State is="b.a">b.a</State>
+        <State is="b.b">b.b</State>
       </div>
     )
 
@@ -122,15 +119,15 @@ test('parallel', () => {
 
   const App = () => (
     <div>
-      <State value="bold.on">bold.on</State>
-      <State value="bold.off">bold.off</State>
-      <State value="underline.on">underline.on</State>
-      <State value="underline.off">underline.off</State>
-      <State value="italics.on">italics.on</State>
-      <State value="italics.off">italics.off</State>
-      <State value="list.none">list.none</State>
-      <State value="list.bullets">list.bullets</State>
-      <State value="list.numbers">list.numbers</State>
+      <State is="bold.on">bold.on</State>
+      <State is="bold.off">bold.off</State>
+      <State is="underline.on">underline.on</State>
+      <State is="underline.off">underline.off</State>
+      <State is="italics.on">italics.on</State>
+      <State is="italics.off">italics.off</State>
+      <State is="list.none">list.none</State>
+      <State is="list.bullets">list.bullets</State>
+      <State is="list.numbers">list.numbers</State>
     </div>
   )
 
@@ -146,10 +143,10 @@ test('channels', () => {
   }
   const Inner = () => (
     <div>
-      <State channel="inner" value="inner">
+      <State channel="inner" is="inner">
         inner
       </State>
-      <State channel="outer" value="outer">
+      <State channel="outer" is="outer">
         outer
       </State>
     </div>
@@ -164,7 +161,7 @@ test('channels', () => {
   }
   const Outer = () => (
     <div>
-      <State channel="outer" value="outer">
+      <State channel="outer" is="outer">
         outer
       </State>
       <InnerMachine />
@@ -193,8 +190,8 @@ describe('cond', () => {
 
   const Cond = () => (
     <React.Fragment>
-      <State value="a">A</State>
-      <State value="b">B</State>
+      <State is="a">A</State>
+      <State is="b">B</State>
     </React.Fragment>
   )
 
