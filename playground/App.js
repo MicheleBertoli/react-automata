@@ -52,9 +52,9 @@ export class App extends React.Component {
         <Action show="fetchGists">Loading...</Action>
         <Action show="showGists">
           <ul>
-            {this.props.gists
-              .filter(gist => gist.description)
-              .map(gist => <li key={gist.id}>{gist.description}</li>)}
+            {this.props.gists.filter(gist => gist.description).map(gist => (
+              <li key={gist.id}>{gist.description}</li>
+            ))}
           </ul>
         </Action>
         <Action show="showError">
