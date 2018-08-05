@@ -52,7 +52,15 @@ const withStatechart = (statechart, options = {}) => Component => {
         })
       }
 
-      this.runActionMethods()
+      this.runActions()
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+      if (!this.jumpToAction) {
+        this.handleComponentDidUpdate(prevProps, prevState)
+      } else {
+        this.jumpToAction = false
+      }
     }
 
     componentWillUnmount() {
@@ -65,27 +73,45 @@ const withStatechart = (statechart, options = {}) => Component => {
       }
     }
 
-    componentDidUpdate(prevProps, prevState) {
-      if (!this.jumpToAction) {
-        this.handleComponentDidUpdate(prevProps, prevState)
-      } else {
-        this.jumpToAction = false
+    runAction = effect => {
+      switch (typeof effect) {
+        case 'string':
+          if (this.instance.current[effect]) {
+            this.instance.current[effect](
+              this.state.componentState,
+              this.lastEvent
+            )
+          }
+          break
+        case 'object':
+          if (effect.type === 'xstate.start' || effect.type === 'xstate.stop') {
+            if (this.instance.current[effect.activity]) {
+              this.instance.current[effect.activity](
+                effect.type === 'xstate.start'
+              )
+            }
+          } else if (this.instance.current[effect.type]) {
+            this.instance.current[effect.type](
+              this.state.componentState,
+              this.lastEvent
+            )
+          }
+          break
+        case 'function':
+          effect(this.state.componentState, this.lastEvent)
+          break
       }
     }
 
-    runActionMethods() {
+    runActions() {
       if (idx(this, _ => _.instance.current)) {
-        this.state.machineState.actions.forEach(action => {
-          if (this.instance.current[action]) {
-            this.instance.current[action]()
-          }
-        })
+        this.state.machineState.actions.forEach(this.runAction)
       }
     }
 
     handleComponentDidUpdate(prevProps, prevState) {
       if (prevState.machineState.actions !== this.state.machineState.actions) {
-        this.runActionMethods()
+        this.runActions()
       }
 
       if (prevState.machineState !== this.state.machineState) {

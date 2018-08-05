@@ -3,6 +3,8 @@ import { Machine, State } from 'xstate'
 import TestRenderer from 'react-test-renderer'
 import { withStatechart } from '../src'
 
+const actionFunction = jest.fn()
+
 const statechart = {
   initial: 'a',
   states: {
@@ -15,7 +17,8 @@ const statechart = {
       on: {
         EVENT: 'a',
       },
-      onEntry: 'onEnterB',
+      onEntry: ['actionMethod', actionFunction],
+      activities: ['activityMethod'],
     },
   },
 }
@@ -68,12 +71,17 @@ test('state', () => {
   expect(component.props.counter).toBe(2)
 })
 
-test('action methods', () => {
-  const spy = jest.fn()
+test('actions', () => {
+  const actionMethod = jest.fn()
+  const activityMethod = jest.fn()
 
   class Component extends React.Component {
-    onEnterB() {
-      spy()
+    actionMethod(...args) {
+      actionMethod(...args)
+    }
+
+    activityMethod(...args) {
+      activityMethod(...args)
     }
 
     render() {
@@ -86,7 +94,12 @@ test('action methods', () => {
 
   instance.handleTransition('EVENT')
 
-  expect(spy).toHaveBeenCalledTimes(1)
+  expect(actionMethod).toHaveBeenCalledTimes(1)
+  expect(actionMethod).toHaveBeenCalledWith({}, 'EVENT')
+  expect(actionFunction).toHaveBeenCalledTimes(1)
+  expect(actionFunction).toHaveBeenCalledWith({}, 'EVENT')
+  expect(activityMethod).toHaveBeenCalledTimes(1)
+  expect(activityMethod).toHaveBeenCalledWith(true)
 })
 
 test('lifecycle hooks', () => {
