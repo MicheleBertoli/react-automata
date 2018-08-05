@@ -3,10 +3,13 @@ import PropTypes from 'prop-types'
 import { Machine, State, StateNode } from 'xstate'
 import idx from 'idx'
 import invariant from 'invariant'
+import memoizeOne from 'memoize-one'
 import { getComponentName, isStateless, stringify } from './utils'
 
+const memoizedStringify = memoizeOne(stringify)
+
 const withStatechart = (statechart, options = {}) => Component => {
-  class StateMachine extends React.Component {
+  class StateMachine extends React.PureComponent {
     machine = statechart instanceof StateNode ? statechart : Machine(statechart)
 
     state = {
@@ -28,7 +31,7 @@ const withStatechart = (statechart, options = {}) => Component => {
             actions: this.state.machineState.actions,
             machineState:
               this.state.machineState.toString() ||
-              stringify(this.state.machineState.value),
+              memoizedStringify(this.state.machineState.value),
           },
         },
       }
@@ -150,15 +153,24 @@ const withStatechart = (statechart, options = {}) => Component => {
           typeof updater === 'function'
             ? updater(prevState.componentState)
             : updater
-        const nextMachineState = this.machine.transition(
+        const machineState = this.machine.transition(
           prevState.machineState,
           event,
           stateChange
         )
 
+        if (
+          machineState === prevState.machineState &&
+          (!stateChange || stateChange === prevState.componentState)
+        ) {
+          this.isTransitioning = false
+
+          return null
+        }
+
         return {
           componentState: { ...prevState.componentState, ...stateChange },
-          machineState: nextMachineState,
+          machineState,
         }
       })
     }

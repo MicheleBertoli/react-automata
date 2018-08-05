@@ -33,6 +33,25 @@ test('statechart', () => {
   expect(renderer1.state.machineState).toEqual(renderer2.state.machineState)
 })
 
+test('render', () => {
+  const spy = jest.fn()
+  const Component = () => {
+    spy()
+    return <div />
+  }
+  const StateMachine = withStatechart(statechart)(Component)
+  const instance = TestRenderer.create(<StateMachine />).getInstance()
+
+  spy.mockClear()
+  instance.handleTransition('FOO')
+
+  expect(spy).not.toHaveBeenCalled()
+
+  instance.handleTransition('EVENT')
+
+  expect(spy).toHaveBeenCalled()
+})
+
 test('props', () => {
   const Component = () => <div />
   const StateMachine = withStatechart(statechart)(Component)

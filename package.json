@@ -60,6 +60,7 @@
   "dependencies": {
     "glob-to-regexp": "^0.4.0",
     "invariant": "^2.2.4",
+    "memoize-one": "^4.0.0",
     "prop-types": "^15.6.1",
     "xstate": "^3.3.0"
   },
