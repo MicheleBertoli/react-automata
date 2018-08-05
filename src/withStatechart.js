@@ -16,8 +16,6 @@ const withStatechart = (statechart, options = {}) => Component => {
       initialMachineState: PropTypes.instanceOf(State),
     }
 
-    static isAutomata = true
-
     machine = statechart instanceof StateNode ? statechart : Machine(statechart)
 
     state = {

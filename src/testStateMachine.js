@@ -1,27 +1,17 @@
 import React from 'react'
 import TestRenderer from 'react-test-renderer'
-import { Machine } from 'xstate'
 import { getShortestPaths } from 'xstate/lib/graph'
 import idx from 'idx'
-import invariant from 'invariant'
 import { stringify } from './utils'
-import withStatechart from './withStatechart'
 
-const testStatechart = (options, Component) => {
-  invariant(
-    !Component.isAutomata,
-    'It seems you are testing a component wrapped into `withStatechart`, please use a base component instead.'
-  )
-
-  const { statechart, extendedState, channel } = options
-  const machine = Machine(statechart)
-  const paths = getShortestPaths(machine, extendedState)
+const testStateMachine = (Component, options = {}) => {
+  const { machine } = TestRenderer.create(<Component />).getInstance()
+  const paths = getShortestPaths(machine, options.extendedState)
 
   Object.keys(paths).forEach(key => {
     const initialData = idx(options, _ => _.fixtures.initialData)
-    const StateMachine = withStatechart(statechart, { channel })(Component)
     const renderer = TestRenderer.create(
-      <StateMachine initialData={initialData} />
+      <Component initialData={initialData} />
     )
     const instance = renderer.getInstance()
 
@@ -39,4 +29,4 @@ const testStatechart = (options, Component) => {
   })
 }
 
-export default testStatechart
+export default testStateMachine
