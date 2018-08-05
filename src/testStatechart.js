@@ -10,8 +10,7 @@ import withStatechart from './withStatechart'
 const testStatechart = (options, Component) => {
   invariant(
     !Component.isStateMachine,
-    `It seems you are testing a component wrapped into \`withStatechart\`, please use a base component instead.
-    See https://github.com/MicheleBertoli/react-automata/issues/46`
+    'It seems you are testing a component wrapped into `withStatechart`, please use a base component instead.'
   )
 
   const { statechart, extendedState, channel } = options

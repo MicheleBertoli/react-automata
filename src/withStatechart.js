@@ -7,14 +7,16 @@ import { getComponentName, isStateless, stringify } from './utils'
 
 const withStatechart = (statechart, options = {}) => Component => {
   class StateMachine extends React.Component {
-    instance = React.createRef()
-
     machine = statechart instanceof StateNode ? statechart : Machine(statechart)
 
     state = {
       componentState: this.props.initialData,
       machineState: this.props.initialMachineState || this.machine.initialState,
     }
+
+    instance = React.createRef()
+
+    ref = !isStateless(Component) ? this.instance : null
 
     getChildContext() {
       const channel = options.channel || 'DEFAULT'
@@ -122,7 +124,7 @@ const withStatechart = (statechart, options = {}) => Component => {
           typeof updater === 'function'
             ? updater(prevState.componentState)
             : updater
-        const nextState = this.machine.transition(
+        const nextMachineState = this.machine.transition(
           prevState.machineState,
           event,
           stateChange
@@ -130,7 +132,7 @@ const withStatechart = (statechart, options = {}) => Component => {
 
         return {
           componentState: { ...prevState.componentState, ...stateChange },
-          machineState: nextState,
+          machineState: nextMachineState,
         }
       })
     }
@@ -141,24 +143,24 @@ const withStatechart = (statechart, options = {}) => Component => {
           {...this.props}
           {...this.state.componentState}
           machineState={this.state.machineState}
-          ref={!isStateless(Component) ? this.instance : null}
+          ref={this.ref}
           transition={this.handleTransition}
         />
       )
     }
   }
 
-  StateMachine.propTypes = {
-    initialData: PropTypes.object,
-    initialMachineState: PropTypes.instanceOf(State),
+  StateMachine.childContextTypes = {
+    automata: PropTypes.object,
   }
 
   StateMachine.contextTypes = {
     automata: PropTypes.object,
   }
 
-  StateMachine.childContextTypes = {
-    automata: PropTypes.object,
+  StateMachine.propTypes = {
+    initialData: PropTypes.object,
+    initialMachineState: PropTypes.instanceOf(State),
   }
 
   StateMachine.isStateMachine = true
