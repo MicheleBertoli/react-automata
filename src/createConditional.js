@@ -1,28 +1,26 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import globToRegExp from 'glob-to-regexp'
-import { getContextValue } from './utils'
+import idx from 'idx'
+import Context from './context'
 
 export const createConditional = (displayName, contextField) => {
-  class Conditional extends React.Component {
-    matches = (is, contextValue) => {
-      const expectedValues = Array.isArray(is) ? is : [is]
-      const actualValues = Array.isArray(contextValue[contextField])
-        ? contextValue[contextField]
-        : [contextValue[contextField]]
+  class Conditional extends React.PureComponent {
+    static getDerivedStateFromProps(props) {
+      const expectedValues = Array.isArray(props.is) ? props.is : [props.is]
+      const actualValues = Array.isArray(props.value)
+        ? props.value
+        : [props.value]
 
-      return expectedValues.some(expectedValue => {
-        const matcher = globToRegExp(expectedValue)
-        return actualValues.some(actualValue => matcher.test(actualValue))
-      })
+      return {
+        visible: expectedValues.some(expectedValue => {
+          const matcher = globToRegExp(expectedValue)
+          return actualValues.some(actualValue => matcher.test(actualValue))
+        }),
+      }
     }
 
-    state = {
-      visible: this.matches(
-        this.props.is,
-        getContextValue(this.context, this.props.channel)
-      ),
-    }
+    state = {}
 
     componentDidMount() {
       if (this.state.visible && this.props.onShow) {
@@ -30,27 +28,13 @@ export const createConditional = (displayName, contextField) => {
       }
     }
 
-    componentWillReceiveProps(nextProps, nextContext) {
-      const contextValue = getContextValue(nextContext, nextProps.channel)
-
-      if (!this.state.visible && this.matches(nextProps.is, contextValue)) {
-        this.setState({
-          visible: true,
-        })
-
-        if (nextProps.onShow) {
-          nextProps.onShow()
-        }
+    componentDidUpdate(prevProps, prevState) {
+      if (!prevState.visible && this.state.visible && this.props.onShow) {
+        this.props.onShow()
       }
 
-      if (this.state.visible && !this.matches(nextProps.is, contextValue)) {
-        this.setState({
-          visible: false,
-        })
-
-        if (nextProps.onHide) {
-          nextProps.onHide()
-        }
+      if (prevState.visible && !this.state.visible && this.props.onHide) {
+        this.props.onHide()
       }
     }
 
@@ -63,17 +47,24 @@ export const createConditional = (displayName, contextField) => {
     }
   }
 
-  Conditional.defaultProps = {
+  const Container = props => (
+    <Context.Consumer>
+      {context => (
+        <Conditional
+          {...props}
+          value={idx(context, _ => _[props.channel || 'DEFAULT'][contextField])}
+        />
+      )}
+    </Context.Consumer>
+  )
+
+  Container.defaultProps = {
     children: null,
   }
 
-  Conditional.displayName = displayName
+  Container.displayName = displayName
 
-  Conditional.contextTypes = {
-    automata: PropTypes.object,
-  }
-
-  Conditional.propTypes = {
+  Container.propTypes = {
     channel: PropTypes.string,
     children: PropTypes.node,
     is: PropTypes.oneOfType([
@@ -85,7 +76,7 @@ export const createConditional = (displayName, contextField) => {
     onShow: PropTypes.func,
   }
 
-  return Conditional
+  return Container
 }
 
 export default createConditional

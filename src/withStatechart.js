@@ -4,12 +4,20 @@ import { Machine, State, StateNode } from 'xstate'
 import idx from 'idx'
 import invariant from 'invariant'
 import memoizeOne from 'memoize-one'
+import Context from './context'
 import { getComponentName, isStateless, stringify } from './utils'
 
 const memoizedStringify = memoizeOne(stringify)
 
 const withStatechart = (statechart, options = {}) => Component => {
-  class StateMachine extends React.PureComponent {
+  class Automata extends React.PureComponent {
+    static propTypes = {
+      initialData: PropTypes.object,
+      initialMachineState: PropTypes.instanceOf(State),
+    }
+
+    static isAutomata = true
+
     machine = statechart instanceof StateNode ? statechart : Machine(statechart)
 
     state = {
@@ -20,22 +28,6 @@ const withStatechart = (statechart, options = {}) => Component => {
     instance = React.createRef()
 
     ref = !isStateless(Component) ? this.instance : null
-
-    getChildContext() {
-      const channel = options.channel || 'DEFAULT'
-
-      return {
-        automata: {
-          ...this.context.automata,
-          [channel]: {
-            actions: this.state.machineState.actions,
-            machineState:
-              this.state.machineState.toString() ||
-              memoizedStringify(this.state.machineState.value),
-          },
-        },
-      }
-    }
 
     componentDidMount() {
       if (options.devTools && window.__REDUX_DEVTOOLS_EXTENSION__) {
@@ -76,6 +68,20 @@ const withStatechart = (statechart, options = {}) => Component => {
       }
     }
 
+    getContext(context) {
+      const channel = options.channel || 'DEFAULT'
+
+      return {
+        ...context,
+        [channel]: {
+          actions: this.state.machineState.actions,
+          machineState:
+            this.state.machineState.toString() ||
+            memoizedStringify(this.state.machineState.value),
+        },
+      }
+    }
+
     runAction = effect => {
       switch (typeof effect) {
         case 'string':
@@ -93,7 +99,8 @@ const withStatechart = (statechart, options = {}) => Component => {
                 effect.type === 'xstate.start'
               )
             }
-          } else if (this.instance.current[effect.type]) {
+          }
+          if (this.instance.current[effect.type]) {
             this.instance.current[effect.type](
               this.state.componentState,
               this.lastEvent
@@ -177,33 +184,24 @@ const withStatechart = (statechart, options = {}) => Component => {
 
     render() {
       return (
-        <Component
-          {...this.props}
-          {...this.state.componentState}
-          machineState={this.state.machineState}
-          ref={this.ref}
-          transition={this.handleTransition}
-        />
+        <Context.Consumer>
+          {context => (
+            <Context.Provider value={this.getContext(context)}>
+              <Component
+                {...this.props}
+                {...this.state.componentState}
+                machineState={this.state.machineState}
+                ref={this.ref}
+                transition={this.handleTransition}
+              />
+            </Context.Provider>
+          )}
+        </Context.Consumer>
       )
     }
   }
 
-  StateMachine.childContextTypes = {
-    automata: PropTypes.object,
-  }
-
-  StateMachine.contextTypes = {
-    automata: PropTypes.object,
-  }
-
-  StateMachine.propTypes = {
-    initialData: PropTypes.object,
-    initialMachineState: PropTypes.instanceOf(State),
-  }
-
-  StateMachine.isStateMachine = true
-
-  return StateMachine
+  return Automata
 }
 
 export default withStatechart

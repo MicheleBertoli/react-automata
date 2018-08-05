@@ -1,13 +1,20 @@
 import React from 'react'
 import TestRenderer from 'react-test-renderer'
+import Context from '../src/context'
 import createConditional from '../src/createConditional'
-
-jest.mock('../src/utils', () => ({
-  getContextValue: () => ({ contextField: 'foo' }),
-}))
 
 const displayName = 'displayName'
 const contextField = 'contextField'
+const context = {
+  DEFAULT: {
+    contextField: 'foo',
+  },
+}
+
+const create = children =>
+  TestRenderer.create(
+    <Context.Provider value={context}>{children}</Context.Provider>
+  )
 
 test('statics', () => {
   const Conditional = createConditional(displayName)
@@ -18,7 +25,7 @@ test('statics', () => {
 describe('visible', () => {
   test('string', () => {
     const Conditional = createConditional(displayName, contextField)
-    const renderer = TestRenderer.create(
+    const renderer = create(
       <Conditional is="foo">
         <div />
       </Conditional>
@@ -29,7 +36,7 @@ describe('visible', () => {
 
   test('array', () => {
     const Conditional = createConditional(displayName, contextField)
-    const renderer = TestRenderer.create(
+    const renderer = create(
       <Conditional is={['foo']}>
         <div />
       </Conditional>
@@ -40,7 +47,7 @@ describe('visible', () => {
 
   test('glob', () => {
     const Conditional = createConditional(displayName, contextField)
-    const renderer = TestRenderer.create(
+    const renderer = create(
       <Conditional is="*o*">
         <div />
       </Conditional>
@@ -53,14 +60,14 @@ describe('visible', () => {
 test('render prop', () => {
   const Conditional = createConditional(displayName, contextField)
   const render = jest.fn(() => <div />)
-  TestRenderer.create(<Conditional is="foo" render={render} />)
+  create(<Conditional is="foo" render={render} />)
 
   expect(render).toHaveBeenCalledWith(true)
 })
 
 test('not visible', () => {
   const Conditional = createConditional(displayName, contextField)
-  const renderer = TestRenderer.create(
+  const renderer = create(
     <Conditional is="bar">
       <div />
     </Conditional>
@@ -73,17 +80,20 @@ test('callbacks', () => {
   const Conditional = createConditional(displayName, contextField)
   const onShow = jest.fn()
   const onHide = jest.fn()
+
   class Wrapper extends React.Component {
     state = { is: 'foo' }
+
     render() {
       return <Conditional is={this.state.is} onShow={onShow} onHide={onHide} />
     }
   }
-  const renderer = TestRenderer.create(<Wrapper />)
+
+  const renderer = create(<Wrapper />)
 
   expect(onShow).toHaveBeenCalled()
 
-  renderer.getInstance().setState({ is: 'bar' })
+  renderer.root.findByType(Wrapper).instance.setState({ is: 'bar' })
 
   expect(onHide).toHaveBeenCalled()
 })

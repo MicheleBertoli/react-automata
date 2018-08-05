@@ -1,19 +1,5 @@
 import React from 'react'
-import { getContextValue, isStateless, stringify } from '../src/utils'
-
-describe('getContextValue', () => {
-  test('context', () => {
-    const context = {}
-
-    expect(() => getContextValue(context)).toThrowErrorMatchingSnapshot()
-  })
-
-  test('channel', () => {
-    const context = { automata: {} }
-
-    expect(() => getContextValue(context, 'foo')).toThrowErrorMatchingSnapshot()
-  })
-})
+import { isStateless, stringify } from '../src/utils'
 
 describe('isStateless', () => {
   test('true', () => {

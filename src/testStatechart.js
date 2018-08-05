@@ -4,12 +4,12 @@ import { Machine } from 'xstate'
 import { getShortestPaths } from 'xstate/lib/graph'
 import idx from 'idx'
 import invariant from 'invariant'
-import { getContextValue } from './utils'
+import { stringify } from './utils'
 import withStatechart from './withStatechart'
 
 const testStatechart = (options, Component) => {
   invariant(
-    !Component.isStateMachine,
+    !Component.isAutomata,
     'It seems you are testing a component wrapped into `withStatechart`, please use a base component instead.'
   )
 
@@ -31,10 +31,9 @@ const testStatechart = (options, Component) => {
       instance.handleTransition(event, fixtures)
     })
 
-    const { machineState } = getContextValue(
-      instance.getChildContext(),
-      channel
-    )
+    const machineState =
+      instance.state.machineState.toString() ||
+      stringify(instance.state.machineState.value)
 
     expect(renderer.toJSON()).toMatchSnapshot(undefined, machineState)
   })
