@@ -1,9 +1,9 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { Machine, State, StateNode } from 'xstate'
 import idx from 'idx'
 import invariant from 'invariant'
 import mem from 'mem'
+import PropTypes from 'prop-types'
+import React from 'react'
+import { Machine, State, StateNode } from 'xstate'
 import Context from './context'
 import {
   DEFAULT_CHANNEL,

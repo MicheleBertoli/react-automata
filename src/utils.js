@@ -1,5 +1,5 @@
-import idx from 'idx'
 import globToRegExp from 'glob-to-regexp'
+import idx from 'idx'
 
 export const DEFAULT_CHANNEL = 'DEFAULT'
 

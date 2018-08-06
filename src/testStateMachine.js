@@ -1,7 +1,7 @@
+import idx from 'idx'
 import React from 'react'
 import TestRenderer from 'react-test-renderer'
 import { getShortestPaths } from 'xstate/lib/graph'
-import idx from 'idx'
 import { stringify } from './utils'
 
 const testStateMachine = (Component, options = {}) => {

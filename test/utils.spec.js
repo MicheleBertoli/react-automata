@@ -1,10 +1,10 @@
 import React from 'react'
 import {
-  isStateless,
-  stringify,
-  getPatterns,
-  match,
   cacheKey,
+  getPatterns,
+  isStateless,
+  match,
+  stringify,
 } from '../src/utils'
 
 describe('isStateless', () => {

@@ -1,6 +1,6 @@
 import React from 'react'
-import { Machine, State } from 'xstate'
 import TestRenderer from 'react-test-renderer'
+import { Machine, State } from 'xstate'
 import { withStatechart } from '../src'
 
 const actionFunction = jest.fn()
