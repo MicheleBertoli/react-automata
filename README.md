@@ -21,9 +21,9 @@ yarn add react-automata
 // App.js
 
 import React from 'react'
-import { Action, withStatechart } from 'react-automata'
+import { Action, withStateMachine } from 'react-automata'
 
-export const statechart = {
+const statechart = {
   initial: 'a',
   states: {
     a: {
@@ -41,7 +41,7 @@ export const statechart = {
   },
 }
 
-export class App extends React.Component {
+class App extends React.Component {
   handleClick = () => {
     this.props.transition('NEXT')
   }
@@ -50,24 +50,24 @@ export class App extends React.Component {
     return (
       <div>
         <button onClick={this.handleClick}>NEXT</button>
-        <Action show="sayHello">Hello, A</Action>
-        <Action show="sayCiao">Ciao, B</Action>
+        <Action is="sayHello">Hello, A</Action>
+        <Action is="sayCiao">Ciao, B</Action>
       </div>
     )
   }
 }
 
-export default withStatechart(statechart)(App)
+export default withStateMachine(statechart)(App)
 ```
 
 ```js
 // App.spec.js
 
-import { testStatechart } from 'react-automata'
-import { App, statechart } from './App'
+import { testStateMachine } from 'react-automata'
+import App from './App'
 
 test('it works', () => {
-  testStatechart({ statechart }, App)
+  testStateMachine(App)
 })
 ```
 
@@ -99,10 +99,10 @@ exports[`it works: b 1`] = `
 
 # API
 
-## withStatechart(statechart[, options])(Component)
+## withStateMachine(statechart[, options])(Component)
 
-The `withStatechart` higher-order component takes an [xstate configuration object](http://davidkpiano.github.io/xstate/docs/#/api/config) or an [xstate machine](http://davidkpiano.github.io/xstate/docs/#/api/machine), some [options](#options) and a component.
-It returns a new component with special [props](#props), [action methods](#action-methods) and additional [lifecycle hooks](#lifecycle-hooks).
+The `withStateMachine` higher-order component accepts an [xstate configuration object](http://davidkpiano.github.io/xstate/docs/#/api/config) or an [xstate machine](http://davidkpiano.github.io/xstate/docs/#/api/machine), some [options](#options) and a component.
+It returns a new component with special [props](#props), [action and activity methods](#action-and-activity-methods) and additional [lifecycle hooks](#lifecycle-hooks).
 The initial machine state and the initial data can be passed to the resulting component through the `initialMachineState` and `initialData` props.
 
 ### Options
@@ -130,7 +130,7 @@ handleClick = () => {
 
 The current state of the state machine.
 
-> The use of this value is discouraged, as it couples the component and the state machine.
+> It's not recommended to use this value because it couples the component and the state machine.
 
 ```js
 <button onClick={this.handleClick}>
@@ -138,9 +138,11 @@ The current state of the state machine.
 </button>
 ```
 
-### Action methods
+### Action and Activity methods
 
-All the component's methods whose names match the names of the actions, are fired when the related transition happen.
+All the component's methods whose names match the names of actions and activities, are fired when the related transition happen.
+Actions receive the state and the event as arguments. While activities receive a boolean that is true when the activity should start, and false otherwise.
+
 For example:
 
 ```js
@@ -187,14 +189,14 @@ componentWillTransition(event) {
 }
 ```
 
-#### componentDidTransition(prevStateMachine, event)
+#### componentDidTransition(prevMachineState, event)
 
 The lifecycle method invoked when a transition has happened and the state is updated.
 It provides the previous state machine, and the event.
 The current `machineState` is available in `this.props`.
 
 ```js
-componentDidTransition(prevStateMachine, event) {
+componentDidTransition(prevMachineState, event) {
   Logger.log(event)
 }
 ```
@@ -205,8 +207,7 @@ The component to define which parts of the tree should be rendered for a given a
 
 | Prop | Type | Description |
 | ---- | ---- | ----------- |
-| hide | oneOfType(string, arrayOf(string)) | The action(s) for which the children should be hidden. |
-| show | oneOfType(string, arrayOf(string)) | The action(s) for which the children should be shown. When both `show` and `hide` are defined, the children are shown from the first `show` match to the first `hide` match. |
+| is | oneOfType(string, arrayOf(string)) | The action(s) for which the children should be shown. It accepts the exact value, a glob expression or an array of values/expressions (e.g. `is="fetch"`, `is="show*"` or `is={['fetch', 'show*']`). |
 | channel | string | The key of the context from where to read the state. |
 | children | node | The children to be rendered when the conditions match. |
 | render | func | The [render prop](https://reactjs.org/docs/render-props.html) receives a bool (true when the conditions match) and it takes precedence over children. |
@@ -214,12 +215,12 @@ The component to define which parts of the tree should be rendered for a given a
 | onShow | func | The function invoked when the component becomes visible. |
 
 ```js
-<Action show="showError">Oh, snap!</Action>
+<Action is="showError">Oh, snap!</Action>
 ```
 
 ```js
 <Action
-  show="showError"
+  is="showError"
   render={visible => (visible ? <div>Oh, snap!</div> : null)}
 />
 ```
@@ -230,7 +231,7 @@ The component to define which parts of the tree should be rendered for a given s
 
 | Prop | Type | Description |
 | ---- | ---- | ----------- |
-| value | oneOfType(string, arrayOf(string)) | The state(s) for which the children should be shown. It accepts the exact state, a glob expression or an array of states/expressions (e.g. `value="idle"`, `value="error.*"` or `value={['idle', 'error.*']`). |
+| is | oneOfType(string, arrayOf(string)) | The state(s) for which the children should be shown. It accepts the exact value, a glob expression or an array of values/expressions (e.g. `is="idle"`, `is="error.*"` or `is={['idle', 'error.*']`). |
 | channel | string | The key of the context from where to read the state. |
 | children | node | The children to be rendered when the conditions match. |
 | render | func | The [render prop](https://reactjs.org/docs/render-props.html) receives a bool (true when the conditions match) and it takes precedence over children. |
@@ -238,24 +239,20 @@ The component to define which parts of the tree should be rendered for a given s
 | onShow | func | The function invoked when the component becomes visible. |
 
 ```js
-<State value="error">Oh, snap!</State>
+<State is="error">Oh, snap!</State>
 ```
 
 ```js
 <State
-  value="error"
+  is="error"
   render={visible => (visible ? <div>Oh, snap!</div> : null)}
 />
 ```
 
-## testStatechart({ statechart[, fixtures][, extendedState] }, Component)
+## testStateMachine(Component[, { fixtures, extendedState }])
 
-The method to automagically generate tests given a statechart definition, and a component.
+The method to automagically generate tests given a component wrapped into `withStateMachine`.
 It accepts an additional `fixtures` option to describe the data to be injected into the component for a given transition, and an `extendedState` option to control the statechart's conditions - both are optional.
-
-> Please note that the component should be a base component not wrapped into `withStateChart` (see [#46](https://github.com/MicheleBertoli/react-automata/issues/46)).
-
-Install "react-test-renderer" with a matching version to your React version.
 
 ```
 yarn add --dev react-test-renderer
@@ -283,7 +280,7 @@ const fixtures = {
 }
 
 test('it works', () => {
-  testStatechart({ statechart, fixtures }, App)
+  testStateMachine(App, { fixtures })
 })
 ```
 
@@ -297,14 +294,14 @@ test('it works', () => {
 
 - [React Loads](https://github.com/jxom/react-loads)
 
-- Packing List ([React](https://codesandbox.io/s/github/GantMan/ReactStateMuseum/tree/master/React/react-automata) | [React Native](https://github.com/GantMan/ReactStateMuseum/tree/master/ReactNative/ReactAutomata))
+- [Packing List](https://codesandbox.io/s/github/GantMan/ReactStateMuseum/tree/master/React/react-automata) ([React Native](https://github.com/GantMan/ReactStateMuseum/tree/master/ReactNative/ReactAutomata))
 
 # Inspiration
 
 [Federico](https://twitter.com/gandellinux), for telling me "Hey, I think building UIs using state machines is the future".
 
-[David](https://twitter.com/DavidKPiano), for giving a very informative (and fun) [talk](https://www.youtube.com/watch?v=VU1NKX6Qkxc) about infinitely better UIs, and building [xstate](https://github.com/davidkpiano/xstate).
+[David](https://twitter.com/DavidKPiano), for giving an awesome [talk](https://www.youtube.com/watch?v=VU1NKX6Qkxc) about infinitely better UIs, and building [xstate](https://github.com/davidkpiano/xstate).
 
-[Ryan](https://twitter.com/ryanflorence), for [experimenting](https://www.youtube.com/watch?v=WbhpQXH7XMw) with xstate and React - Ryan's approach to React has always been a source of inspiration.
+[Ryan](https://twitter.com/ryanflorence), for [experimenting](https://www.youtube.com/watch?v=WbhpQXH7XMw) with xstate and React - Ryan's approach to React has always been a source of inspiration to me.
 
 [Erik](https://twitter.com/mogsie), for writing about [statecharts](https://statecharts.github.io/), and showing me how to keep UI and state machine decoupled.
