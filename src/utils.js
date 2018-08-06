@@ -1,6 +1,8 @@
 import idx from 'idx'
 import globToRegExp from 'glob-to-regexp'
 
+export const DEFAULT_CHANNEL = 'DEFAULT'
+
 export const getComponentName = Component =>
   Component.displayName || Component.name || 'Component'
 

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import idx from 'idx'
 import mem from 'mem'
 import Context from './context'
-import { getPatterns, match, cacheKey } from './utils'
+import { DEFAULT_CHANNEL, getPatterns, match, cacheKey } from './utils'
 
 const memoizedGetPatterns = mem(getPatterns)
 const memoizedMatch = mem(match, { cacheKey })
@@ -44,7 +44,10 @@ const createConditional = (displayName, contextField) => {
       {context => (
         <Conditional
           {...props}
-          value={idx(context, _ => _[props.channel || 'DEFAULT'][contextField])}
+          value={idx(
+            context,
+            _ => _[props.channel || DEFAULT_CHANNEL][contextField]
+          )}
         />
       )}
     </Context.Consumer>

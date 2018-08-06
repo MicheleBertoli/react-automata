@@ -5,7 +5,17 @@ import idx from 'idx'
 import invariant from 'invariant'
 import mem from 'mem'
 import Context from './context'
-import { getComponentName, isStateless, stringify } from './utils'
+import {
+  DEFAULT_CHANNEL,
+  getComponentName,
+  isStateless,
+  stringify,
+} from './utils'
+
+const REDUX_DISPATCH = 'DISPATCH'
+const REDUX_JUMP_TO_ACTION = 'JUMP_TO_ACTION'
+const XSTATE_START_ACTION = 'xstate.start'
+const XSTATE_STOP_ACTION = 'xstate.stop'
 
 const memoizedStringify = mem(stringify)
 
@@ -36,8 +46,8 @@ const withStatechart = (statechart, options = {}) => Component => {
 
         this.unsubscribe = this.devTools.subscribe(message => {
           if (
-            message.type === 'DISPATCH' &&
-            message.payload.type === 'JUMP_TO_ACTION'
+            message.type === REDUX_DISPATCH &&
+            message.payload.type === REDUX_JUMP_TO_ACTION
           ) {
             this.jumpToAction = true
             this.setState(JSON.parse(message.state))
@@ -66,20 +76,6 @@ const withStatechart = (statechart, options = {}) => Component => {
       }
     }
 
-    getContext(context) {
-      const channel = options.channel || 'DEFAULT'
-
-      return {
-        ...context,
-        [channel]: {
-          actions: this.state.machineState.actions,
-          machineState:
-            this.state.machineState.toString() ||
-            memoizedStringify(this.state.machineState.value),
-        },
-      }
-    }
-
     runAction = effect => {
       switch (typeof effect) {
         case 'string':
@@ -91,10 +87,13 @@ const withStatechart = (statechart, options = {}) => Component => {
           }
           break
         case 'object':
-          if (effect.type === 'xstate.start' || effect.type === 'xstate.stop') {
+          if (
+            effect.type === XSTATE_START_ACTION ||
+            effect.type === XSTATE_STOP_ACTION
+          ) {
             if (this.instance.current[effect.activity]) {
               this.instance.current[effect.activity](
-                effect.type === 'xstate.start'
+                effect.type === XSTATE_START_ACTION
               )
             }
           }
@@ -118,11 +117,11 @@ const withStatechart = (statechart, options = {}) => Component => {
     }
 
     handleComponentDidUpdate(prevProps, prevState) {
-      if (prevState.machineState.actions !== this.state.machineState.actions) {
-        this.runActions()
-      }
-
       if (prevState.machineState !== this.state.machineState) {
+        this.isTransitioning = false
+
+        this.runActions()
+
         if (idx(this, _ => _.instance.current.componentDidTransition)) {
           this.instance.current.componentDidTransition(
             prevState.machineState,
@@ -134,8 +133,20 @@ const withStatechart = (statechart, options = {}) => Component => {
           this.devTools.send(this.lastEvent, this.state)
         }
       }
+    }
 
-      this.isTransitioning = false
+    getContext(context) {
+      const channel = options.channel || DEFAULT_CHANNEL
+
+      return {
+        ...context,
+        [channel]: {
+          actions: this.state.machineState.actions,
+          machineState:
+            this.state.machineState.toString() ||
+            memoizedStringify(this.state.machineState.value),
+        },
+      }
     }
 
     handleTransition = (event, updater) => {

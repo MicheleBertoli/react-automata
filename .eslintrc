@@ -1,9 +1,7 @@
 {
-  "extends": "airbnb",
+  "extends": ["airbnb", "plugin:prettier/recommended"],
 
   "parser": "babel-eslint",
-
-  "plugins": ["prettier"],
 
   "env": {
     "browser": true,
@@ -11,20 +9,9 @@
   },
 
   "rules": {
-    "arrow-parens": ["error", "as-needed", { "requireForBlockBody": false }],
     "class-methods-use-this": "off",
-    "comma-dangle": ["error", {
-      "arrays": "only-multiline",
-      "exports": "never",
-      "functions": "never",
-      "imports": "never",
-      "objects": "only-multiline"
-    }],
     "default-case": "off",
-    "function-paren-newline": ["error", "consistent"],
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
-    "import/no-named-as-default": "off",
-    "no-confusing-arrow": "off",
     "no-underscore-dangle": ["error", {
       "allow": ["__REDUX_DEVTOOLS_EXTENSION__"],
     }],

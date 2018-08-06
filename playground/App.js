@@ -2,7 +2,7 @@ import React from 'react'
 import { hot } from 'react-hot-loader'
 import { Action, withStatechart } from '../src'
 
-export const statechart = {
+const statechart = {
   initial: 'idle',
   states: {
     idle: {
@@ -30,7 +30,7 @@ export const statechart = {
   },
 }
 
-export class App extends React.Component {
+class App extends React.Component {
   fetchGists() {
     fetch('https://api.github.com/users/gaearon/gists')
       .then(response => response.json())
