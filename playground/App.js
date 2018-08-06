@@ -1,6 +1,6 @@
 import React from 'react'
 import { hot } from 'react-hot-loader'
-import { Action, withStatechart } from '../src'
+import { Action, withStateMachine } from '../src'
 
 const statechart = {
   initial: 'idle',
@@ -74,6 +74,6 @@ const options = {
   devTools: true,
 }
 
-const StateMachine = withStatechart(statechart, options)(App)
+const StateMachine = withStateMachine(statechart, options)(App)
 
 export default hot(module)(StateMachine)

@@ -1,7 +1,7 @@
 import React from 'react'
 import TestRenderer from 'react-test-renderer'
 import { Machine, State } from 'xstate'
-import { withStatechart } from '../src'
+import { withStateMachine } from '../src'
 
 const actionFunction = jest.fn()
 
@@ -25,8 +25,8 @@ const statechart = {
 
 test('statechart', () => {
   const Component = () => <div />
-  const StateMachine1 = withStatechart(statechart)(Component)
-  const StateMachine2 = withStatechart(Machine(statechart))(Component)
+  const StateMachine1 = withStateMachine(statechart)(Component)
+  const StateMachine2 = withStateMachine(Machine(statechart))(Component)
   const renderer1 = TestRenderer.create(<StateMachine1 />).getInstance()
   const renderer2 = TestRenderer.create(<StateMachine2 />).getInstance()
 
@@ -39,7 +39,7 @@ test('render', () => {
     spy()
     return <div />
   }
-  const StateMachine = withStatechart(statechart)(Component)
+  const StateMachine = withStateMachine(statechart)(Component)
   const instance = TestRenderer.create(<StateMachine />).getInstance()
 
   spy.mockClear()
@@ -54,7 +54,7 @@ test('render', () => {
 
 test('props', () => {
   const Component = () => <div />
-  const StateMachine = withStatechart(statechart)(Component)
+  const StateMachine = withStateMachine(statechart)(Component)
   const machineState = new State('b')
   const renderer = TestRenderer.create(
     <StateMachine
@@ -72,7 +72,7 @@ test('props', () => {
 test('state', () => {
   const Component = () => <div />
   Component.defaultProps = { counter: 0 }
-  const StateMachine = withStatechart(statechart)(Component)
+  const StateMachine = withStateMachine(statechart)(Component)
   const renderer = TestRenderer.create(<StateMachine />)
   const instance = renderer.getInstance()
   const component = renderer.root.findByType(Component)
@@ -108,7 +108,7 @@ test('actions', () => {
     }
   }
 
-  const StateMachine = withStatechart(statechart)(Component)
+  const StateMachine = withStateMachine(statechart)(Component)
   const instance = TestRenderer.create(<StateMachine />).getInstance()
 
   instance.handleTransition('EVENT')
@@ -138,7 +138,7 @@ test('lifecycle hooks', () => {
     }
   }
 
-  const StateMachine = withStatechart(statechart)(Component)
+  const StateMachine = withStateMachine(statechart)(Component)
   const instance = TestRenderer.create(<StateMachine />).getInstance()
 
   instance.handleTransition('EVENT')

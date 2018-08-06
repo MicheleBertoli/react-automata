@@ -1,5 +1,5 @@
 import React from 'react'
-import { Action, State, testStateMachine, withStatechart } from '../src'
+import { Action, State, testStateMachine, withStateMachine } from '../src'
 
 describe('conditional', () => {
   const secondMachine = {
@@ -46,7 +46,7 @@ describe('conditional', () => {
         <Action is="enterBB">b.b</Action>
       </div>
     )
-    const StateMachine = withStatechart(firstMachine)(App)
+    const StateMachine = withStateMachine(firstMachine)(App)
 
     testStateMachine(StateMachine)
   })
@@ -59,7 +59,7 @@ describe('conditional', () => {
         <State is="b.b">b.b</State>
       </div>
     )
-    const StateMachine = withStatechart(firstMachine)(App)
+    const StateMachine = withStateMachine(firstMachine)(App)
 
     testStateMachine(StateMachine)
   })
@@ -132,7 +132,7 @@ test('parallel', () => {
       <State is="list.numbers">list.numbers</State>
     </div>
   )
-  const StateMachine = withStatechart(wordMachine)(App)
+  const StateMachine = withStateMachine(wordMachine)(App)
 
   testStateMachine(StateMachine)
 })
@@ -154,7 +154,7 @@ test('channels', () => {
       </State>
     </div>
   )
-  const InnerMachine = withStatechart(inner, { channel: 'inner' })(Inner)
+  const InnerMachine = withStateMachine(inner, { channel: 'inner' })(Inner)
 
   const outer = {
     initial: 'outer',
@@ -170,7 +170,7 @@ test('channels', () => {
       <InnerMachine />
     </div>
   )
-  const StateMachine = withStatechart(outer, { channel: 'outer' })(Outer)
+  const StateMachine = withStateMachine(outer, { channel: 'outer' })(Outer)
 
   testStateMachine(StateMachine)
 })
@@ -198,7 +198,7 @@ describe('cond', () => {
       <State is="b">B</State>
     </React.Fragment>
   )
-  const StateMachine = withStatechart(statechart)(Cond)
+  const StateMachine = withStateMachine(statechart)(Cond)
 
   test('pass', () => {
     const extendedState = {

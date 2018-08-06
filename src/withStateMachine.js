@@ -19,7 +19,7 @@ const XSTATE_STOP_ACTION = 'xstate.stop'
 
 const memoizedStringify = mem(stringify)
 
-const withStatechart = (statechart, options = {}) => Component => {
+const withStateMachine = (statechart, options = {}) => Component => {
   class Automata extends React.PureComponent {
     static propTypes = {
       initialData: PropTypes.object,
@@ -213,4 +213,4 @@ const withStatechart = (statechart, options = {}) => Component => {
   return Automata
 }
 
-export default withStatechart
+export default withStateMachine
