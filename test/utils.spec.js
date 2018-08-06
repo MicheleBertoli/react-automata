@@ -1,5 +1,11 @@
 import React from 'react'
-import { isStateless, stringify } from '../src/utils'
+import {
+  isStateless,
+  stringify,
+  getPatterns,
+  match,
+  cacheKey,
+} from '../src/utils'
 
 describe('isStateless', () => {
   test('true', () => {
@@ -38,4 +44,25 @@ describe('stringify', () => {
 
     expect(result).toEqual(expected)
   })
+})
+
+test('getPatterns', () => {
+  const patterns1 = getPatterns('foo')
+  const patterns2 = getPatterns(['foo'])
+
+  expect(patterns1).toEqual(expect.arrayContaining(patterns2))
+  expect(patterns1).toMatchSnapshot()
+})
+
+test('match', () => {
+  const patterns = [/^foo$/]
+
+  expect(match(patterns, 'foo')).toBe(true)
+  expect(match(patterns, ['foo'])).toBe(true)
+  expect(match(patterns, 'bar')).toBe(false)
+  expect(match(patterns, ['bar'])).toBe(false)
+})
+
+test('cacheKey', () => {
+  expect(cacheKey(/^foo$/, 'bar')).toMatchSnapshot()
 })
