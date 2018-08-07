@@ -141,7 +141,7 @@ The current state of the state machine.
 ### Action and Activity methods
 
 All the component's methods whose names match the names of actions and activities, are fired when the related transition happen.
-Actions receive the state and the event as arguments. While activities receive a boolean that is true when the activity should start, and false otherwise.
+Actions receive the state and the event as arguments. Activities receive a boolean that is true when the activity should start, and false otherwise.
 
 For example:
 
@@ -295,6 +295,10 @@ test('it works', () => {
 - [React Loads](https://github.com/jxom/react-loads)
 
 - [Packing List](https://codesandbox.io/s/github/GantMan/ReactStateMuseum/tree/master/React/react-automata) ([React Native](https://github.com/GantMan/ReactStateMuseum/tree/master/ReactNative/ReactAutomata))
+
+# Frequently Asked Questions
+
+You might find the answer to your question [here](FAQ.md).
 
 # Inspiration
 

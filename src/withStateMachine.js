@@ -18,7 +18,7 @@ const XSTATE_START_ACTION = 'xstate.start'
 const XSTATE_STOP_ACTION = 'xstate.stop'
 
 const withStateMachine = (statechart, options = {}) => Component => {
-  class Automata extends React.PureComponent {
+  class Automata extends React.Component {
     static propTypes = {
       initialData: PropTypes.object,
       initialMachineState: PropTypes.instanceOf(State),

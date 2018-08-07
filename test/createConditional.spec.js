@@ -89,11 +89,15 @@ test('callbacks', () => {
     }
   }
 
-  const renderer = create(<Wrapper />)
+  const { instance } = create(<Wrapper />).root.findByType(Wrapper)
 
-  expect(onShow).toHaveBeenCalled()
+  expect(onShow).toHaveBeenCalledTimes(1)
 
-  renderer.root.findByType(Wrapper).instance.setState({ is: 'bar' })
+  instance.setState({ is: 'bar' })
 
   expect(onHide).toHaveBeenCalled()
+
+  instance.setState({ is: 'foo' })
+
+  expect(onShow).toHaveBeenCalledTimes(2)
 })
