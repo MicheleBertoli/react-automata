@@ -1,11 +1,5 @@
 import React from 'react'
-import {
-  cacheKey,
-  getPatterns,
-  isStateless,
-  match,
-  stringify,
-} from '../src/utils'
+import { getPatterns, isStateless, matches, stringify } from '../src/utils'
 
 describe('isStateless', () => {
   test('true', () => {
@@ -54,15 +48,11 @@ test('getPatterns', () => {
   expect(patterns1).toMatchSnapshot()
 })
 
-test('match', () => {
+test('matches', () => {
   const patterns = [/^foo$/]
 
-  expect(match(patterns, 'foo')).toBe(true)
-  expect(match(patterns, ['foo'])).toBe(true)
-  expect(match(patterns, 'bar')).toBe(false)
-  expect(match(patterns, ['bar'])).toBe(false)
-})
-
-test('cacheKey', () => {
-  expect(cacheKey(/^foo$/, 'bar')).toMatchSnapshot()
+  expect(matches(patterns, 'foo')).toBe(true)
+  expect(matches(patterns, ['foo'])).toBe(true)
+  expect(matches(patterns, 'bar')).toBe(false)
+  expect(matches(patterns, ['bar'])).toBe(false)
 })

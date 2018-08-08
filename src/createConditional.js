@@ -1,12 +1,9 @@
 import idx from 'idx'
-import mem from 'mem'
+import memoize from 'memoize-one'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Context from './context'
-import { cacheKey, DEFAULT_CHANNEL, getPatterns, match } from './utils'
-
-const memoizedGetPatterns = mem(getPatterns)
-const memoizedMatch = mem(match, { cacheKey })
+import { DEFAULT_CHANNEL, getPatterns, matches } from './utils'
 
 const createConditional = (displayName, contextField) => {
   class Conditional extends React.Component {
@@ -26,10 +23,14 @@ const createConditional = (displayName, contextField) => {
       }
     }
 
+    getPatterns = memoize(getPatterns)
+
+    matches = memoize(matches)
+
     render() {
       this.wasVisible = this.isVisible
-      const patterns = memoizedGetPatterns(this.props.is)
-      this.isVisible = memoizedMatch(patterns, this.props.value)
+      const patterns = this.getPatterns(this.props.is)
+      this.isVisible = this.matches(patterns, this.props.value)
 
       if (this.props.render) {
         return this.props.render(this.isVisible)

@@ -25,11 +25,8 @@ export const getPatterns = glob =>
     ? glob.map(pattern => globToRegExp(pattern))
     : [globToRegExp(glob)]
 
-export const match = (patterns, value) => {
+export const matches = (patterns, value) => {
   const values = Array.isArray(value) ? value : [value]
 
   return patterns.some(pattern => values.some(val => pattern.test(val)))
 }
-
-export const cacheKey = (...args) =>
-  JSON.stringify(Array.from(args).map(argument => argument.toString()))

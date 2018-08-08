@@ -1,6 +1,6 @@
 import idx from 'idx'
 import invariant from 'invariant'
-import mem from 'mem'
+import memoize from 'memoize-one'
 import PropTypes from 'prop-types'
 import React from 'react'
 import { Machine, State, StateNode } from 'xstate'
@@ -16,8 +16,6 @@ const REDUX_DISPATCH = 'DISPATCH'
 const REDUX_JUMP_TO_ACTION = 'JUMP_TO_ACTION'
 const XSTATE_START_ACTION = 'xstate.start'
 const XSTATE_STOP_ACTION = 'xstate.stop'
-
-const memoizedStringify = mem(stringify)
 
 const withStateMachine = (statechart, options = {}) => Component => {
   class Automata extends React.PureComponent {
@@ -135,6 +133,8 @@ const withStateMachine = (statechart, options = {}) => Component => {
       }
     }
 
+    stringify = memoize(stringify)
+
     getContext(context) {
       const channel = options.channel || DEFAULT_CHANNEL
 
@@ -144,7 +144,7 @@ const withStateMachine = (statechart, options = {}) => Component => {
           actions: this.state.machineState.actions,
           machineState:
             this.state.machineState.toString() ||
-            memoizedStringify(this.state.machineState.value),
+            this.stringify(this.state.machineState.value),
         },
       }
     }

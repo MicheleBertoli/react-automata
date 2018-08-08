@@ -1,7 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`cacheKey 1`] = `"[\\"/^foo$/\\",\\"bar\\"]"`;
-
 exports[`getPatterns 1`] = `
 Array [
   /\\^foo\\$/,
