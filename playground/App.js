@@ -1,8 +1,8 @@
 import React from 'react'
 import { hot } from 'react-hot-loader'
-import { Action, withStatechart } from '../src'
+import { Action, withStateMachine } from '../src'
 
-export const statechart = {
+const statechart = {
   initial: 'idle',
   states: {
     idle: {
@@ -30,7 +30,7 @@ export const statechart = {
   },
 }
 
-export class App extends React.Component {
+class App extends React.Component {
   fetchGists() {
     fetch('https://api.github.com/users/gaearon/gists')
       .then(response => response.json())
@@ -46,18 +46,18 @@ export class App extends React.Component {
     return (
       <div>
         <h1>Actions</h1>
-        <Action show="showButton" hide="fetchGists">
+        <Action is="showButton">
           <button onClick={this.handleClick}>Fetch</button>
         </Action>
-        <Action show="fetchGists">Loading...</Action>
-        <Action show="showGists">
+        <Action is="fetchGists">Loading...</Action>
+        <Action is="showGists">
           <ul>
-            {this.props.gists
-              .filter(gist => gist.description)
-              .map(gist => <li key={gist.id}>{gist.description}</li>)}
+            {this.props.gists.filter(gist => gist.description).map(gist => (
+              <li key={gist.id}>{gist.description}</li>
+            ))}
           </ul>
         </Action>
-        <Action show="showError">
+        <Action is="showError">
           <button onClick={this.handleClick}>Retry</button>
           Oh, snap!
         </Action>
@@ -74,6 +74,6 @@ const options = {
   devTools: true,
 }
 
-const StateMachine = withStatechart(statechart, options)(App)
+const StateMachine = withStateMachine(statechart, options)(App)
 
 export default hot(module)(StateMachine)

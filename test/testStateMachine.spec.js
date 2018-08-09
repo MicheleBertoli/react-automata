@@ -1,5 +1,5 @@
 import React from 'react'
-import { Action, State, testStatechart, withStatechart } from '../src'
+import { Action, State, testStateMachine, withStateMachine } from '../src'
 
 describe('conditional', () => {
   const secondMachine = {
@@ -33,7 +33,6 @@ describe('conditional', () => {
         on: {
           FIRST_NEXT: 'a',
         },
-        onEntry: 'enterB',
         ...secondMachine,
       },
     },
@@ -42,27 +41,27 @@ describe('conditional', () => {
   test('action', () => {
     const App = () => (
       <div>
-        <Action show="enterA" hide="enterB">
-          a
-        </Action>
-        <Action show="enterBA">b.a</Action>
-        <Action show="enterBB">b.b</Action>
+        <Action is="enterA">a</Action>
+        <Action is="enterBA">b.a</Action>
+        <Action is="enterBB">b.b</Action>
       </div>
     )
+    const StateMachine = withStateMachine(firstMachine)(App)
 
-    testStatechart({ statechart: firstMachine }, App)
+    testStateMachine(StateMachine)
   })
 
   test('state', () => {
     const App = () => (
       <div>
-        <State value="a">a</State>
-        <State value="b.a">b.a</State>
-        <State value="b.b">b.b</State>
+        <State is="a">a</State>
+        <State is="b.a">b.a</State>
+        <State is="b.b">b.b</State>
       </div>
     )
+    const StateMachine = withStateMachine(firstMachine)(App)
 
-    testStatechart({ statechart: firstMachine }, App)
+    testStateMachine(StateMachine)
   })
 })
 
@@ -122,19 +121,20 @@ test('parallel', () => {
 
   const App = () => (
     <div>
-      <State value="bold.on">bold.on</State>
-      <State value="bold.off">bold.off</State>
-      <State value="underline.on">underline.on</State>
-      <State value="underline.off">underline.off</State>
-      <State value="italics.on">italics.on</State>
-      <State value="italics.off">italics.off</State>
-      <State value="list.none">list.none</State>
-      <State value="list.bullets">list.bullets</State>
-      <State value="list.numbers">list.numbers</State>
+      <State is="bold.on">bold.on</State>
+      <State is="bold.off">bold.off</State>
+      <State is="underline.on">underline.on</State>
+      <State is="underline.off">underline.off</State>
+      <State is="italics.on">italics.on</State>
+      <State is="italics.off">italics.off</State>
+      <State is="list.none">list.none</State>
+      <State is="list.bullets">list.bullets</State>
+      <State is="list.numbers">list.numbers</State>
     </div>
   )
+  const StateMachine = withStateMachine(wordMachine)(App)
 
-  testStatechart({ statechart: wordMachine }, App)
+  testStateMachine(StateMachine)
 })
 
 test('channels', () => {
@@ -146,15 +146,15 @@ test('channels', () => {
   }
   const Inner = () => (
     <div>
-      <State channel="inner" value="inner">
+      <State channel="inner" is="inner">
         inner
       </State>
-      <State channel="outer" value="outer">
+      <State channel="outer" is="outer">
         outer
       </State>
     </div>
   )
-  const InnerMachine = withStatechart(inner, { channel: 'inner' })(Inner)
+  const InnerMachine = withStateMachine(inner, { channel: 'inner' })(Inner)
 
   const outer = {
     initial: 'outer',
@@ -164,14 +164,15 @@ test('channels', () => {
   }
   const Outer = () => (
     <div>
-      <State channel="outer" value="outer">
+      <State channel="outer" is="outer">
         outer
       </State>
       <InnerMachine />
     </div>
   )
+  const StateMachine = withStateMachine(outer, { channel: 'outer' })(Outer)
 
-  testStatechart({ statechart: outer, channel: 'outer' }, Outer)
+  testStateMachine(StateMachine)
 })
 
 describe('cond', () => {
@@ -193,10 +194,11 @@ describe('cond', () => {
 
   const Cond = () => (
     <React.Fragment>
-      <State value="a">A</State>
-      <State value="b">B</State>
+      <State is="a">A</State>
+      <State is="b">B</State>
     </React.Fragment>
   )
+  const StateMachine = withStateMachine(statechart)(Cond)
 
   test('pass', () => {
     const extendedState = {
@@ -208,10 +210,10 @@ describe('cond', () => {
       },
     }
 
-    testStatechart({ statechart, fixtures, extendedState }, Cond)
+    testStateMachine(StateMachine, { fixtures, extendedState })
   })
 
   test('fail', () => {
-    testStatechart({ statechart }, Cond)
+    testStateMachine(StateMachine)
   })
 })

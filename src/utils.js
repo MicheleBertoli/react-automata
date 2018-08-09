@@ -1,16 +1,7 @@
+import globToRegExp from 'glob-to-regexp'
 import idx from 'idx'
-import invariant from 'invariant'
 
-export const getContextValue = (context, name) => {
-  invariant(context.automata, 'No context received.')
-
-  const channel = name || 'DEFAULT'
-  const value = context.automata[channel]
-
-  invariant(value, 'No value for channel: "%s".', channel)
-
-  return value
-}
+export const DEFAULT_CHANNEL = 'DEFAULT'
 
 export const getComponentName = Component =>
   Component.displayName || Component.name || 'Component'
@@ -27,4 +18,15 @@ export const stringify = (state, path = []) => {
     (prev, key) => prev.concat(stringify(state[key], path.concat(key))),
     []
   )
+}
+
+export const getPatterns = glob =>
+  Array.isArray(glob)
+    ? glob.map(pattern => globToRegExp(pattern))
+    : [globToRegExp(glob)]
+
+export const matches = (patterns, value) => {
+  const values = Array.isArray(value) ? value : [value]
+
+  return patterns.some(pattern => values.some(val => pattern.test(val)))
 }

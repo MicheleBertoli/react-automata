@@ -1,19 +1,5 @@
 import React from 'react'
-import { getContextValue, isStateless, stringify } from '../src/utils'
-
-describe('getContextValue', () => {
-  test('context', () => {
-    const context = {}
-
-    expect(() => getContextValue(context)).toThrowErrorMatchingSnapshot()
-  })
-
-  test('channel', () => {
-    const context = { automata: {} }
-
-    expect(() => getContextValue(context, 'foo')).toThrowErrorMatchingSnapshot()
-  })
-})
+import { getPatterns, isStateless, matches, stringify } from '../src/utils'
 
 describe('isStateless', () => {
   test('true', () => {
@@ -52,4 +38,21 @@ describe('stringify', () => {
 
     expect(result).toEqual(expected)
   })
+})
+
+test('getPatterns', () => {
+  const patterns1 = getPatterns('foo')
+  const patterns2 = getPatterns(['foo'])
+
+  expect(patterns1).toEqual(expect.arrayContaining(patterns2))
+  expect(patterns1).toMatchSnapshot()
+})
+
+test('matches', () => {
+  const patterns = [/^foo$/]
+
+  expect(matches(patterns, 'foo')).toBe(true)
+  expect(matches(patterns, ['foo'])).toBe(true)
+  expect(matches(patterns, 'bar')).toBe(false)
+  expect(matches(patterns, ['bar'])).toBe(false)
 })

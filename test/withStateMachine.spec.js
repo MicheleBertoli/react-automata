@@ -1,7 +1,9 @@
 import React from 'react'
-import { Machine, State } from 'xstate'
 import TestRenderer from 'react-test-renderer'
-import { withStatechart } from '../src'
+import { Machine, State } from 'xstate'
+import { withStateMachine } from '../src'
+
+const actionFunction = jest.fn()
 
 const statechart = {
   initial: 'a',
@@ -15,24 +17,44 @@ const statechart = {
       on: {
         EVENT: 'a',
       },
-      onEntry: 'onEnterB',
+      onEntry: ['actionMethod', actionFunction],
+      activities: ['activityMethod'],
     },
   },
 }
 
 test('statechart', () => {
   const Component = () => <div />
-  const StateMachine1 = withStatechart(statechart)(Component)
-  const StateMachine2 = withStatechart(Machine(statechart))(Component)
+  const StateMachine1 = withStateMachine(statechart)(Component)
+  const StateMachine2 = withStateMachine(Machine(statechart))(Component)
   const renderer1 = TestRenderer.create(<StateMachine1 />).getInstance()
   const renderer2 = TestRenderer.create(<StateMachine2 />).getInstance()
 
   expect(renderer1.state.machineState).toEqual(renderer2.state.machineState)
 })
 
+test('render', () => {
+  const spy = jest.fn()
+  const Component = () => {
+    spy()
+    return <div />
+  }
+  const StateMachine = withStateMachine(statechart)(Component)
+  const instance = TestRenderer.create(<StateMachine />).getInstance()
+
+  spy.mockClear()
+  instance.handleTransition('FOO')
+
+  expect(spy).not.toHaveBeenCalled()
+
+  instance.handleTransition('EVENT')
+
+  expect(spy).toHaveBeenCalled()
+})
+
 test('props', () => {
   const Component = () => <div />
-  const StateMachine = withStatechart(statechart)(Component)
+  const StateMachine = withStateMachine(statechart)(Component)
   const machineState = new State('b')
   const renderer = TestRenderer.create(
     <StateMachine
@@ -50,7 +72,7 @@ test('props', () => {
 test('state', () => {
   const Component = () => <div />
   Component.defaultProps = { counter: 0 }
-  const StateMachine = withStatechart(statechart)(Component)
+  const StateMachine = withStateMachine(statechart)(Component)
   const renderer = TestRenderer.create(<StateMachine />)
   const instance = renderer.getInstance()
   const component = renderer.root.findByType(Component)
@@ -68,12 +90,17 @@ test('state', () => {
   expect(component.props.counter).toBe(2)
 })
 
-test('action methods', () => {
-  const spy = jest.fn()
+test('actions', () => {
+  const actionMethod = jest.fn()
+  const activityMethod = jest.fn()
 
   class Component extends React.Component {
-    onEnterB() {
-      spy()
+    actionMethod(...args) {
+      actionMethod(...args)
+    }
+
+    activityMethod(...args) {
+      activityMethod(...args)
     }
 
     render() {
@@ -81,12 +108,17 @@ test('action methods', () => {
     }
   }
 
-  const StateMachine = withStatechart(statechart)(Component)
+  const StateMachine = withStateMachine(statechart)(Component)
   const instance = TestRenderer.create(<StateMachine />).getInstance()
 
   instance.handleTransition('EVENT')
 
-  expect(spy).toHaveBeenCalledTimes(1)
+  expect(actionMethod).toHaveBeenCalledTimes(1)
+  expect(actionMethod).toHaveBeenCalledWith({}, 'EVENT')
+  expect(actionFunction).toHaveBeenCalledTimes(1)
+  expect(actionFunction).toHaveBeenCalledWith({}, 'EVENT')
+  expect(activityMethod).toHaveBeenCalledTimes(1)
+  expect(activityMethod).toHaveBeenCalledWith(true)
 })
 
 test('lifecycle hooks', () => {
@@ -106,7 +138,7 @@ test('lifecycle hooks', () => {
     }
   }
 
-  const StateMachine = withStatechart(statechart)(Component)
+  const StateMachine = withStateMachine(statechart)(Component)
   const instance = TestRenderer.create(<StateMachine />).getInstance()
 
   instance.handleTransition('EVENT')

@@ -1,81 +1,78 @@
-import React from 'react'
+import idx from 'idx'
+import memoize from 'memoize-one'
 import PropTypes from 'prop-types'
-import { getContextValue } from './utils'
+import React from 'react'
+import Context from './context'
+import { DEFAULT_CHANNEL, getPatterns, matches } from './utils'
 
-export const createConditional = ({
-  displayName,
-  propTypes,
-  shouldShow,
-  shouldHide,
-}) => {
+const createConditional = (displayName, contextField) => {
   class Conditional extends React.Component {
-    constructor(props, context) {
-      super(props, context)
-
-      const value = getContextValue(context, props.channel)
-
-      this.state = {
-        visible: shouldShow(props, value),
-      }
-
-      if (this.state.visible && props.onShow) {
-        props.onShow()
+    componentDidMount() {
+      if (this.isVisible && this.props.onShow) {
+        this.props.onShow()
       }
     }
 
-    componentWillReceiveProps(nextProps, nextContext) {
-      const value = getContextValue(nextContext, nextProps.channel)
-
-      if (!this.state.visible && shouldShow(nextProps, value)) {
-        this.setState({
-          visible: true,
-        })
-
-        if (nextProps.onShow) {
-          nextProps.onShow()
-        }
+    componentDidUpdate() {
+      if (!this.wasVisible && this.isVisible && this.props.onShow) {
+        this.props.onShow()
       }
 
-      if (this.state.visible && shouldHide(nextProps, value)) {
-        this.setState({
-          visible: false,
-        })
-
-        if (nextProps.onHide) {
-          nextProps.onHide()
-        }
+      if (this.wasVisible && !this.isVisible && this.props.onHide) {
+        this.props.onHide()
       }
     }
+
+    getPatterns = memoize(getPatterns)
+
+    matches = memoize(matches)
 
     render() {
-      if (typeof this.props.render === 'function') {
-        return this.props.render(this.state.visible)
+      this.wasVisible = this.isVisible
+      const patterns = this.getPatterns(this.props.is)
+      this.isVisible = this.matches(patterns, this.props.value)
+
+      if (this.props.render) {
+        return this.props.render(this.isVisible)
       }
 
-      return this.state.visible ? this.props.children : null
+      return this.isVisible ? this.props.children : null
     }
   }
 
-  Conditional.displayName = displayName
+  const Container = props => (
+    <Context.Consumer>
+      {context => (
+        <Conditional
+          {...props}
+          value={idx(
+            context,
+            _ => _[props.channel || DEFAULT_CHANNEL][contextField]
+          )}
+        />
+      )}
+    </Context.Consumer>
+  )
 
-  Conditional.contextTypes = {
-    automata: PropTypes.object,
+  Container.defaultProps = {
+    children: null,
   }
 
-  Conditional.propTypes = {
-    ...propTypes,
+  Container.displayName = displayName
+
+  Container.propTypes = {
     channel: PropTypes.string,
     children: PropTypes.node,
+    is: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.string),
+      PropTypes.string,
+    ]),
     render: PropTypes.func,
     onHide: PropTypes.func,
     onShow: PropTypes.func,
   }
 
-  Conditional.defaultProps = {
-    children: null,
-  }
-
-  return Conditional
+  return Container
 }
 
 export default createConditional
