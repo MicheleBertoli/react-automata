@@ -1,6 +1,6 @@
 {
   "name": "react-automata",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "A state machine abstraction for React",
   "main": "dist/react-automata.js",
   "module": "dist/react-automata.es.js",
