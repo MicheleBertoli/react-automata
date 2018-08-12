@@ -11,7 +11,7 @@ A state machine abstraction for React that provides declarative state management
 
 ## Installation
 
-> `react` and `react-test-renderer` are peer dependencies
+> `react` and `react-test-renderer` are peer dependencies.
 
 ```sh
 yarn add react-automata
