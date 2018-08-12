@@ -23,9 +23,9 @@ const testStateMachine = (Component, options = {}) => {
 
     const machineState =
       instance.state.machineState.toString() ||
-      stringify(instance.state.machineState.value)
+      stringify(instance.state.machineState.value).join(',')
 
-    expect(renderer.toJSON()).toMatchSnapshot(undefined, machineState)
+    expect(renderer.toJSON()).toMatchSnapshot(machineState)
   })
 }
 
