@@ -176,7 +176,7 @@ const withStateMachine = (statechart, options = {}) => Component => {
         )
 
         if (
-          machineState === prevState.machineState &&
+          machineState.value === prevState.machineState.value &&
           (!stateChange || stateChange === prevState.componentState)
         ) {
           this.isTransitioning = false
@@ -185,7 +185,9 @@ const withStateMachine = (statechart, options = {}) => Component => {
         }
 
         return {
-          componentState: { ...prevState.componentState, ...stateChange },
+          componentState: stateChange
+            ? { ...prevState.componentState, ...stateChange }
+            : prevState.componentState,
           machineState,
         }
       })

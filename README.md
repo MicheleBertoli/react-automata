@@ -11,6 +11,8 @@ A state machine abstraction for React that provides declarative state management
 
 ## Installation
 
+> `react` and `react-test-renderer` are peer dependencies
+
 ```sh
 yarn add react-automata
 ```
@@ -175,7 +177,7 @@ class App extends React.Component {
 
 #### componentWillTransition(event)
 
-The lifecycle method invoked when a transition is about to happen.
+The lifecycle method invoked when the [transition function](#transitionevent-updater) has been called.
 It provides the event, and can be used to run side-effects.
 
 ```js
@@ -253,10 +255,6 @@ The component to define which parts of the tree should be rendered for a given s
 
 The method to automagically generate tests given a component wrapped into `withStateMachine`.
 It accepts an additional `fixtures` option to describe the data to be injected into the component for a given transition, and an `extendedState` option to control the statechart's conditions - both are optional.
-
-```
-yarn add --dev react-test-renderer
-```
 
 ```js
 const fixtures = {

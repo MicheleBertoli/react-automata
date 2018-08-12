@@ -114,23 +114,24 @@ test('actions', () => {
   instance.handleTransition('EVENT')
 
   expect(actionMethod).toHaveBeenCalledTimes(1)
-  expect(actionMethod).toHaveBeenCalledWith({}, 'EVENT')
+  expect(actionMethod).toHaveBeenCalledWith(undefined, 'EVENT')
   expect(actionFunction).toHaveBeenCalledTimes(1)
-  expect(actionFunction).toHaveBeenCalledWith({}, 'EVENT')
+  expect(actionFunction).toHaveBeenCalledWith(undefined, 'EVENT')
   expect(activityMethod).toHaveBeenCalledTimes(1)
   expect(activityMethod).toHaveBeenCalledWith(true)
 })
 
 test('lifecycle hooks', () => {
-  const spy = jest.fn()
+  const willTransition = jest.fn()
+  const didTransition = jest.fn()
 
   class Component extends React.Component {
     componentWillTransition(...args) {
-      spy(...args)
+      willTransition(...args)
     }
 
     componentDidTransition(...args) {
-      spy(...args)
+      didTransition(...args)
     }
 
     render() {
@@ -143,10 +144,16 @@ test('lifecycle hooks', () => {
 
   instance.handleTransition('EVENT')
 
-  expect(spy).toHaveBeenCalledTimes(2)
-  expect(spy).toHaveBeenCalledWith('EVENT')
-  expect(spy).toHaveBeenLastCalledWith(
+  expect(willTransition).toHaveBeenCalledWith('EVENT')
+  expect(didTransition).toHaveBeenCalledWith(
     expect.objectContaining({ value: 'a' }),
     'EVENT'
   )
+
+  willTransition.mockClear()
+  didTransition.mockClear()
+  instance.handleTransition('FOO')
+
+  expect(willTransition).toHaveBeenCalled()
+  expect(didTransition).not.toHaveBeenCalled()
 })
