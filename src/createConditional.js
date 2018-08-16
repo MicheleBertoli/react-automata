@@ -66,7 +66,7 @@ const createConditional = (displayName, contextField) => {
     is: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.string),
       PropTypes.string,
-    ]),
+    ]).isRequired,
     render: PropTypes.func,
     onHide: PropTypes.func,
     onShow: PropTypes.func,
