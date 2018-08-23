@@ -74,8 +74,5 @@
       "eslint --fix",
       "git add"
     ]
-  },
-  "jest": {
-    "testURL": "http://localhost"
   }
 }
