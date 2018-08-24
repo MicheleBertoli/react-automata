@@ -52,6 +52,18 @@ test('render', () => {
   expect(spy).toHaveBeenCalled()
 })
 
+test('invalid transition with extended state', () => {
+  const Component = () => <div />
+  const StateMachine = withStateMachine(statechart)(Component)
+  const instance = TestRenderer.create(<StateMachine />).getInstance()
+
+  instance.handleTransition('FOO', { foo: 'bar' })
+
+  expect(() => {
+    instance.handleTransition('FOO')
+  }).not.toThrow()
+})
+
 test('props', () => {
   const Component = () => <div />
   const StateMachine = withStateMachine(statechart)(Component)

@@ -115,9 +115,9 @@ const withStateMachine = (statechart, options = {}) => Component => {
     }
 
     handleComponentDidUpdate(prevProps, prevState) {
-      if (prevState.machineState !== this.state.machineState) {
-        this.isTransitioning = false
+      this.isTransitioning = false
 
+      if (prevState.machineState !== this.state.machineState) {
         this.runActions()
 
         if (idx(this, _ => _.instance.current.componentDidTransition)) {
