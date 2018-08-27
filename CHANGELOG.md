@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.0.4] - 2018-08-27
+### Fixed
+- Avoid rendering the component to extract the machine in tests [#72](https://github.com/MicheleBertoli/react-automata/issues/72).
+
 ## [4.0.3] - 2018-08-24
 ### Fixed
 - Avoid throwing on invalid transitions with extended state [#71](https://github.com/MicheleBertoli/react-automata/issues/71).
