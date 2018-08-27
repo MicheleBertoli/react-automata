@@ -24,11 +24,13 @@ const withStateMachine = (statechart, options = {}) => Component => {
       initialMachineState: PropTypes.instanceOf(State),
     }
 
-    machine = statechart instanceof StateNode ? statechart : Machine(statechart)
+    static machine =
+      statechart instanceof StateNode ? statechart : Machine(statechart)
 
     state = {
       componentState: this.props.initialData,
-      machineState: this.props.initialMachineState || this.machine.initialState,
+      machineState:
+        this.props.initialMachineState || this.constructor.machine.initialState,
     }
 
     instance = React.createRef()
@@ -169,7 +171,7 @@ const withStateMachine = (statechart, options = {}) => Component => {
           typeof updater === 'function'
             ? updater(prevState.componentState)
             : updater
-        const machineState = this.machine.transition(
+        const machineState = this.constructor.machine.transition(
           prevState.machineState,
           event,
           stateChange

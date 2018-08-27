@@ -5,8 +5,7 @@ import { getShortestPaths } from 'xstate/lib/graph'
 import { stringify } from './utils'
 
 const testStateMachine = (Component, options = {}) => {
-  const { machine } = TestRenderer.create(<Component />).getInstance()
-  const paths = getShortestPaths(machine, options.extendedState)
+  const paths = getShortestPaths(Component.machine, options.extendedState)
 
   Object.keys(paths).forEach(key => {
     const initialData = idx(options, _ => _.fixtures.initialData)
