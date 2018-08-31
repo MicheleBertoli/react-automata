@@ -4,6 +4,7 @@ import { Machine, State } from 'xstate'
 import { withStateMachine } from '../src'
 
 const actionFunction = jest.fn()
+const sameStateFn = jest.fn()
 
 const statechart = {
   initial: 'a',
@@ -16,6 +17,11 @@ const statechart = {
     b: {
       on: {
         EVENT: 'a',
+        SAME: {
+          b: {
+            actions: ['sameStateMethod', sameStateFn]
+          }
+        }
       },
       onEntry: ['actionMethod', actionFunction],
       activities: ['activityMethod'],
@@ -105,6 +111,7 @@ test('state', () => {
 test('actions', () => {
   const actionMethod = jest.fn()
   const activityMethod = jest.fn()
+  const sameStateMethod = jest.fn()
 
   class Component extends React.Component {
     actionMethod(...args) {
@@ -113,6 +120,10 @@ test('actions', () => {
 
     activityMethod(...args) {
       activityMethod(...args)
+    }
+
+    sameStateMethod(...args) {
+      sameStateMethod(...args)
     }
 
     render() {
@@ -131,6 +142,20 @@ test('actions', () => {
   expect(actionFunction).toHaveBeenCalledWith(undefined, 'EVENT')
   expect(activityMethod).toHaveBeenCalledTimes(1)
   expect(activityMethod).toHaveBeenCalledWith(true)
+  expect(sameStateFn).not.toHaveBeenCalled()
+  expect(sameStateMethod).not.toHaveBeenCalled()
+
+  instance.handleTransition('SAME')
+  expect(actionMethod).toHaveBeenCalledTimes(2)
+  expect(actionMethod).toHaveBeenCalledWith(undefined, 'EVENT')
+  expect(actionFunction).toHaveBeenCalledTimes(2)
+  expect(actionFunction).toHaveBeenCalledWith(undefined, 'EVENT')
+  /* WIP - should the activity method have been called two or three times? */
+  expect(activityMethod).toHaveBeenCalledTimes(3)
+  expect(activityMethod).toHaveBeenCalledWith(true)
+
+  expect(sameStateFn).toHaveBeenCalledTimes(1)
+  expect(sameStateMethod).toHaveBeenCalledTimes(1)
 })
 
 test('lifecycle hooks', () => {
