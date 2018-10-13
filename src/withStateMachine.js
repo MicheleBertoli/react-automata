@@ -4,6 +4,7 @@ import memoize from 'memoize-one'
 import PropTypes from 'prop-types'
 import React from 'react'
 import { Machine, State, StateNode } from 'xstate'
+import hoistStatics from 'hoist-non-react-statics'
 import Context from './context'
 import {
   DEFAULT_CHANNEL,
@@ -213,6 +214,8 @@ const withStateMachine = (statechart, options = {}) => Component => {
       )
     }
   }
+
+  hoistStatics(Automata, Component)
 
   return Automata
 }
