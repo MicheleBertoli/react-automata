@@ -298,6 +298,10 @@ test('it works', () => {
 
 You might find the answer to your question [here](FAQ.md).
 
+# Upgrades
+
+The upgrade process is documented [here](UPGRADING.md).
+
 # Inspiration
 
 [Federico](https://twitter.com/gandellinux), for telling me "Hey, I think building UIs using state machines is the future".
