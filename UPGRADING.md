@@ -15,4 +15,4 @@ The exported higher-order component known as `withStatechart` was renamed to `wi
 
 `Action` and `State` components props were renamed more consistently. The `hide` and `show` prop from `Action` were unified in the new `is` prop. The `value` prop from `State` was renamed to `is` as well. You should change these props in your code accordingly.
 
-The `testStateChart` method  was renamed to `testStateMachine`, and its signature was changed to `Component[, { fixtures, extendedState }]` from `{ statechart[, fixtures][, extendedState] }, Component`. You need to change that accordingly. Please note, that you don't have to pass the statechart to `testStateMachine` directly, instead you should use the from `withStateMachine` enriched component.
+The `testStateChart` method  was renamed to `testStateMachine`, and its signature was changed to `Component[, { fixtures, extendedState }]` from `{ statechart[, fixtures][, extendedState] }, Component`. You need to change that accordingly. Please note that you don't have to pass the statechart to `testStateMachine` directly, the library will automatically extract it from the `withStateMachine` enriched component.
