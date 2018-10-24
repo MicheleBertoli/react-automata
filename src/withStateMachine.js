@@ -11,6 +11,7 @@ import {
   getComponentName,
   isStateless,
   stringify,
+  machineDidUpdate
 } from './utils'
 
 const REDUX_DISPATCH = 'DISPATCH'
@@ -119,7 +120,7 @@ const withStateMachine = (statechart, options = {}) => Component => {
 
     handleComponentDidUpdate(prevProps, prevState) {
       this.isTransitioning = false
-
+      /* WIP - Should this logic be the same as what is used in handleTransition? */
       if (prevState.machineState !== this.state.machineState) {
         this.runActions()
 
@@ -177,9 +178,8 @@ const withStateMachine = (statechart, options = {}) => Component => {
           event,
           stateChange
         )
-
         if (
-          machineState.value === prevState.machineState.value &&
+          !machineDidUpdate(machineState, prevState.machineState) &&
           (!stateChange || stateChange === prevState.componentState)
         ) {
           this.isTransitioning = false

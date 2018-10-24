@@ -30,3 +30,12 @@ export const matches = (patterns, value) => {
 
   return patterns.some(pattern => values.some(val => pattern.test(val)))
 }
+
+export const machineDidUpdate = (oldMachine, newMachine) => {
+  // Compare the value
+  if (oldMachine.value !== newMachine.value) return true
+  // Compare the actions
+  // /* WIP - 
+  if (oldMachine.actions !== newMachine.actions) return true
+  return false
+}
