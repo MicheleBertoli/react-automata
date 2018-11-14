@@ -1,7 +1,7 @@
 {
   "name": "react-automata-test-utilities",
   "version": "4.0.4",
-  "description": "Test utilities for react-automata",
+  "description": "Utilities for writing tests against your react-automata implementations",
   "main": "dist/react-automata-test-utilities.js",
   "module": "dist/react-automata-test-utilities.es.js",
   "repository": "git@github.com:MicheleBertoli/react-automata.git",
