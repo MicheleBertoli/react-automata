@@ -58,10 +58,5 @@
       "eslint --fix",
       "git add"
     ]
-  },
-  "jest": {
-    "transformIgnorePatterns": [
-      "node_modules/(?!(hoist-non-react-statics)/)"
-    ]
   }
 }

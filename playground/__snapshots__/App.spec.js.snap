@@ -7,6 +7,7 @@ exports[`it works: error 1`] = `
   </h1>
   <button
     onClick={[Function]}
+    type="button"
   >
     Retry
   </button>
@@ -30,6 +31,7 @@ exports[`it works: idle 1`] = `
   </h1>
   <button
     onClick={[Function]}
+    type="button"
   >
     Fetch
   </button>

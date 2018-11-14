@@ -25,11 +25,5 @@
   "peerDependencies": {
     "react": ">=16.3",
     "react-test-renderer": ">=16.3"
-  },
-  "jest": {
-    "transformIgnorePatterns": [
-      "node_modules/(?!(react-automata|react-automata-utilities|hoist-non-react-statics)/)",
-      "!(/dist/react-automata/)"
-    ]
   }
 }
