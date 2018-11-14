@@ -1,4 +1,4 @@
-import { testStateMachine } from '../src'
+import { testStateMachine } from '../packages/react-automata-test-utilities/src'
 import App from './App'
 
 global.fetch = jest.fn(() => new Promise(resolve => resolve()))

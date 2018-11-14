@@ -2,8 +2,8 @@ import idx from 'idx'
 import memoize from 'memoize-one'
 import PropTypes from 'prop-types'
 import React from 'react'
+import { DEFAULT_CHANNEL, getPatterns, matches } from 'react-automata-utilities'
 import Context from './context'
-import { DEFAULT_CHANNEL, getPatterns, matches } from './utils'
 
 const createConditional = (displayName, contextField) => {
   class Conditional extends React.Component {

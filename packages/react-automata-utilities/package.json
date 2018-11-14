@@ -1,0 +1,21 @@
+{
+  "name": "react-automata-utilities",
+  "version": "4.0.4",
+  "description": "Test utilities for react-automata",
+  "main": "dist/react-automata-test-utilities.js",
+  "module": "dist/react-automata-test-utilities.es.js",
+  "repository": "git@github.com:MicheleBertoli/react-automata.git",
+  "license": "MIT",
+  "files": [
+    "DISCLAIMER",
+    "dist"
+  ],
+  "sideEffects": false,
+  "devDependencies": {
+    "react": "^16.4.0"
+  },
+  "dependencies": {
+    "glob-to-regexp": "^0.4.0",
+    "idx": "^2.3.0"
+  }
+}

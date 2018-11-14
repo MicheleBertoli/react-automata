@@ -1,6 +1,6 @@
 import React from 'react'
 import { hot } from 'react-hot-loader'
-import { Action, withStateMachine } from '../src'
+import { Action, withStateMachine } from '../packages/react-automata/src'
 
 const statechart = {
   initial: 'idle',
@@ -47,18 +47,24 @@ class App extends React.Component {
       <div>
         <h1>Actions</h1>
         <Action is="showButton">
-          <button onClick={this.handleClick}>Fetch</button>
+          <button type="button" onClick={this.handleClick}>
+            Fetch
+          </button>
         </Action>
         <Action is="fetchGists">Loading...</Action>
         <Action is="showGists">
           <ul>
-            {this.props.gists.filter(gist => gist.description).map(gist => (
-              <li key={gist.id}>{gist.description}</li>
-            ))}
+            {this.props.gists
+              .filter(gist => gist.description)
+              .map(gist => (
+                <li key={gist.id}>{gist.description}</li>
+              ))}
           </ul>
         </Action>
         <Action is="showError">
-          <button onClick={this.handleClick}>Retry</button>
+          <button type="button" onClick={this.handleClick}>
+            Retry
+          </button>
           Oh, snap!
         </Action>
       </div>

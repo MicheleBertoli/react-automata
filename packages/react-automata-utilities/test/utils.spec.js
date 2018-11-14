@@ -1,5 +1,5 @@
 import React from 'react'
-import { getPatterns, isStateless, matches, stringify } from '../src/utils'
+import { getPatterns, isStateless, matches, stringify } from '../src/index'
 
 describe('isStateless', () => {
   test('true', () => {
