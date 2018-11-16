@@ -1,5 +1,6 @@
 import React from 'react'
-import { Action, State, testStateMachine, withStateMachine } from '../src'
+import { Action, State, withStateMachine } from 'react-automata'
+import { testStateMachine } from '../src'
 
 describe('conditional', () => {
   const secondMachine = {

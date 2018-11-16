@@ -12,14 +12,21 @@
     "class-methods-use-this": "off",
     "default-case": "off",
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
-    "no-underscore-dangle": ["error", {
-      "allow": ["__REDUX_DEVTOOLS_EXTENSION__"],
-    }],
-    "prettier/prettier": ["error", {
-      "semi": false,
-      "singleQuote": true,
-      "trailingComma": "es5"
-    }],
+    "no-underscore-dangle": [
+      "error",
+      {
+        "allow": ["__REDUX_DEVTOOLS_EXTENSION__"]
+      }
+    ],
+    "prettier/prettier": [
+      "error",
+      {
+        "semi": false,
+        "singleQuote": true,
+        "trailingComma": "es5"
+      }
+    ],
+    "react/destructuring-assignment": "off",
     "react/forbid-prop-types": ["error", { "forbid": "any" }],
     "react/jsx-filename-extension": ["error", { "extensions": [".js"] }],
     "react/no-multi-comp": "off",
@@ -27,6 +34,6 @@
     "react/prop-types": ["error", { "skipUndeclared": true }],
     "react/require-default-props": "off",
     "react/sort-comp": "off",
-    "semi": ["error", "never"],
+    "semi": ["error", "never"]
   }
 }

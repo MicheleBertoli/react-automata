@@ -2,7 +2,7 @@ import idx from 'idx'
 import React from 'react'
 import TestRenderer from 'react-test-renderer'
 import { getShortestPaths } from 'xstate/lib/graph'
-import { stringify } from './utils'
+import { stringify } from 'react-automata-utilities'
 
 const testStateMachine = (Component, options = {}) => {
   const paths = getShortestPaths(Component.machine, options.extendedState)

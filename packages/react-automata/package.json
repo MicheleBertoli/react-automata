@@ -1,0 +1,32 @@
+{
+  "name": "react-automata",
+  "version": "4.0.4",
+  "description": "A state machine abstraction for React",
+  "main": "dist/react-automata.js",
+  "module": "dist/react-automata.es.js",
+  "repository": "git@github.com:MicheleBertoli/react-automata.git",
+  "author": "Michele Bertoli",
+  "license": "MIT",
+  "files": [
+    "DISCLAIMER",
+    "dist"
+  ],
+  "sideEffects": false,
+  "devDependencies": {
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0",
+    "react-test-renderer": "^16.4.1"
+  },
+  "dependencies": {
+    "hoist-non-react-statics": "^3.0.1",
+    "idx": "^2.3.0",
+    "invariant": "^2.2.4",
+    "memoize-one": "^4.0.0",
+    "prop-types": "^15.6.1",
+    "react-automata-utilities": "^4.0.4",
+    "xstate": "^3.3.0"
+  },
+  "peerDependencies": {
+    "react": ">=16.3"
+  }
+}

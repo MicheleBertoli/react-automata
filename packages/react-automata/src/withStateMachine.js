@@ -5,13 +5,13 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { Machine, State, StateNode } from 'xstate'
 import hoistStatics from 'hoist-non-react-statics'
-import Context from './context'
 import {
   DEFAULT_CHANNEL,
   getComponentName,
   isStateless,
   stringify,
-} from './utils'
+} from 'react-automata-utilities'
+import Context from './context'
 
 const REDUX_DISPATCH = 'DISPATCH'
 const REDUX_JUMP_TO_ACTION = 'JUMP_TO_ACTION'

@@ -1,5 +1,6 @@
+/* eslint-disable global-require */
+
 import babel from 'rollup-plugin-babel'
-import pkg from './package.json'
 
 const makeExternalPredicate = externalArr => {
   if (externalArr.length === 0) {
@@ -9,12 +10,12 @@ const makeExternalPredicate = externalArr => {
   return id => pattern.test(id)
 }
 
-export default {
-  input: 'src/index.js',
+const generateConfig = pkg => ({
+  input: `packages/${pkg.name}/src/index.js`,
 
   output: [
-    { file: pkg.main, format: 'cjs' },
-    { file: pkg.module, format: 'es' },
+    { file: `packages/${pkg.name}/${pkg.main}`, format: 'cjs' },
+    { file: `packages/${pkg.name}/${pkg.module}`, format: 'es' },
   ],
 
   external: makeExternalPredicate([
@@ -22,5 +23,13 @@ export default {
     ...Object.keys(pkg.peerDependencies || {}),
   ]),
 
-  plugins: [babel({ plugins: ['external-helpers'] })],
-}
+  plugins: [babel()],
+})
+
+export default [
+  generateConfig(require('./packages/react-automata-utilities/package.json')),
+  generateConfig(
+    require('./packages/react-automata-test-utilities/package.json')
+  ),
+  generateConfig(require('./packages/react-automata/package.json')),
+]
