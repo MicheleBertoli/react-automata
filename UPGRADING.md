@@ -2,7 +2,7 @@
 
 ## From v3.0.0 to v4.0.0
 
-The update to React Automata version 4 introduces some braking changes, which also requires changes in users' code.
+The update to React Automata version 4 introduces some breaking changes, which also requires changes in users' code.
 
 First step is to update React Automata dependency, and add `react-test-renderer` separately, since that was changed to a peer dependency
 ```sh
